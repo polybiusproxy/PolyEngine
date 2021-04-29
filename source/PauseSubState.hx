@@ -112,6 +112,11 @@ class PauseSubState extends MusicBeatSubstate
 			}
 		}
 
+		if (FlxG.keys.justPressed.R)
+		{
+			FlxG.resetState();
+		}
+
 		if (FlxG.keys.justPressed.J)
 		{
 			// for reference later!
