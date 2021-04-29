@@ -18,11 +18,11 @@ class OutdatedSubState extends MusicBeatState
 		add(bg);
 		var ver = "v" + Application.current.meta.get('version');
 		var txt:FlxText = new FlxText(0, 0, FlxG.width,
-			"HEY! You're running an outdated version of the game!\nCurrent version is "
+			"You're running an old version of PolyEngine!\nCurrent version is "
 			+ ver
 			+ " while the most recent version is "
 			+ NGio.GAME_VER
-			+ "! Press Space to go to itch.io, or ESCAPE to ignore this!!",
+			+ "!\nPress Space / Enter to download latest version,\nor press Escape to close this message.",
 			32);
 		txt.setFormat("VCR OSD Mono", 32, FlxColor.WHITE, CENTER);
 		txt.screenCenter();
@@ -33,7 +33,7 @@ class OutdatedSubState extends MusicBeatState
 	{
 		if (controls.ACCEPT)
 		{
-			FlxG.openURL("https://ninja-muffin24.itch.io/funkin");
+			FlxG.openURL("https://github.com/notdonxd/PolyEngine");
 		}
 		if (controls.BACK)
 		{
