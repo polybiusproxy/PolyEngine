@@ -22,7 +22,7 @@ class OutdatedSubState extends MusicBeatState
 			+ ver
 			+ " while the most recent version is "
 			+ NGio.GAME_VER
-			+ "!\nPress Space / Enter to download latest version,\nor press Escape to close this message.",
+			+ "!\n\nPress Space / Enter to download latest version,\nor press Escape to close this message.",
 			32);
 		txt.setFormat("VCR OSD Mono", 32, FlxColor.WHITE, CENTER);
 		txt.screenCenter();
