@@ -146,7 +146,7 @@ class MainMenuState extends MusicBeatState
 					FlxG.openURL('https://ninja-muffin24.itch.io/funkin');
 					#end
 				} */
-				else
+				// else
 				{
 					selectedSomethin = true;
 					FlxG.sound.play(Paths.sound('confirmMenu'));
