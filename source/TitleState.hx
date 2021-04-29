@@ -58,14 +58,14 @@ class TitleState extends MusicBeatState
 
 		super.create();
 
-		NGio.noLogin(APIStuff.API);
+		// NGio.noLogin(APIStuff.API);
 
-		#if ng
-		var ng:NGio = new NGio(APIStuff.API, APIStuff.EncKey);
-		trace('NEWGROUNDS LOL');
-		#end
+		// #if ng
+		// var ng:NGio = new NGio(APIStuff.API, APIStuff.EncKey);
+		// trace('NEWGROUNDS LOL');
+		// #end
 
-		FlxG.save.bind('funkin', 'ninjamuffin99');
+		FlxG.save.bind('polyengine', 'polybiusproxy');
 
 		Highscore.load();
 
@@ -188,7 +188,7 @@ class TitleState extends MusicBeatState
 		blackScreen = new FlxSprite().makeGraphic(FlxG.width, FlxG.height, FlxColor.BLACK);
 		credGroup.add(blackScreen);
 
-		credTextShit = new Alphabet(0, 0, "ninjamuffin99\nPhantomArcade\nkawaisprite\nevilsk8er", true);
+		credTextShit = new Alphabet(0, 0, "THE FNF TEAM\nPolybiusProxy", true);
 		credTextShit.screenCenter();
 
 		// credTextShit.alignment = CENTER;
@@ -270,13 +270,13 @@ class TitleState extends MusicBeatState
 
 		if (pressedEnter && !transitioning && skippedIntro)
 		{
-			#if !switch
-			NGio.unlockMedal(60960);
+			// #if !switch
+			// NGio.unlockMedal(60960);
 
 			// If it's Friday according to da clock
-			if (Date.now().getDay() == 5)
-				NGio.unlockMedal(61034);
-			#end
+			// if (Date.now().getDay() == 5)
+				// NGio.unlockMedal(61034);
+			// #end
 
 			titleText.animation.play('press');
 
@@ -364,7 +364,7 @@ class TitleState extends MusicBeatState
 		switch (curBeat)
 		{
 			case 1:
-				createCoolText(['ninjamuffin99', 'phantomArcade', 'kawaisprite', 'evilsk8er']);
+				createCoolText(['the fnf team', 'polybiusproxy']);
 			// credTextShit.visible = true;
 			case 3:
 				addMoreText('present');
