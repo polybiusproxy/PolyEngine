@@ -1,5 +1,6 @@
 package;
 
+import haxe.Http;
 #if desktop
 import Discord.DiscordClient;
 import sys.thread.Thread;
@@ -287,26 +288,34 @@ class TitleState extends MusicBeatState
 			// FlxG.sound.music.stop();
 
 			new FlxTimer().start(2, function(tmr:FlxTimer)
-			{
-				// Check if version is outdated
-
-				var version:String = "v" + Application.current.meta.get('version');
-
-				if (version.trim() != NGio.GAME_VER_NUMS.trim() && !OutdatedSubState.leftState)
 				{
-					FlxG.switchState(new OutdatedSubState());
-					trace('OLD VERSION!');
-					trace('old ver');
-					trace(version.trim());
-					trace('cur ver');
-					trace(NGio.GAME_VER_NUMS.trim());
-				}
-				else
-				{
-					FlxG.switchState(new MainMenuState());
-				}
-			});
-			// FlxG.sound.play(Paths.music('titleShoot'), 0.7);
+	
+					// Get current version of Kade Engine
+	
+					var http = new haxe.Http("https://raw.githubusercontent.com/notdonxd/PolyEngine/master/daversion");
+	
+					http.onData = function (data:String) {
+					  
+						  if (!PlayState.daVersion.contains(data.trim()) && !OutdatedSubState.leftState && MainMenuState.nightly == "")
+						{
+							trace('this dumbass cant update lmfao hahahahh ' + data.trim() + ' != ' + PlayState.daVersion);
+							FlxG.switchState(new OutdatedSubState());
+						}
+						else
+						{
+							FlxG.switchState(new MainMenuState());
+						}
+					}
+					
+					http.onError = function (error) {
+					  trace('error: $error');
+					  FlxG.switchState(new MainMenuState()); // fail but we go anyway
+					}
+					
+					http.request();
+	
+				});
+				// FlxG.sound.play(Paths.music('titleShoot'), 0.7);
 		}
 
 		if (pressedEnter && !skippedIntro)
