@@ -1,7 +1,7 @@
 package;
 
 #if desktop
-import discord_rpc.DiscordRpc;
+import Discord.DiscordClient;
 #end
 import flixel.FlxG;
 import flixel.FlxSprite;
@@ -115,7 +115,7 @@ class StoryMenuState extends MusicBeatState
 		
 		#if desktop
 		// Updating Discord Rich Presence
-		DiscordRpc.changePresence("In the Menus", null);
+		DiscordClient.changePresence("In the Menus", null);
 		#end
 
 		for (i in 0...weekData.length)

@@ -96,10 +96,10 @@ class TitleState extends MusicBeatState
 		#end
 
 		#if desktop
-		DiscordRpc.initialize();
+		DiscordClient.initialize();
 		
 		Application.current.onExit.add (function (exitCode) {
-			DiscordRpc.shutdown();
+			DiscordClient.shutdown();
 		 });
 		#end
 	}

@@ -21,7 +21,7 @@ class Main extends Sprite
 
 	#if windows
 	// take this as an temporary fix
-	var framerate:Int = 120; // i could just change the framerate in line 17, but it works fine on windows, and laggy on html5 lol
+	var framerate = 120; // i could just change the framerate in line 17, but it works fine on windows, and laggy on html5 lol
 	#end
 
 	// You can pretty much ignore everything from here on - your code should go in your states.

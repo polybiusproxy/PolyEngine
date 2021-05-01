@@ -1,7 +1,7 @@
 package;
 
 #if desktop
-import discord_rpc.DiscordRpc;
+import Discord.DiscordClient;
 #end
 import flixel.FlxG;
 import flixel.FlxObject;
@@ -40,7 +40,7 @@ class MainMenuState extends MusicBeatState
 	{
 		#if desktop
 		// Updating Discord Rich Presence
-		DiscordRpc.changePresence("In the Menus", null);
+		DiscordClient.changePresence("In the Menus", null);
 		#end
 
 		transIn = FlxTransitionableState.defaultTransIn;
