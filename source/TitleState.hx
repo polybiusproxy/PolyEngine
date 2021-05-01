@@ -2,8 +2,8 @@ package;
 
 import haxe.Http;
 #if desktop
-import Discord.DiscordClient;
-import sys.thread.Thread;
+import discord_rpc.DiscordRpc;
+import Sys;
 #end
 import flixel.FlxG;
 import flixel.FlxSprite;
@@ -96,10 +96,10 @@ class TitleState extends MusicBeatState
 		#end
 
 		#if desktop
-		DiscordClient.initialize();
+		DiscordRpc.initialize();
 		
 		Application.current.onExit.add (function (exitCode) {
-			DiscordClient.shutdown();
+			DiscordRpc.shutdown();
 		 });
 		#end
 	}
