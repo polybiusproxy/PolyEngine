@@ -1,5 +1,6 @@
 package;
 
+import lime.app.Application;
 import haxe.Http;
 #if desktop
 import Discord.DiscordClient;
