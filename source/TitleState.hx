@@ -2,7 +2,7 @@ package;
 
 import haxe.Http;
 #if desktop
-import discord_rpc.DiscordRpc;
+import Discord.DiscordClient;
 import Sys;
 #end
 import flixel.FlxG;
