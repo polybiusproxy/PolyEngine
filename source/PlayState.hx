@@ -76,7 +76,7 @@ class PlayState extends MusicBeatState
 	private var camHUD:FlxCamera;
 	private var camGame:FlxCamera;
 
-	public static var daVersion:String = "1.0";
+	public static var daVersion:String = "1.5";
 	public static var uglyVersion:String = "0.2.7.1";
 
 	var dialogue:Array<String> = ['blah blah blah', 'coolswag'];
