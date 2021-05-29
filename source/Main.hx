@@ -1,5 +1,8 @@
 package;
 
+import other.MemoryMonitor;
+import menus.WarningState;
+import menus.AmongUsState;
 import flixel.FlxGame;
 import flixel.FlxState;
 import openfl.Lib;
@@ -9,6 +12,8 @@ import openfl.events.Event;
 
 class Main extends Sprite
 {
+	var MemoryMonitor:MemoryMonitor = new MemoryMonitor(20, 10, 0xffffff);
+
 	var gameWidth:Int = 1280; // Width of the game in pixels (might be less / more in actual pixels depending on your zoom).
 	var gameHeight:Int = 720; // Height of the game in pixels (might be less / more in actual pixels depending on your zoom).
 	var initialState:Class<FlxState> = WarningState; // The FlxState the game starts with.
@@ -63,17 +68,19 @@ class Main extends Sprite
 		}
 
 		#if !debug
-		initialState = WarningState;
-		#end
-
-		#if cpp
-		framerate = 120;
-		#end
-
 		addChild(new FlxGame(gameWidth, gameHeight, initialState, zoom, framerate, skipSplash, startFullscreen));
+		#else
+		addChild(new FlxGame(gameWidth, gameHeight, AmongUsState, zoom, 120, skipSplash, startFullscreen));
+		#end
 
 		#if !mobile
 		addChild(new FPS(10, 3, 0xFFFFFF));
+		#end
+
+		#if (!web && !mobile)
+		addChild(MemoryMonitor);
+		#else
+		js.Browser.console.warn("MemoryMonitor can't work on JavaScript for some strange reason...");
 		#end
 	}
 }

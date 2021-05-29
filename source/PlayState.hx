@@ -1,10 +1,19 @@
 package;
 
+import menus.*;
+import song.*;
+import player.*;
+import other.*;
+import paths.*;
+import chart.*;
+import debug.AnimationDebug;
+import song.MusicBeatState;
+import flixel.FlxBasic;
 #if desktop
-import Discord.DiscordClient;
+import other.Discord.DiscordClient;
 #end
-import Section.SwagSection;
-import Song.SwagSong;
+import song.Section.SwagSection;
+import song.Song.SwagSong;
 import flixel.FlxCamera;
 import flixel.FlxG;
 import flixel.FlxObject;
@@ -37,6 +46,8 @@ class PlayState extends MusicBeatState
 	public static var storyPlaylist:Array<String> = [];
 	public static var storyDifficulty:Int = 1;
 
+	public static var framework:Bool = true;
+
 	var halloweenLevel:Bool = false;
 
 	private var vocals:FlxSound;
@@ -50,6 +61,8 @@ class PlayState extends MusicBeatState
 
 	private var strumLine:FlxSprite;
 	private var curSection:Int = 0;
+
+	private var misses:Int = 0;
 
 	private var camFollow:FlxObject;
 
@@ -76,7 +89,7 @@ class PlayState extends MusicBeatState
 	private var camHUD:FlxCamera;
 	private var camGame:FlxCamera;
 
-	public static var daVersion:String = "1.5";
+	public static var daVersion:String = "2.0";
 	public static var uglyVersion:String = "0.2.7.1";
 
 	var dialogue:Array<String> = ['blah blah blah', 'coolswag'];
@@ -121,6 +134,8 @@ class PlayState extends MusicBeatState
 	var detailsPausedText:String = "";
 	#end
 
+	var trackedAssets:Array<FlxBasic> = [];
+
 	override public function create()
 	{
 		if (FlxG.sound.music != null)
@@ -134,6 +149,7 @@ class PlayState extends MusicBeatState
 		FlxG.cameras.reset(camGame);
 		FlxG.cameras.add(camHUD);
 
+		FlxG.cameras.setDefaultDrawTarget(camGame, false);
 		FlxCamera.defaultCameras = [camGame];
 
 		persistentUpdate = true;
@@ -221,10 +237,10 @@ class PlayState extends MusicBeatState
                                 curStage = 'spooky';
 	                          halloweenLevel = true;
 
-		                  var hallowTex = Paths.getSparrowAtlas('halloween_bg');
+		                  	var hallowTex = Paths.getSparrowAtlas('halloween_bg');
 
 	                          halloweenBG = new FlxSprite(-200, -100);
-		                  halloweenBG.frames = hallowTex;
+		                  	  halloweenBG.frames = hallowTex;
 	                          halloweenBG.animation.addByPrefix('idle', 'halloweem bg0');
 	                          halloweenBG.animation.addByPrefix('lightning', 'halloweem bg lightning strike', 24, false);
 	                          halloweenBG.animation.play('idle');
@@ -720,8 +736,8 @@ class PlayState extends MusicBeatState
 		// healthBar
 		add(healthBar);
 
-		scoreTxt = new FlxText(healthBarBG.x + healthBarBG.width - 190, healthBarBG.y + 30, 0, "", 20);
-		scoreTxt.setFormat(Paths.font("vcr.ttf"), 16, FlxColor.WHITE, RIGHT);
+		scoreTxt = new FlxText(healthBarBG.x + 200, healthBarBG.y + 40, 0, "", 20);
+		scoreTxt.setFormat("assets/fonts/vcr.ttf", 20, FlxColor.WHITE, CENTER);
 		scoreTxt.scrollFactor.set();
 		add(scoreTxt);
 
@@ -748,6 +764,10 @@ class PlayState extends MusicBeatState
 
 		// cameras = [FlxG.cameras.list[1]];
 		startingSong = true;
+
+		FlxG.sound.cache(Paths.inst(PlayState.SONG.song));
+		if (SONG.needsVoices)
+			FlxG.sound.cache(Paths.voices(PlayState.SONG.song));
 
 		if (isStoryMode)
 		{
@@ -1071,7 +1091,7 @@ class PlayState extends MusicBeatState
 				else
 					oldNote = null;
 
-				var swagNote:Note = new Note(daStrumTime, daNoteData, oldNote);
+				var swagNote:Note = new Note(daStrumTime + FlxG.save.data.noteoffset, daNoteData, oldNote);
 				swagNote.sustainLength = songNotes[2];
 				swagNote.scrollFactor.set(0, 0);
 
@@ -1331,6 +1351,11 @@ class PlayState extends MusicBeatState
 				iconP1.animation.play(SONG.player1);
 			else
 				iconP1.animation.play('bf-old');
+
+			if (FlxG.keys.justPressed.ONE)
+			{
+				FlxG.resetState();
+			}
 		}
 
 		switch (curStage)
@@ -1351,7 +1376,9 @@ class PlayState extends MusicBeatState
 
 		super.update(elapsed);
 
-		scoreTxt.text = "Score:" + songScore;
+		scoreTxt.text = "Score: " + songScore + " | Misses: " + misses;
+		scoreTxt.borderColor = FlxColor.BLACK;
+		scoreTxt.borderSize = 2;
 
 		if (FlxG.keys.justPressed.ENTER && startedCountdown && canPause)
 		{
@@ -1547,8 +1574,7 @@ class PlayState extends MusicBeatState
 		}
 		// better streaming of shit
 
-		// RESET = Quick Game Over Screen
-		if (controls.RESET)
+		if (controls.RESET && FlxG.save.data.resetEnabled)
 		{
 			health = 0;
 			trace("RESET = True");
@@ -1571,6 +1597,8 @@ class PlayState extends MusicBeatState
 
 			vocals.stop();
 			FlxG.sound.music.stop();
+
+			unloadAssets();
 
 			openSubState(new GameOverSubstate(boyfriend.getScreenPosition().x, boyfriend.getScreenPosition().y));
 
@@ -1652,6 +1680,11 @@ class PlayState extends MusicBeatState
 
 					if (SONG.needsVoices)
 						vocals.volume = 1;
+						#if debug
+						vocals.fadeOut(Conductor.stepCrochet/1000, 1, function(_) {
+							vocals.volume = 0;
+						});
+						#end
 
 					daNote.kill();
 					notes.remove(daNote, true);
@@ -1666,6 +1699,9 @@ class PlayState extends MusicBeatState
 					if (daNote.tooLate || !daNote.wasGoodHit)
 					{
 						health -= 0.0475;
+						misses = misses + 1;
+						var noteDataShit:Int = Std.int(Math.abs(daNote.noteData));
+						noteMiss(noteDataShit);
 						vocals.volume = 0;
 					}
 
@@ -1712,6 +1748,7 @@ class PlayState extends MusicBeatState
 
 				transIn = FlxTransitionableState.defaultTransIn;
 				transOut = FlxTransitionableState.defaultTransOut;
+				unloadAssets();
 
 				FlxG.switchState(new StoryMenuState());
 
@@ -1720,7 +1757,6 @@ class PlayState extends MusicBeatState
 
 				if (SONG.validScore)
 				{
-					NGio.unlockMedal(60961);
 					Highscore.saveWeekScore(storyWeek, campaignScore, storyDifficulty);
 				}
 
@@ -1757,6 +1793,7 @@ class PlayState extends MusicBeatState
 
 				PlayState.SONG = Song.loadFromJson(PlayState.storyPlaylist[0].toLowerCase() + difficulty, PlayState.storyPlaylist[0]);
 				FlxG.sound.music.stop();
+				unloadAssets();
 
 				LoadingState.loadAndSwitchState(new PlayState());
 			}
@@ -1764,6 +1801,7 @@ class PlayState extends MusicBeatState
 		else
 		{
 			trace('WENT BACK TO FREEPLAY??');
+			unloadAssets();
 			FlxG.switchState(new FreeplayState());
 		}
 	}
@@ -1788,20 +1826,25 @@ class PlayState extends MusicBeatState
 
 		var daRating:String = "sick";
 
-		if (noteDiff > Conductor.safeZoneOffset * 0.9)
+		if (noteDiff > Conductor.safeZoneOffset * 2)
 		{
 			daRating = 'shit';
 			score = 50;
 		}
-		else if (noteDiff > Conductor.safeZoneOffset * 0.75)
+		else if (noteDiff > Conductor.safeZoneOffset * 1.6)
 		{
 			daRating = 'bad';
 			score = 100;
 		}
-		else if (noteDiff > Conductor.safeZoneOffset * 0.2)
+		else if (noteDiff > Conductor.safeZoneOffset * 1.4)
 		{
 			daRating = 'good';
 			score = 200;
+		}
+		else if (noteDiff > Conductor.safeZoneOffset * 1.1)
+		{
+			daRating = 'sick';
+			score = 350;
 		}
 
 		songScore += score;
@@ -1885,8 +1928,7 @@ class PlayState extends MusicBeatState
 			numScore.velocity.y -= FlxG.random.int(140, 160);
 			numScore.velocity.x = FlxG.random.float(-5, 5);
 
-			if (combo >= 10 || combo == 0)
-				add(numScore);
+			add(numScore);
 
 			FlxTween.tween(numScore, {alpha: 0}, 0.2, {
 				onComplete: function(tween:FlxTween)
@@ -1972,74 +2014,17 @@ class PlayState extends MusicBeatState
 				if (perfectMode)
 					noteCheck(true, daNote);
 
-				// Jump notes
-				if (possibleNotes.length >= 2)
+				// Input fix???
+				for (coolNote in possibleNotes)
 				{
-					if (possibleNotes[0].strumTime == possibleNotes[1].strumTime)
+					noteCheck(controlArray[coolNote.noteData], coolNote);
+					if (coolNote.wasGoodHit)
 					{
-						for (coolNote in possibleNotes)
-						{
-							if (controlArray[coolNote.noteData])
-								goodNoteHit(coolNote);
-							else
-							{
-								var inIgnoreList:Bool = false;
-								for (shit in 0...ignoreList.length)
-								{
-									if (controlArray[ignoreList[shit]])
-										inIgnoreList = true;
-								}
-								if (!inIgnoreList)
-									badNoteCheck();
-							}
-						}
-					}
-					else if (possibleNotes[0].noteData == possibleNotes[1].noteData)
-					{
-						noteCheck(controlArray[daNote.noteData], daNote);
-					}
-					else
-					{
-						for (coolNote in possibleNotes)
-						{
-							noteCheck(controlArray[coolNote.noteData], coolNote);
-						}
+						coolNote.kill();
+						notes.remove(coolNote, true);
+						coolNote.destroy();
 					}
 				}
-				else // regular notes?
-				{
-					noteCheck(controlArray[daNote.noteData], daNote);
-				}
-				/* 
-					if (controlArray[daNote.noteData])
-						goodNoteHit(daNote);
-				 */
-				// trace(daNote.noteData);
-				/* 
-						switch (daNote.noteData)
-						{
-							case 2: // NOTES YOU JUST PRESSED
-								if (upP || rightP || downP || leftP)
-									noteCheck(upP, daNote);
-							case 3:
-								if (upP || rightP || downP || leftP)
-									noteCheck(rightP, daNote);
-							case 1:
-								if (upP || rightP || downP || leftP)
-									noteCheck(downP, daNote);
-							case 0:
-								if (upP || rightP || downP || leftP)
-									noteCheck(leftP, daNote);
-						}
-
-					//this is already done in noteCheck / goodNoteHit
-					if (daNote.wasGoodHit)
-					{
-						daNote.kill();
-						notes.remove(daNote, true);
-						daNote.destroy();
-					}
-				 */
 			}
 			else
 			{
@@ -2223,6 +2208,11 @@ class PlayState extends MusicBeatState
 
 			note.wasGoodHit = true;
 			vocals.volume = 1;
+			#if debug
+			vocals.fadeOut(Conductor.stepCrochet/1000, 1, function(_) {
+				vocals.volume = 0;
+			});
+			#end
 
 			if (!note.isSustainNote)
 			{
@@ -2449,6 +2439,20 @@ class PlayState extends MusicBeatState
 		if (isHalloween && FlxG.random.bool(10) && curBeat > lightningStrikeBeat + lightningOffset)
 		{
 			lightningStrikeShit();
+		}
+	}
+
+	override function add(Object:FlxBasic):FlxBasic
+	{
+		trackedAssets.insert(trackedAssets.length, Object);
+		return super.add(Object);
+	}
+	
+	function unloadAssets():Void
+	{
+		for (asset in trackedAssets)
+		{
+			remove(asset);
 		}
 	}
 
