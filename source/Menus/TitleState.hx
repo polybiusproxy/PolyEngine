@@ -58,7 +58,7 @@ class TitleState extends MusicBeatState
 		var mods = sys.FileSystem.readDirectory("mods");
 
 		for (fileText in mods) {
-			if (sys.FileSystem.isDirectory("mods/"+fileText)) {
+			if (sys.FileSystem.isDirectory("mods/" + fileText)) {
 				modDirectory.push(fileText);
 			}
 		}
@@ -66,7 +66,7 @@ class TitleState extends MusicBeatState
 
 		// Handle mod errors
 		var errors = (error:PolymodError) -> {
-			trace(error.severity+": "+error.code+" - "+ error.message + " ORIGIN: "+error.origin);
+			trace(error.severity + ": " + error.code + " - " + error.message + " - ORIGIN: " + error.origin);
 		};
 
 		//Initialize polymod
@@ -74,19 +74,19 @@ class TitleState extends MusicBeatState
 			modRoot: "mods",
 			dirs: modDirectory,
 			errorCallback: errors,
-			ignoredFiles:Polymod.getDefaultIgnoreList()
+			ignoredFiles: polymod.Polymod.getDefaultIgnoreList()
 		});
 
 		//Display active mods
 		var loadedMods = "";
 		for (modData in modMetadata) {
-			loadedMods += modData.title+", ";
+			loadedMods += modData.title + "";
 		}
 
-		var flxText = new FlxText(5, 5, 0, "", 16);
-		flxText.text = "Loaded Mods: "+loadedMods;
-		flxText.color = FlxColor.WHITE;
-		add(flxText);
+		var modText = new FlxText(5, 5, 0, "", 16);
+		modText.text = "Loaded Mods: " + loadedMods;
+		modText.color = FlxColor.WHITE;
+		add(modText);
 
 		#end
 
