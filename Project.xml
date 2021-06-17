@@ -1,12 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<project
-    xmlns="http://lime.software/project/1.0.3"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://lime.software/project/1.0.3 http://lime.software/xsd/project-1.0.3.xsd">
+<project xmlns="http://lime.software/project/1.0.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://lime.software/project/1.0.2 http://lime.software/xsd/project-1.0.2.xsd">
 	
 	<!-- _________________________ Application Settings _________________________ -->
 
-	<app title="Friday Night Funkin' - PolyEngine" file="Funkin" packageName="com.ninjamuffin99.funkin" package="com.ninjamuffin99.funkin" main="Main" version="1.5" company="ninjamuffin99" />
+	<app title="Friday Night Funkin' - PolyEngine" file="Funkin" packageName="com.ninjamuffin99.funkin" package="com.ninjamuffin99.funkin" main="Main" version="2.1" company="ninjamuffin99" />
 
 	<!--Switch Export with Unique ApplicationID and Icon-->
 	<set name="APP_ID" value="0x0100f6c013bbc000" />
@@ -94,6 +92,9 @@
 	<assets path="assets/week5"    library="week5"    rename="contents/week5" exclude="*.mp3" unless="web"/>
 	<assets path="assets/week6"    library="week6"    rename="contents/week6" exclude="*.ogg" if="web"/>
 	<assets path="assets/week6"    library="week6"    rename="contents/week6" exclude="*.mp3" unless="web"/>
+
+	<assets path="assets/videos" rename="contents/videos" exclude="*.mp3" if="web"/>
+	<assets path="assets/videos" rename="contents/videos" exclude="*.ogg" unless="web"/>
 	
 	<assets path='example_mods' rename='mods' embed='false'/>
 	<assets path='art/readme.txt' rename='do NOT readme.txt' />
@@ -124,6 +125,7 @@
 	<haxelib name="polymod"/>
 	<haxelib name="discord_rpc" if="desktop"/>
 	<haxelib name="hxcpp-debug-server" if="desktop"/>
+	<haxelib name="flixel-studio"/>
 
 	<!-- <haxelib name="markdown" /> -->
 	<!-- <haxelib name="HtmlParser" /> -->
