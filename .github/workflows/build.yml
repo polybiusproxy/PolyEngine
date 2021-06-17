@@ -30,6 +30,7 @@ jobs:
           haxelib install flixel-ui
           haxelib install hscript
           haxelib install newgrounds
+          haxelib git flixel-studio https://github.com/Dovyski/flixel-studio.git
           haxelib install flixel-addons
           haxelib install hxcpp-debug-server
           haxelib git polymod https://github.com/larsiusprime/polymod.git
