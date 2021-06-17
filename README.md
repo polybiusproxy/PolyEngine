@@ -8,21 +8,13 @@ Support the project on the itch.io page: https://ninja-muffin24.itch.io/funkin
 
 ## Credits / shoutouts
 
-- [ninjamuffin99 (me!)](https://twitter.com/ninja_muffin99) - Programmer
-- [PhantomArcade3K](https://twitter.com/phantomarcade3k) and [Evilsk8r](https://twitter.com/evilsk8r) - Art
-- [Kawaisprite](https://twitter.com/kawaisprite) - Musician
+- [PolybiusProxy (me!) and TRSF2.0](https://twitter.com/polybiusproxy) - Programmers
+  [Idiocrasy] - Artist for Dark mod demo.
+- [BrightFyre]() - Tester
 
 This game was made with love to Newgrounds and it's community. Extra love to Tom Fulp.
 
 ## Build instructions
-
-THESE INSTRUCTIONS ARE FOR COMPILING THE GAME'S SOURCE CODE!!!
-
-IF YOU WANT TO JUST DOWNLOAD AND INSTALL AND PLAY THE GAME NORMALLY, GO TO ITCH.IO TO DOWNLOAD THE GAME FOR PC, MAC, AND LINUX!!
-
-https://ninja-muffin24.itch.io/funkin
-
-IF YOU WANT TO COMPILE THE GAME YOURSELF, CONTINUE READING!!!
 
 ### Installing the Required Programs
 
@@ -50,26 +42,6 @@ You should have everything ready for compiling the game! Follow the guide below 
 
 At the moment, you can optionally fix the transition bug in songs with zoomed out cameras.
 - Run `haxelib git flixel-addons https://github.com/HaxeFlixel/flixel-addons` in the terminal/command-prompt.
-
-### Ignored files
-
-I gitignore the API keys for the game, so that no one can nab them and post fake highscores on the leaderboards. But because of that the game
-doesn't compile without it.
-
-Just make a file in `/source` and call it `APIStuff.hx`, and copy paste this into it
-
-```haxe
-package;
-
-class APIStuff
-{
-	public static var API:String = "";
-	public static var EncKey:String = "";
-}
-
-```
-
-and you should be good to go there.
 
 ### Compiling game
 
