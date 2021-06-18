@@ -1699,12 +1699,14 @@ class PlayState extends MusicBeatState
 
 		// CHEAT = im a noob at rhythm games so this is actually useful
 		// also forgot to say: brandon's still a pussy
+		#if debug
 		if (controls.CHEAT)
 		{
 			health += 1;
 			misses = 0;
 			trace("User is cheating!");
 		}
+		#end
 
 		if (health <= 0)
 		{
