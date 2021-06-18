@@ -1,5 +1,6 @@
 package song;
 
+import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.graphics.frames.FlxAtlasFrames;
 import flixel.math.FlxMath;
@@ -120,6 +121,9 @@ class Note extends FlxSprite
 		}
 
 		// trace(prevNote);
+
+		if (FlxG.save.data.downscroll && sustainNote)
+			flipY = true;
 
 		if (isSustainNote && prevNote != null)
 		{

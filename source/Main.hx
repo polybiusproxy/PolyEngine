@@ -3,20 +3,30 @@ package;
 import other.MemoryMonitor;
 import menus.WarningState;
 import menus.AmongUsState;
+import video.VideoState;
+import menus.TitleState;
 import flixel.FlxGame;
 import flixel.FlxState;
 import openfl.Lib;
 import openfl.display.FPS;
 import openfl.display.Sprite;
 import openfl.events.Event;
+import flixel.util.FlxTimer;
+import paths.*;
+import flixel.FlxG;
+#if debug
+import flixel.addons.studio.FlxStudio;
+#end
 
 class Main extends Sprite
 {
-	var MemoryMonitor:MemoryMonitor = new MemoryMonitor(20, 10, 0xffffff);
+	var memoryMonitor:MemoryMonitor = new MemoryMonitor(10, 10, 0xffffff);
 
 	var gameWidth:Int = 1280; // Width of the game in pixels (might be less / more in actual pixels depending on your zoom).
 	var gameHeight:Int = 720; // Height of the game in pixels (might be less / more in actual pixels depending on your zoom).
-	var initialState:Class<FlxState> = WarningState; // The FlxState the game starts with.
+
+	inline static public var initialState:Class<FlxState> = WarningState; // The FlxState the game starts with.
+	
 	var zoom:Float = -1; // If -1, zoom is automatically calculated to fit the window dimensions.
 	var framerate:Int = 60; // How many frames per second the game should run at.
 	var skipSplash:Bool = true; // Whether to skip the flixel splash screen that appears in release mode.
@@ -67,20 +77,32 @@ class Main extends Sprite
 			gameHeight = Math.ceil(stageHeight / zoom);
 		}
 
-		#if !debug
-		addChild(new FlxGame(gameWidth, gameHeight, initialState, zoom, framerate, skipSplash, startFullscreen));
-		#else
-		addChild(new FlxGame(gameWidth, gameHeight, AmongUsState, zoom, 120, skipSplash, startFullscreen));
+		#if debug
+		initialState = AmongUsState;
 		#end
 
-		#if !mobile
-		addChild(new FPS(10, 3, 0xFFFFFF));
+		addChild(new FlxGame(gameWidth, gameHeight, initialState, zoom, framerate, skipSplash, startFullscreen));
+
+		#if (web && debug)
+		new FlxTimer().start(3, function(tmr:FlxTimer)
+		{
+			FlxG.addChildBelowMouse(VideoState.playVideo(Paths.video('polyEngine')));
+		});
 		#end
 
 		#if (!web && !mobile)
-		addChild(MemoryMonitor);
+		addChild(memoryMonitor);
 		#else
 		js.Browser.console.warn("MemoryMonitor can't work on JavaScript for some strange reason...");
+		addChild(new FPS(10, 3, 0xFFFFFF));
+		#end
+
+		#if debug
+		flixel.addons.studio.FlxStudio.create();
+		#end
+
+		#if desktop
+		Lib.current.stage.frameRate = 120;
 		#end
 	}
 }

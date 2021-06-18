@@ -274,10 +274,12 @@ class Controls extends FlxActionSet
 	// inline
 	public function checkByName(name:Action):Bool
 	{
+		// ????? -- what's this
 		#if debug
 		if (!byName.exists(name))
 			throw 'Invalid name: $name';
 		#end
+
 		return byName[name].check();
 	}
 
@@ -506,6 +508,7 @@ class Controls extends FlxActionSet
 				inline bindKeys(Control.BACK, [BACKSPACE, ESCAPE]);
 				inline bindKeys(Control.PAUSE, [P, ENTER, ESCAPE]);
 				inline bindKeys(Control.RESET, [R]);
+				inline bindKeys(Control.CHEAT, [T]);
 			case Duo(true):
 				inline bindKeys(Control.UP, [W]);
 				inline bindKeys(Control.DOWN, [S]);
@@ -539,6 +542,7 @@ class Controls extends FlxActionSet
 				bindKeys(Control.BACK, [BACKSPACE, ESCAPE]);
 				bindKeys(Control.PAUSE, [P, ENTER, ESCAPE]);
 				bindKeys(Control.RESET, [R]);
+				bindKeys(Control.CHEAT, [T]);
 			case Duo(true):
 				bindKeys(Control.UP, [W]);
 				bindKeys(Control.DOWN, [S]);

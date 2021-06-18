@@ -142,6 +142,7 @@ class TitleState extends MusicBeatState
 	var gfDance:FlxSprite;
 	var danceLeft:Bool = false;
 	var titleText:FlxSprite;
+	var weekDay:FlxText;
 
 	function startIntro()
 	{
@@ -181,8 +182,26 @@ class TitleState extends MusicBeatState
 		logoBl.animation.addByPrefix('bump', 'logo bumpin', 24);
 		logoBl.animation.play('bump');
 		logoBl.updateHitbox();
-		// logoBl.screenCenter();
-		// logoBl.color = FlxColor.BLACK;
+
+		weekDay = new FlxText(5, 5, 0, "", 16);
+		weekDay.text = "DAY: ";
+		weekDay.setFormat(Paths.font("vcr.ttf"), 32);
+		weekDay.screenCenter(X);
+
+		if (Date.now().getDay() == 0)
+			weekDay.text = "DAY: SUNDAY!";
+		else if (Date.now().getDay() == 1)
+			weekDay.text = "DAY: MONDAY!";
+		else if (Date.now().getDay() == 2)
+			weekDay.text = "DAY: TUESDAY!";
+		else if (Date.now().getDay() == 3)
+			weekDay.text = "DAY: WEDNESDAY!";
+		else if (Date.now().getDay() == 4)
+			weekDay.text = "DAY: THURSDAY!";
+		else if (Date.now().getDay() == 5)
+			weekDay.text = "DAY: FRIDAY!";
+		else if (Date.now().getDay() == 6)
+			weekDay.text = "DAY: SATURDAY!";
 
 		gfDance = new FlxSprite(FlxG.width * 0.4, FlxG.height * 0.07);
 		gfDance.frames = Paths.getSparrowAtlas('gfDanceTitle');
@@ -191,6 +210,7 @@ class TitleState extends MusicBeatState
 		gfDance.antialiasing = true;
 		add(gfDance);
 		add(logoBl);
+		add(weekDay);
 
 		titleText = new FlxSprite(100, FlxG.height * 0.8);
 		titleText.frames = Paths.getSparrowAtlas('titleEnter');
@@ -202,12 +222,7 @@ class TitleState extends MusicBeatState
 		// titleText.screenCenter(X);
 		add(titleText);
 
-		var logo:FlxSprite = new FlxSprite().loadGraphic(Paths.image('logo'));
-		logo.screenCenter();
-		logo.antialiasing = true;
-
 		FlxTween.tween(logoBl, {y: logoBl.y + 50}, 0.6, {ease: FlxEase.quadInOut, type: PINGPONG});
-		FlxTween.tween(logo, {y: logoBl.y + 50}, 0.6, {ease: FlxEase.quadInOut, type: PINGPONG, startDelay: 0.1});
 
 		credGroup = new FlxGroup();
 		add(credGroup);
@@ -392,49 +407,30 @@ class TitleState extends MusicBeatState
 		{
 			case 1:
 				createCoolText(['the fnf team', 'polybiusproxy']);
-			// credTextShit.visible = true;
 			case 3:
-				addMoreText('present');
-			// credTextShit.text += '\npresent...';
-			// credTextShit.addText();
+				addMoreText('present...');
 			case 4:
 				deleteCoolText();
-			// credTextShit.visible = false;
-			// credTextShit.text = 'In association \nwith';
-			// credTextShit.screenCenter();
 			case 5:
 				createCoolText(['In association', 'with']);
 			case 7:
 				addMoreText('newgrounds');
 				ngSpr.visible = true;
-			// credTextShit.text += '\nNewgrounds';
 			case 8:
 				deleteCoolText();
 				ngSpr.visible = false;
-			// credTextShit.visible = false;
-
-			// credTextShit.text = 'Shoutouts Tom Fulp';
-			// credTextShit.screenCenter();
 			case 9:
 				createCoolText([curWacky[0]]);
-			// credTextShit.visible = true;
 			case 11:
 				addMoreText(curWacky[1]);
-			// credTextShit.text += '\nlmao';
 			case 12:
 				deleteCoolText();
-			// credTextShit.visible = false;
-			// credTextShit.text = "Friday";
-			// credTextShit.screenCenter();
 			case 13:
 				addMoreText('Friday');
-			// credTextShit.visible = true;
 			case 14:
 				addMoreText('Night');
-			// credTextShit.text += '\nNight';
 			case 15:
-				addMoreText('Funkin'); // credTextShit.text += '\nFunkin';
-
+				addMoreText('Funkin');
 			case 16:
 				skipIntro();
 		}

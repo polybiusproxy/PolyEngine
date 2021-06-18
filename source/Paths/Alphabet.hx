@@ -6,6 +6,7 @@ import flixel.graphics.frames.FlxAtlasFrames;
 import flixel.group.FlxSpriteGroup;
 import flixel.math.FlxMath;
 import flixel.util.FlxTimer;
+import PlayState;
 
 using StringTools;
 
@@ -202,10 +203,13 @@ class Alphabet extends FlxSpriteGroup
 					letter.x += 90;
 				}
 
-				if (FlxG.random.bool(40))
+				if (PlayState.SONG.song.toLowerCase() == 'tutorial')
 				{
-					var daSound:String = "GF_";
-					FlxG.sound.play(Paths.soundRandom(daSound, 1, 4));
+					if (FlxG.random.bool(40))
+					{
+						var daSound:String = "GF_";
+						FlxG.sound.play(Paths.soundRandom(daSound, 1, 4));
+					}
 				}
 
 				add(letter);

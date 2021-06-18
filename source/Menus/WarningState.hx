@@ -19,7 +19,6 @@ using StringTools;
 // This displays a warning that says this is a modification that shouldn't be treated like an official thing made by ninjamuffin lol.
 class WarningState extends MusicBeatState
 {
-
     override function create()
     {
         var warningMessage = new FlxText(0, 0, FlxG.width,

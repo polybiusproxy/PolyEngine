@@ -17,6 +17,7 @@ import haxe.io.Path;
 import song.*;
 import paths.*;
 import flixel.group.FlxGroup;
+import flixel.util.FlxAxes;
 
 class LoadingState extends MusicBeatState
 {
@@ -30,8 +31,7 @@ class LoadingState extends MusicBeatState
 	var grpFinished:FlxGroup;
 
 	var logo:FlxSprite;
-	var loadingBar:FlxBar;
-	var barText:FlxText;
+	var loadingBar:FlxSprite;
 	
 	function new(target:FlxState, stopMusic:Bool)
 	{
@@ -51,14 +51,9 @@ class LoadingState extends MusicBeatState
 		logo.screenCenter();
 		add(logo);
 
-		loadingBar = new FlxBar(0, 0, LEFT_TO_RIGHT, FlxG.width - 50, 50, null, "", 0, 100, true);
-		loadingBar.value = 0;
+		loadingBar = new FlxSprite(0, FlxG.height - 20).makeGraphic(FlxG.width, 10, FlxColor.GREEN);
+		loadingBar.screenCenter(FlxAxes.X);
 		add(loadingBar);
-
-		barText = new FlxText(loadingBar.x, loadingBar.y, FlxG.width, "Loading...");
-		barText.setFormat(null, 28, FlxColor.WHITE, CENTER, OUTLINE);
-		barText.screenCenter();
-		add(barText);
 		
 		initSongsManifest().onComplete
 		(
@@ -121,6 +116,7 @@ class LoadingState extends MusicBeatState
 	override function update(elapsed:Float)
 	{
 		super.update(elapsed);
+
 		#if debug
 		if (FlxG.keys.justPressed.SPACE)
 			trace('fired: ' + callbacks.getFired() + " unfired:" + callbacks.getUnfired());

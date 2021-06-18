@@ -15,12 +15,13 @@ import flixel.text.FlxText;
 import flixel.util.FlxColor;
 import lime.utils.Assets;
 import paths.*;
+import PlayState;
 
 class OptionsMenu extends MusicBeatState
 {
 	var grpMenuShit:FlxTypedGroup<Alphabet>;
 
-	var menuItems:Array<String> = ['WASD', 'DFJK', 'Enable reset', 'Disable reset', 'Exit to menu'];
+	var menuItems:Array<String> = ['WASD', 'DFJK', 'Downscroll', 'Upscroll', 'Exit to menu'];
 	var curSelected:Int = 0;
 	var offsetText:FlxText;
 
@@ -28,8 +29,8 @@ class OptionsMenu extends MusicBeatState
 	{
 		super.create();
 
-		// note: use paths now due to polymod!
-		var bg:FlxSprite = new FlxSprite(-80).loadGraphic('assets/images/menuBG.png');
+		// note: use paths now due to polymod! -- done >:)
+		var bg:FlxSprite = new FlxSprite(-80).loadGraphic(Paths.image('menuBG'));
 		bg.scrollFactor.x = 0;
 		bg.scrollFactor.y = 0.18;
 		bg.setGraphicSize(Std.int(bg.width * 1.1));
@@ -41,13 +42,13 @@ class OptionsMenu extends MusicBeatState
 		if (FlxG.save.data.dfjk == null){
 			FlxG.save.data.dfjk = false;
 		}
-		
-		if (FlxG.save.data.resetEnabled == null){
-			FlxG.save.data.resetEnabled = true;
-		}
 
 		if (FlxG.save.data.noteoffset == null){
 			FlxG.save.data.noteoffset = 0;
+		}
+
+		if (FlxG.save.data.downscroll == null){
+			FlxG.save.data.downscroll = false;
 		}
 
 		var bg:FlxSprite = new FlxSprite().makeGraphic(FlxG.width, FlxG.height, FlxColor.BLACK);
@@ -135,13 +136,11 @@ class OptionsMenu extends MusicBeatState
 					FlxG.save.data.dfjk = true;
 					controls.setKeyboardScheme(Controls.KeyboardScheme.Solo);
 					FlxG.switchState(new MainMenuState());
-				case "Enable reset":
-					FlxG.save.data.resetEnabled = true;
-					controls.setKeyboardScheme(Controls.KeyboardScheme.Solo);
+				case "Downscroll":
+					FlxG.save.data.downscroll = true;
 					FlxG.switchState(new MainMenuState());
-				case "Disable reset":
-					FlxG.save.data.resetEnabled = false;
-					controls.setKeyboardScheme(Controls.KeyboardScheme.Solo);
+				case "Upscroll":
+					FlxG.save.data.downscroll = false;
 					FlxG.switchState(new MainMenuState());
 				case "Exit to menu":
 					FlxG.switchState(new MainMenuState());
