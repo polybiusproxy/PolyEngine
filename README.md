@@ -9,7 +9,7 @@ Support the project on the itch.io page: https://ninja-muffin24.itch.io/funkin
 ## Credits / shoutouts
 
 - [PolybiusProxy (me!) and TRSF2.0](https://twitter.com/polybiusproxy) - Programmers
-  [Idiocrasy]() - Artist for Dark mod demo.
+- [Idiocrasy]() - Artist for Dark mod demo.
 - [BrightFyre]() - Tester
 
 This game was made with love to Newgrounds and it's community. Extra love to Tom Fulp.
