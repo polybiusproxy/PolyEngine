@@ -1,6 +1,7 @@
-package other;
+package system;
 
 import haxe.Timer;
+
 import openfl.events.Event;
 import openfl.system.System;
 import openfl.text.TextField;

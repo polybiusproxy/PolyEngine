@@ -13,7 +13,7 @@ import paths.*;
 
 using StringTools;
 
-class DialogueBox extends FlxSpriteGroup
+class PixelDialogue extends FlxSpriteGroup
 {
 	var box:FlxSprite;
 

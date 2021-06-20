@@ -1,4 +1,4 @@
-package other;
+package shaders;
 
 // STOLEN FROM HAXEFLIXEL DEMO LOL
 
