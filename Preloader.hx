@@ -1,5 +1,6 @@
 package ;
  
+import paths.Paths;
 import flixel.system.FlxBasePreloader;
 import openfl.display.Sprite;
 import flash.display.Bitmap;
@@ -7,9 +8,8 @@ import flash.display.BitmapData;
 import flash.display.BlendMode;
 import flash.display.Sprite;
 import flash.Lib;
-import flixel.FlxG;
  
-@:bitmap("art/preloaderArt.png") class LogoImage extends BitmapData { }
+@:bitmap(Paths.image('logoBumpin')) class LogoImage extends BitmapData {}
  
 class Preloader extends FlxBasePreloader
 {
@@ -39,18 +39,24 @@ class Preloader extends FlxBasePreloader
      
     override function update(Percent:Float):Void 
     {
-        if(Percent < 69)
+        /*
+
+        if (Percent < 69)
         {
             logo.scaleX += Percent / 1920;
             logo.scaleY += Percent / 1920;
             logo.x -= Percent * 0.6;
             logo.y -= Percent / 2;
-        }else{
+        }
+        else
+        {
             logo.scaleX = this._width / 1280;
             logo.scaleY = this._width / 1280;
             logo.x = ((this._width) / 2) - ((logo.width) / 2);
             logo.y = (this._height / 2) - ((logo.height) / 2);
         }
+
+        */
         
         super.update(Percent);
     }
