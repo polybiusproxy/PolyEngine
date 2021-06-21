@@ -107,6 +107,11 @@ class Paths
 		return getPath('images/$key.png', IMAGE, library);
 	}
 
+	inline static public function icon(key:String, ?library:String)
+	{
+		return getPath('images/icons/$key.png', IMAGE, library);
+	}
+
 	inline static public function font(key:String)
 	{
 		return 'contents/fonts/$key';
