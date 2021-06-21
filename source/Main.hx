@@ -1,19 +1,26 @@
 package;
 
-import other.MemoryMonitor;
-import menus.WarningState;
-import menus.AmongUsState;
-import video.VideoState;
-import menus.TitleState;
-import flixel.FlxGame;
-import flixel.FlxState;
+import menus.*;
+import video.*;
+import system.*;
+import paths.*;
+
+import lime.app.Application;
+
 import openfl.Lib;
 import openfl.display.FPS;
 import openfl.display.Sprite;
 import openfl.events.Event;
+
+import flixel.FlxGame;
+import flixel.FlxState;
 import flixel.util.FlxTimer;
-import paths.*;
 import flixel.FlxG;
+
+#if desktop
+import systools.Dialogs;
+#end
+
 #if debug
 import flixel.addons.studio.FlxStudio;
 #end
@@ -89,6 +96,12 @@ class Main extends Sprite
 			FlxG.addChildBelowMouse(VideoState.playVideo(Paths.video('polyEngine')));
 		});
 		#end
+
+		if (PlayState.isBetaVer)
+		{
+			trace("beta ver!");
+			Dialogs.message("Friday Night Funkin' - PolyEngine", "This is a beta version of PolyEngine, therefore, bugs are possible to appear. If you notice one, make an issue or a pull request. Thanks.", false);
+		}
 
 		#if (!web && !mobile)
 		addChild(memoryMonitor);

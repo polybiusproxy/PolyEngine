@@ -1,8 +1,13 @@
 package menus;
 
+import song.*;
+import paths.*;
+import other.*;
+
 #if desktop
-import other.Discord.DiscordClient;
+import system.Discord.DiscordClient;
 #end
+
 import flixel.FlxG;
 import flixel.FlxObject;
 import flixel.FlxSprite;
@@ -13,9 +18,6 @@ import flixel.text.FlxText;
 import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
 import flixel.util.FlxColor;
-import song.*;
-import paths.*;
-import other.*;
 
 using StringTools;
 
@@ -37,6 +39,8 @@ class MainMenuState extends MusicBeatState
 	var camFollow:FlxObject;
 
 	var trackedAssets:Array<Dynamic> = [];
+
+	var versionShit:FlxText;
 
 	override function create()
 	{
@@ -100,12 +104,16 @@ class MainMenuState extends MusicBeatState
 
 		FlxG.camera.follow(camFollow, null, 0.06);
 
-		var versionShit:FlxText = new FlxText(5, FlxG.height - 18, 0, PlayState.uglyVersion +  (" FNF - " + PlayState.daVersion + " - PolyEngine"), 12);
+		versionShit = new FlxText(5, FlxG.height - 18, 0, "", 12);
+
+		if (PlayState.isBetaVer)
+		{
+			versionShit.text = PlayState.uglyVersion + (" FNF - " + PlayState.daVersion + " - PolyEngine | [BETA VERSION]");
+		}
+
 		versionShit.scrollFactor.set();
 		versionShit.setFormat("VCR OSD Mono", 16, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		add(versionShit);
-
-		// NG.core.calls.event.logEvent('swag').send();
 
 		changeItem();
 

@@ -109,7 +109,6 @@ class LoadingState extends MusicBeatState
 	override function beatHit()
 	{
 		super.beatHit();
-		
 		logo.animation.play('bump');
 	}
 	
@@ -117,6 +116,12 @@ class LoadingState extends MusicBeatState
 	{
 		super.update(elapsed);
 
+		// if (callbacks != null)
+			// targetShit = FlxMath.remapToRange(callbacks.numRemaining / callbacks.length, 1, 0, 0, 1);
+
+		// loadingBar.scale.x = ? + 0.5 * (targetShit - ?);
+
+		// ?????
 		#if debug
 		if (FlxG.keys.justPressed.SPACE)
 			trace('fired: ' + callbacks.getFired() + " unfired:" + callbacks.getUnfired());
