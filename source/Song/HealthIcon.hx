@@ -12,9 +12,15 @@ class HealthIcon extends FlxSprite
 
 	public function new(char:String = 'bf', isPlayer:Bool = false)
 	{
+		// isPlayer = isOldIcon;
+		// char = "";
+
 		super();
+
+		// isPlayer = false;
 		loadGraphic(Paths.image('iconGrid'), true, 150, 150);
 
+		// changeIcon(char);
 		antialiasing = true;
 		animation.add('bf', [0, 1], 0, false, isPlayer);
 		animation.add('bf-car', [0, 1], 0, false, isPlayer);
@@ -38,6 +44,21 @@ class HealthIcon extends FlxSprite
 		animation.play(char);
 		scrollFactor.set();
 	}
+
+	// i was just testing shit lol
+	
+	/*
+	function swapOldIcon()
+	{
+		inline bindKeys(Control.UP, (FlxG.save.data.dfjk ? [J, FlxKey.UP] : [W, FlxKey.UP]));
+		(this.isOldIcon = !this.isOldIcon) ? this.changeIcon("bf-old") : this.changeIcon("bf");
+	}
+
+	function changeIcon(char:String)
+	{
+		loadGraphic(Paths.icon('icon-' + char), true, 150, 150);
+	}
+	*/
 
 	override function update(elapsed:Float)
 	{
