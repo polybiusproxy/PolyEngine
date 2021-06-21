@@ -4,11 +4,14 @@ import lime.app.Application;
 import haxe.Http;
 
 #if desktop
-import other.Discord.DiscordClient;
 import Sys;
 import sys.FileSystem;
+
+import system.Discord.DiscordClient;
+
 import polymod.Polymod.Framework;
 import polymod.Polymod.PolymodError;
+
 import openfl.display.BitmapData;
 #end
 
@@ -16,6 +19,9 @@ import song.*;
 import paths.*;
 import player.*;
 import other.*;
+
+import openfl.Assets;
+
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.addons.transition.FlxTransitionSprite.GraphicTransTileDiamond;
@@ -30,7 +36,6 @@ import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
 import flixel.util.FlxColor;
 import flixel.util.FlxTimer;
-import openfl.Assets;
 import flixel.text.FlxText;
 
 using StringTools;
@@ -89,6 +94,8 @@ class TitleState extends MusicBeatState
 		add(modText);
 
 		#end
+
+		FlxG.game.focusLostFramerate = 60;
 
 		PlayerSettings.init();
 
