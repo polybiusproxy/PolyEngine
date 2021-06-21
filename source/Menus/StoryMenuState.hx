@@ -1,8 +1,13 @@
 package menus;
 
+import song.*;
+import paths.*;
+import other.*;
+
 #if desktop
-import other.Discord.DiscordClient;
+import system.Discord.DiscordClient;
 #end
+
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.addons.transition.FlxTransitionableState;
@@ -12,9 +17,6 @@ import flixel.text.FlxText;
 import flixel.tweens.FlxTween;
 import flixel.util.FlxColor;
 import flixel.util.FlxTimer;
-import song.*;
-import paths.*;
-import other.*;
 
 using StringTools;
 

@@ -1,4 +1,4 @@
-package song;
+package paths;
 
 import lime.utils.Assets;
 
@@ -16,6 +16,11 @@ class CoolUtil
 	public static function getScore():Int
 	{
 		return PlayState.songScore;
+	}
+
+	public static function blueBalls():Int
+	{
+		return PlayState.deaths;
 	}
 
 	public static function coolTextFile(path:String):Array<String>
