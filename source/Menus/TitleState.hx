@@ -1,27 +1,5 @@
 package menus;
 
-import lime.app.Application;
-import haxe.Http;
-
-#if desktop
-import Sys;
-import sys.FileSystem;
-
-import system.Discord.DiscordClient;
-
-import polymod.Polymod.Framework;
-import polymod.Polymod.PolymodError;
-
-import openfl.display.BitmapData;
-#end
-
-import song.*;
-import paths.*;
-import player.*;
-import other.*;
-
-import openfl.Assets;
-
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.addons.transition.FlxTransitionSprite.GraphicTransTileDiamond;
@@ -32,13 +10,30 @@ import flixel.group.FlxGroup;
 import flixel.input.gamepad.FlxGamepad;
 import flixel.math.FlxPoint;
 import flixel.math.FlxRect;
+import flixel.text.FlxText;
 import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
 import flixel.util.FlxColor;
 import flixel.util.FlxTimer;
-import flixel.text.FlxText;
+import haxe.Http;
+import lime.app.Application;
+import openfl.Assets;
+import openfl.Lib;
+import other.*;
+import paths.*;
+import player.*;
+import song.*;
 
 using StringTools;
+
+#if desktop
+import Sys;
+import openfl.display.BitmapData;
+import polymod.Polymod.Framework;
+import polymod.Polymod.PolymodError;
+import sys.FileSystem;
+import system.Discord.DiscordClient;
+#end
 
 class TitleState extends MusicBeatState
 {
@@ -57,24 +52,26 @@ class TitleState extends MusicBeatState
 	override public function create():Void
 	{
 		#if (polymod && sys)
-
 		// Get all directories in the mod folder
 		var modDirectory:Array<String> = [];
 		var mods = sys.FileSystem.readDirectory("mods");
 
-		for (fileText in mods) {
-			if (sys.FileSystem.isDirectory("mods/" + fileText)) {
+		for (fileText in mods)
+		{
+			if (sys.FileSystem.isDirectory("mods/" + fileText))
+			{
 				modDirectory.push(fileText);
 			}
 		}
 		trace(modDirectory);
 
 		// Handle mod errors
-		var errors = (error:PolymodError) -> {
+		var errors = (error:PolymodError) ->
+		{
 			trace(error.severity + ": " + error.code + " - " + error.message + " - ORIGIN: " + error.origin);
 		};
 
-		//Initialize polymod
+		// Initialize polymod
 		var modMetadata = polymod.Polymod.init({
 			modRoot: "mods",
 			dirs: modDirectory,
@@ -82,9 +79,10 @@ class TitleState extends MusicBeatState
 			ignoredFiles: polymod.Polymod.getDefaultIgnoreList()
 		});
 
-		//Display active mods
+		// Display active mods
 		var loadedMods = "";
-		for (modData in modMetadata) {
+		for (modData in modMetadata)
+		{
 			loadedMods += modData.title + "";
 		}
 
@@ -92,7 +90,10 @@ class TitleState extends MusicBeatState
 		modText.text = "Loaded Mods: " + loadedMods;
 		modText.color = FlxColor.WHITE;
 		add(modText);
+		#end
 
+		#if desktop
+		Lib.current.stage.frameRate = 120;
 		#end
 
 		FlxG.game.focusLostFramerate = 60;
@@ -138,10 +139,11 @@ class TitleState extends MusicBeatState
 
 		#if desktop
 		DiscordClient.initialize();
-		
-		Application.current.onExit.add (function (exitCode) {
+
+		Application.current.onExit.add(function(exitCode)
+		{
 			DiscordClient.shutdown();
-		 });
+		});
 		#end
 	}
 
@@ -327,35 +329,34 @@ class TitleState extends MusicBeatState
 			// FlxG.sound.music.stop();
 
 			new FlxTimer().start(2, function(tmr:FlxTimer)
+			{
+				// Get current version of Kade Engine
+				// ye i stole this from kade engine (srry dude!)
+
+				var http = new haxe.Http("https://raw.githubusercontent.com/notdonxd/PolyEngine/master/daversion");
+
+				http.onData = function(data:String)
 				{
-	
-					// Get current version of Kade Engine
-					// ye i stole this from kade engine (srry dude!)
-	
-					var http = new haxe.Http("https://raw.githubusercontent.com/notdonxd/PolyEngine/master/daversion");
-	
-					http.onData = function (data:String) {
-					  
-						  if (!PlayState.daVersion.contains(data.trim()) && !OutdatedSubState.leftState && MainMenuState.nightly == "")
-						{
-							trace('this dumbass cant update lmfao hahahahh ' + data.trim() + ' != ' + PlayState.daVersion);
-							FlxG.switchState(new OutdatedSubState());
-						}
-						else
-						{
-							FlxG.switchState(new MainMenuState());
-						}
+					if (!PlayState.daVersion.contains(data.trim()) && !OutdatedSubState.leftState && MainMenuState.nightly == "")
+					{
+						trace('this dumbass cant update lmfao hahahahh ' + data.trim() + ' != ' + PlayState.daVersion);
+						FlxG.switchState(new OutdatedSubState());
 					}
-					
-					http.onError = function (error) {
-					  trace('error: $error');
-					  FlxG.switchState(new MainMenuState()); // fail but we go anyway
+					else
+					{
+						FlxG.switchState(new MainMenuState());
 					}
-					
-					http.request();
-	
-				});
-				// FlxG.sound.play(Paths.music('titleShoot'), 0.7);
+				}
+
+				http.onError = function(error)
+				{
+					trace('error: $error');
+					FlxG.switchState(new MainMenuState()); // fail but we go anyway
+				}
+
+				http.request();
+			});
+			// FlxG.sound.play(Paths.music('titleShoot'), 0.7);
 		}
 
 		if (pressedEnter && !skippedIntro)
