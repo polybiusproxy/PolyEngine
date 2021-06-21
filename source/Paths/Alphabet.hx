@@ -211,6 +211,10 @@ class Alphabet extends FlxSpriteGroup
 						FlxG.sound.play(Paths.soundRandom(daSound, 1, 4));
 					}
 				}
+				else
+				{
+					FlxG.sound.play(Paths.sound('pixelText'), 0.6);
+				}
 
 				add(letter);
 
