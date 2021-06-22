@@ -14,7 +14,7 @@ Besides all that PolyEngine is a great engine developed by PolybiusProxy and me 
 Bellow are the steps to compiling the game
 |||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
 
-This is the repository for Friday Night Funkin, a game originally made for Ludum Dare 47 "Stuck In a Loop".
+bruh trsf
 
 Play the Ludum Dare prototype here: https://ninja-muffin24.itch.io/friday-night-funkin
 Play the Newgrounds one here: https://www.newgrounds.com/portal/view/770371
