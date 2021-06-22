@@ -1,4 +1,18 @@
 # Friday Night Funkin - PolyEngine
+Poly engine is EPIC #BEST ENGINE
+WE GOT UHHH NOTE SPLASHES
+AND WE GOT DOWNSCROLL AND SOON CUSTOM KEYBINDS
+THIS WILL BE THE ENGINE USED FOR V.S DARK AND ALL OTHER PROJECTS MADE BY THE DARK TEAM
+WE ALSO HAVE POLY MOD UPDATED SO U CAN ADD MODS IN
+AND WE HAVE FLOATY LOGO
+AND UH I WAS FORCED TO MAKE THIS SO PLS CALL FOR HELP
+MY DISCORD IS TRSF2.0#....
+OH SHIT HE IS COMING
+UHHH POLY ENGINE BEST ENGINE YEAH
+Anyway hope you enjoyed my rambling (or didnt). 
+Besides all that PolyEngine is a great engine developed by PolybiusProxy and me (TRSF2.0)
+Bellow are the steps to compiling the game
+|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
 
 This is the repository for Friday Night Funkin, a game originally made for Ludum Dare 47 "Stuck In a Loop".
 
