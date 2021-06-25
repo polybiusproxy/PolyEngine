@@ -1160,7 +1160,9 @@ class PlayState extends MusicBeatState
 				{
 					swagNote.x += FlxG.width / 2; // general offset
 				}
-				else {}
+				else
+				{
+				}
 			}
 			daBeats += 1;
 		}
@@ -1765,7 +1767,7 @@ class PlayState extends MusicBeatState
 					else
 					{
 						health -= 0.0475;
-						misses++;
+						misses = misses + 1;
 
 						var noteDataShit:Int = Std.int(Math.abs(daNote.noteData));
 						noteMiss(noteDataShit);
@@ -2199,7 +2201,7 @@ class PlayState extends MusicBeatState
 			}
 
 			combo = 0;
-			misses += 1;
+			misses = misses + 1;
 
 			songScore -= 10;
 
