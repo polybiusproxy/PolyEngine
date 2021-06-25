@@ -31,7 +31,7 @@ install:
   - haxelib list
 
 build_script:
-  - lime rebuild systools windows
+  - haxelib run lime rebuild systools windows
   - haxelib run lime build windows
 
 artifacts:

@@ -38,7 +38,7 @@ jobs:
           haxelib list
       - name: Build time! (macOS)
         run: |
-          lime rebuild systools mac
+          haxelib run lime rebuild systools mac
           haxelib run lime build mac
       - uses: actions/upload-artifact@v2
         with:
