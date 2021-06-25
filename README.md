@@ -10,18 +10,18 @@
 
 # Features
 
- - **Downscroll**
-	 - An improved input system, similar to Quaver or Etterna, with less delays, less dropped inputs and other improvements.
+ - **Downscroll and input**
+	 - An improved input system, similar to osu!, with less delays, downscroll, and more!
  - **DFJK**
-	 - Tired of being forced to.
+	 - Tired of being forced to use arrow keys and WASD? Well, you can now change to DFJK! (keybinding soon)
  - **Misses counter**
      - While you're playing, you can see your misses!
  - **Options menu**
-	 - An options menu where you can adjust several PolyEngine features!
+	 - A full overhaul of the options menu where you can adjust several PolyEngine features!
  - **Pause menu overhaul**
-     - You can see your current score, your deaths, and change difficulty.
+     - An improved pause menu where you can see your current score, your deaths, and change difficulty.
  - **Note offset** (in beta)
-	 - Change your
+	 - Change the offset of the notes. It's useful if you have a Bluetooth speaker / headphones.
 
 # Credits
 ### Friday Night Funkin'
@@ -38,5 +38,5 @@ This game was made with love to Newgrounds and its community. Extra love to Tom 
 
 
 ### Shoutouts
-- [BrightFyre](https://github.com/ThatRozebudDude) - Tester (i'm stealing ur code >:))))) ).
+- [BrightFyre](https://github.com/brightfyregit) - Tester (i'm stealing ur code >:))))) ).
 - [Idiocrasy]() - Artist for Dark assets in mod example. <!--- lol -->
