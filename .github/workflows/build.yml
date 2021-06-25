@@ -32,11 +32,13 @@ jobs:
           haxelib install newgrounds
           haxelib git flixel-studio https://github.com/Dovyski/flixel-studio.git
           haxelib install flixel-addons
+          haxelib git systools https://github.com/polybiusproxy/systools.git
           haxelib git polymod https://github.com/larsiusprime/polymod.git
           haxelib git discord_rpc https://github.com/Aidan63/linc_discord-rpc
           haxelib list
       - name: Build time! (macOS)
         run: |
+          lime rebuild systools mac
           haxelib run lime build mac
       - uses: actions/upload-artifact@v2
         with:
