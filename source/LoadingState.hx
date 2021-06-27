@@ -4,6 +4,7 @@ import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.FlxState;
 import flixel.group.FlxGroup;
+import flixel.math.FlxMath;
 import flixel.text.FlxText;
 import flixel.ui.FlxBar;
 import flixel.util.FlxAxes;
@@ -22,6 +23,7 @@ class LoadingState extends MusicBeatState
 	inline static var MIN_TIME = 1.0;
 
 	var target:FlxState;
+	var targetShit:Float = 0;
 	var stopMusic = false;
 	var callbacks:MultiCallback;
 
@@ -34,6 +36,7 @@ class LoadingState extends MusicBeatState
 	function new(target:FlxState, stopMusic:Bool)
 	{
 		super();
+
 		this.target = target;
 		this.stopMusic = stopMusic;
 	}
@@ -117,16 +120,15 @@ class LoadingState extends MusicBeatState
 	{
 		super.update(elapsed);
 
-		// if (callbacks != null)
-		// targetShit = FlxMath.remapToRange(callbacks.numRemaining / callbacks.length, 1, 0, 0, 1);
+		/*
+			elapsed = 0.88 * FlxG.width;
 
-		// loadingBar.scale.x = ? + 0.5 * (targetShit - ?);
+			if (callbacks != null)
+				targetShit = FlxMath.remapToRange(callbacks.numRemaining / callbacks.length, 1, 0, 0, 1);
 
-		// ?????
-		#if debug
-		if (FlxG.keys.justPressed.SPACE)
-			trace('fired: ' + callbacks.getFired() + " unfired:" + callbacks.getUnfired());
-		#end
+			loadingBar.scale.set(target + 0.5 * (targetShit - target));
+			loadingBar.updateHitbox();
+		 */
 	}
 
 	function onLoad()
