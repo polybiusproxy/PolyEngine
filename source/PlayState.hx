@@ -595,6 +595,7 @@ class PlayState extends MusicBeatState
 		if (curStage == 'limo')
 			gfVersion = 'gf-car';
 
+		#if desktop
 		var artist:String = 'KawaiSprite';
 
 		if (curStage != 'schoolEvil')
@@ -607,6 +608,7 @@ class PlayState extends MusicBeatState
 		{
 			Application.current.window.title = "Friday Night Funkin' - PolyEngine";
 		}
+		#end
 
 		gf = new Character(400, 130, gfVersion);
 		gf.scrollFactor.set(0.95, 0.95);
