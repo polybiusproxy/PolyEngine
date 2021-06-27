@@ -6,7 +6,6 @@ import flixel.graphics.frames.FlxAtlasFrames;
 import flixel.group.FlxSpriteGroup;
 import flixel.math.FlxMath;
 import flixel.util.FlxColor;
-import paths.*;
 
 class MenuItem extends FlxSpriteGroup
 {
@@ -32,9 +31,7 @@ class MenuItem extends FlxSpriteGroup
 	// if it runs at 144 fps, fake framerate will be like 14, and will update the graphic every 0.016666 * 3 seconds still???
 	// so it runs basically every so many seconds, not dependant on framerate??
 	// I'm still learning how math works thanks whoever is reading this lol
-
 	// thats delta time mr ninjamuffin :)
-
 	var fakeFramerate:Float = Math.round((1 / FlxG.elapsed) / 10);
 
 	override function update(elapsed:Float)

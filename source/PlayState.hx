@@ -1,7 +1,8 @@
 package;
 
-import chart.*;
-import debug.*;
+import Section.SwagSection;
+import Song.SwagSong;
+import WiggleEffect.WiggleEffectType;
 import flixel.FlxBasic;
 import flixel.FlxCamera;
 import flixel.FlxG;
@@ -25,23 +26,12 @@ import flixel.util.FlxColor;
 import flixel.util.FlxSort;
 import flixel.util.FlxTimer;
 import lime.app.Application;
-import menus.*;
 import openfl.Lib;
-import other.*;
-import paths.*;
-import player.*;
-import shaders.*;
-import shaders.WiggleEffect.WiggleEffectType;
-import song.*;
-import song.*;
-import song.Section.SwagSection;
-import song.Song.SwagSong;
-import system.*;
 
 using StringTools;
 
 #if desktop
-import system.Discord.DiscordClient;
+import Discord.DiscordClient;
 #end
 
 class PlayState extends MusicBeatState
@@ -71,6 +61,7 @@ class PlayState extends MusicBeatState
 	private var curSection:Int = 0;
 
 	private var misses:Int = 0;
+	private var accuracy:Float = 100.00;
 
 	private var camFollow:FlxObject;
 
@@ -176,12 +167,16 @@ class PlayState extends MusicBeatState
 		Conductor.mapBPMChanges(SONG);
 		Conductor.changeBPM(SONG.bpm);
 
+		// if (FlxG.save.data.noteSplash)
 		grpNoteSplashes = new FlxTypedGroup<NoteSplash>();
 
 		var sploosh = new NoteSplash(100, 100, 0);
 		sploosh.alpha = 0.1;
 
 		grpNoteSplashes.add(sploosh);
+
+		songScore = 0;
+		accuracy = 100.00;
 
 		switch (SONG.song.toLowerCase())
 		{
@@ -766,7 +761,7 @@ class PlayState extends MusicBeatState
 		healthBar.createFilledBar(0xFFFF0000, 0xFF66FF33);
 		add(healthBar);
 
-		scoreTxt = new FlxText(healthBarBG.x + 200, healthBarBG.y + 50, 0, "", 20);
+		scoreTxt = new FlxText(healthBarBG.x + healthBarBG.width - 190, healthBarBG.y + 50, 0, "", 20);
 		scoreTxt.setFormat("assets/fonts/vcr.ttf", 15, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		scoreTxt.scrollFactor.set();
 		add(scoreTxt);
@@ -862,6 +857,19 @@ class PlayState extends MusicBeatState
 		}
 
 		super.create();
+	}
+
+	function updateAccuracy() // thx brightfyre :troll:
+	{
+		if (accuracy >= 100.00)
+		{
+			if (misses == 0)
+				accuracy = 100.00;
+			else
+			{
+				accuracy = 99.98;
+			}
+		}
 	}
 
 	function schoolIntro(?pixelBox:PixelDialogue):Void
@@ -1113,8 +1121,11 @@ class PlayState extends MusicBeatState
 
 			for (songNotes in section.sectionNotes)
 			{
-				var daStrumTime:Float = songNotes[0];
+				var daStrumTime:Float = songNotes[0] + 46;
 				var daNoteData:Int = Std.int(songNotes[1] % 4);
+
+				if (daStrumTime < 0)
+					daStrumTime = 0;
 
 				var gottaHitNote:Bool = section.mustHitSection;
 
@@ -1142,7 +1153,8 @@ class PlayState extends MusicBeatState
 				{
 					oldNote = unspawnNotes[Std.int(unspawnNotes.length - 1)];
 
-					var sustainNote:Note = new Note(daStrumTime + (Conductor.stepCrochet * susNote) + Conductor.stepCrochet, daNoteData, oldNote, true);
+					var sustainNote:Note = new Note(daStrumTime + (Conductor.stepCrochet * susNote) + Conductor.stepCrochet + FlxG.save.data.noteoffset,
+						daNoteData, oldNote, true);
 					sustainNote.scrollFactor.set();
 					unspawnNotes.push(sustainNote);
 
@@ -1379,6 +1391,16 @@ class PlayState extends MusicBeatState
 	var startedCountdown:Bool = false;
 	var canPause:Bool = true;
 
+	function truncateFloat(number:Float, precision:Int):Float
+	{
+		var num = number;
+
+		num = num * Math.pow(10, precision);
+		num = Math.round(num) / Math.pow(10, precision);
+
+		return num;
+	}
+
 	override public function update(elapsed:Float)
 	{
 		if (FlxG.keys.justPressed.NINE)
@@ -1412,7 +1434,12 @@ class PlayState extends MusicBeatState
 
 		super.update(elapsed);
 
-		scoreTxt.text = "Score: " + songScore + " | Misses: " + misses;
+		if (accuracy > 100)
+		{
+			accuracy = 100;
+		}
+
+		scoreTxt.text = "Score: " + songScore + " | Misses: " + misses + " | Accuracy: " + truncateFloat(accuracy, 2) + "%";
 		scoreTxt.borderColor = FlxColor.BLACK;
 		scoreTxt.borderSize = 2;
 
@@ -1616,7 +1643,10 @@ class PlayState extends MusicBeatState
 		{
 			health += 1;
 			misses = 0;
+
 			trace("User is cheating!");
+
+			updateAccuracy();
 		}
 		#end
 
@@ -1766,13 +1796,18 @@ class PlayState extends MusicBeatState
 					}
 					else
 					{
-						health -= 0.0475;
-						misses = misses + 1;
+						health -= 0.02;
 
 						var noteDataShit:Int = Std.int(Math.abs(daNote.noteData));
 						noteMiss(noteDataShit);
 
 						vocals.volume = 0;
+					}
+
+					if ((daNote.isSustainNote && !daNote.wasGoodHit))
+					{
+						updateAccuracy();
+						combo = 0;
 					}
 
 					daNote.active = false;
@@ -1892,31 +1927,35 @@ class PlayState extends MusicBeatState
 		var coolText:FlxText = new FlxText(0, 0, 0, placement, 32);
 		coolText.screenCenter();
 		coolText.x = FlxG.width * 0.55;
-		//
 
 		var rating:FlxSprite = new FlxSprite();
 		var score:Int = 350;
 
 		var daRating:String = "sick";
 
-		if (noteDiff > Conductor.safeZoneOffset * 2)
+		// global arrow offset i think lol
+		if (noteDiff > Conductor.safeZoneOffset * 0.9)
 		{
 			daRating = 'shit';
+			accuracy -= 0.1;
 			score = 50;
 		}
-		else if (noteDiff > Conductor.safeZoneOffset * 1.6)
+		else if (noteDiff > Conductor.safeZoneOffset * 0.75)
 		{
 			daRating = 'bad';
+			accuracy += 0.1;
 			score = 100;
 		}
-		else if (noteDiff > Conductor.safeZoneOffset * 1.4)
+		else if (noteDiff > Conductor.safeZoneOffset * 0.2)
 		{
 			daRating = 'good';
+			accuracy += 0.5;
 			score = 200;
 		}
-		else if (noteDiff > Conductor.safeZoneOffset * 1.1)
+		else if (noteDiff > Conductor.safeZoneOffset * 0.1)
 		{
 			daRating = 'sick';
+			accuracy += 1;
 			score = 350;
 		}
 
@@ -1924,11 +1963,11 @@ class PlayState extends MusicBeatState
 		switch (daRating)
 		{
 			case 'shit':
-				trace("shit");
+			// do nothing i guess
 			case 'bad':
-				trace("bad");
+			// do nothing i guess
 			case 'good':
-				trace("good");
+			// do nothing i guess
 			case 'sick':
 				var recycledNote = grpNoteSplashes.recycle(NoteSplash);
 
@@ -2075,8 +2114,8 @@ class PlayState extends MusicBeatState
 
 		var controlArray:Array<Bool> = [leftP, downP, upP, rightP];
 
-		// FlxG.watch.addQuick('asdfa', upP);
-		if ((upP || rightP || downP || leftP) && !boyfriend.stunned && generatedMusic)
+		// maybe "&& !boyfriend.stunned" causing misses problems??????
+		if ((upP || rightP || downP || leftP) && generatedMusic)
 		{
 			boyfriend.holdTimer = 0;
 
@@ -2118,7 +2157,7 @@ class PlayState extends MusicBeatState
 			}
 		}
 
-		if ((up || right || down || left) && !boyfriend.stunned && generatedMusic)
+		if ((up || right || down || left) && generatedMusic)
 		{
 			notes.forEachAlive(function(daNote:Note)
 			{
@@ -2193,7 +2232,8 @@ class PlayState extends MusicBeatState
 	{
 		if (!boyfriend.stunned)
 		{
-			health -= 0.04;
+			health -= 0.005;
+			accuracy -= 5.1;
 
 			if (combo > 5 && gf.animOffsets.exists('sad'))
 			{
@@ -2201,9 +2241,10 @@ class PlayState extends MusicBeatState
 			}
 
 			combo = 0;
-			misses = misses + 1;
+			misses++;
 
 			songScore -= 10;
+			updateAccuracy();
 
 			FlxG.sound.play(Paths.soundRandom('missnote', 1, 3), FlxG.random.float(0.1, 0.2));
 			// FlxG.sound.play(Paths.sound('missnote1'), 1, false);
@@ -2264,6 +2305,8 @@ class PlayState extends MusicBeatState
 	{
 		if (!note.wasGoodHit)
 		{
+			accuracy += 0.1;
+
 			if (!note.isSustainNote)
 			{
 				popUpScore(note.strumTime, note);
@@ -2311,6 +2354,8 @@ class PlayState extends MusicBeatState
 				notes.remove(note, true);
 				note.destroy();
 			}
+
+			updateAccuracy();
 		}
 	}
 
