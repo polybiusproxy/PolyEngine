@@ -3,7 +3,7 @@ jobs:
 
   # Neko
 
-  - job: Build-Linux
+  - job: BuildLinux
     pool:
       vmImage: 'ubuntu-latest'
     steps:
@@ -40,7 +40,7 @@ jobs:
           artifactName: 'LinuxOutput'
           targetPath: bin.tar.gz
 
-  - job: Build-macOS
+  - job: BuildmacOS
     pool:
       vmImage: 'macOS-10.14'
     steps:
