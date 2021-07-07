@@ -1426,7 +1426,7 @@ class PlayState extends MusicBeatState
 				iconP1.animation.play('bf-old');
 		}
 
-		shaders.update(elapsed);
+		// shaders.update(elapsed);
 
 		switch (curStage)
 		{
