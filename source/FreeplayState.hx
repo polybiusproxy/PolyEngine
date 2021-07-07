@@ -7,10 +7,6 @@ import flixel.math.FlxMath;
 import flixel.text.FlxText;
 import flixel.util.FlxColor;
 import flixel.util.FlxTimer;
-import lime.utils.Assets;
-import lime.utils.Assets;
-import openfl.text.TextField;
-import openfl.text.TextField;
 
 using StringTools;
 
@@ -263,8 +259,7 @@ class FreeplayState extends MusicBeatState
 		// lerpScore = 0;
 		#end
 
-		#if PRELOAD_ALL
-		// FlxG.sound.playMusic(Paths.inst(songs[curSelected].songName), 0);
+		#if PRELOAD_ALL // desktop
 		songWait.cancel();
 
 		songWait.start(1, function(tmr:FlxTimer)

@@ -109,7 +109,7 @@ class OptionsMenu extends MusicBeatState
 			FlxG.save.data.noteoffset += 1;
 		}
 
-		offsetText.text = "Note Offset (use left and right to change): " + FlxG.save.data.noteoffset;
+		offsetText.text = "Note Offset (use left and right to change): " + FlxG.save.data.noteoffset + "ms";
 
 		if (accepted)
 		{
