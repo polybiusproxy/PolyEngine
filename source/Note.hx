@@ -47,7 +47,12 @@ class Note extends FlxSprite
 		x += 50;
 		// MAKE SURE ITS DEFINITELY OFF SCREEN?
 		y -= 2000;
-		this.strumTime = strumTime + FlxG.save.data.offset;
+		this.strumTime = strumTime; // add offset here??
+
+		/*
+			if (this.strumTime < 0)
+				this.strumTime = 0;
+		 */
 
 		this.noteData = noteData;
 
@@ -165,7 +170,8 @@ class Note extends FlxSprite
 						prevNote.animation.play('redhold');
 				}
 
-				prevNote.scale.y *= Conductor.stepCrochet / 100 * 1.5 * PlayState.SONG.speed;
+				// prevNote.scale.y *= Conductor.stepCrochet / 100 * 1.5 * PlayState.SONG.speed;
+				prevNote.scale.y *= Conductor.stepCrochet / 100 * 1.8 * PlayState.SONG.speed;
 				prevNote.updateHitbox();
 				// prevNote.setGraphicSize();
 			}
@@ -176,14 +182,18 @@ class Note extends FlxSprite
 	{
 		super.update(elapsed);
 
+		// make a system for sustain notes
 		if (mustPress)
 		{
 			// The * 0.5 is so that it's easier to hit them too late, instead of too early
-			if (strumTime > Conductor.songPosition - Conductor.safeZoneOffset
-				&& strumTime < Conductor.songPosition + (Conductor.safeZoneOffset * 0.80)) // poopy ninjamuffin
+			if (strumTime >= Conductor.songPosition - (Conductor.safeZoneOffset)
+				&& strumTime <= Conductor.songPosition + (Conductor.safeZoneOffset * 0.55)) // poopy ninjamuffin
 				canBeHit = true;
 			else
 				canBeHit = false;
+
+			// if (strumTime < Conductor.songPosition - Conductor.safeZoneOffset * Conductor.timeScale && !wasGoodHit)
+			// tooLate = false;
 
 			if (strumTime < Conductor.songPosition - Conductor.safeZoneOffset && !wasGoodHit)
 				tooLate = true;

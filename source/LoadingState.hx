@@ -1,12 +1,11 @@
 package;
 
+import ShaderHandler.*;
+import ShaderHandler;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.FlxState;
 import flixel.group.FlxGroup;
-import flixel.math.FlxMath;
-import flixel.text.FlxText;
-import flixel.ui.FlxBar;
 import flixel.util.FlxAxes;
 import flixel.util.FlxColor;
 import flixel.util.FlxTimer;
@@ -31,7 +30,10 @@ class LoadingState extends MusicBeatState
 	var grpFinished:FlxGroup;
 
 	var logo:FlxSprite;
+	var pyramid:PyramidEffect;
 	var loadingBar:FlxSprite;
+
+	var shaders:ShaderHandler;
 
 	function new(target:FlxState, stopMusic:Bool)
 	{
@@ -51,6 +53,9 @@ class LoadingState extends MusicBeatState
 		logo.updateHitbox();
 		logo.screenCenter();
 		add(logo);
+
+		// pyramid = new PyramidEffect();
+		// shaders.addShader(pyramid);
 
 		loadingBar = new FlxSprite(0, FlxG.height - 20).makeGraphic(FlxG.width, 10, FlxColor.GREEN);
 		loadingBar.screenCenter(FlxAxes.X);
@@ -113,12 +118,16 @@ class LoadingState extends MusicBeatState
 	override function beatHit()
 	{
 		super.beatHit();
-		logo.animation.play('bump');
+		// logo.animation.play('bump');
+
+		// FlxTween.tween(FlxG.camera, {zoom: 1.05}, 0.3, {ease: FlxEase.quadOut, type: BACKWARD});
 	}
 
 	override function update(elapsed:Float)
 	{
 		super.update(elapsed);
+		// pyramid.update(elapsed);
+		// shaders.update(elapsed);
 
 		/*
 			elapsed = 0.88 * FlxG.width;
@@ -157,7 +166,8 @@ class LoadingState extends MusicBeatState
 	static function getNextState(target:FlxState, stopMusic = false):FlxState
 	{
 		Paths.setCurrentLevel("week" + PlayState.storyWeek);
-		#if NO_PRELOAD_ALL
+
+		#if NO_PRELOAD_ALL // html5
 		var loaded = isSoundLoaded(getSongPath())
 			&& (!PlayState.SONG.needsVoices || isSoundLoaded(getVocalPath()))
 			&& isLibraryLoaded("shared");
@@ -165,6 +175,7 @@ class LoadingState extends MusicBeatState
 		if (!loaded)
 			return new LoadingState(target, stopMusic);
 		#end
+
 		if (stopMusic && FlxG.sound.music != null)
 			FlxG.sound.music.stop();
 

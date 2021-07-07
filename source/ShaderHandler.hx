@@ -3,6 +3,7 @@ package;
 import Shaders.CreationShader;
 import Shaders.PyramidShader;
 import Shaders;
+import flixel.FlxState;
 import flixel.system.FlxAssets.FlxShader;
 import openfl.Lib;
 import openfl.filters.BitmapFilter;
@@ -10,12 +11,12 @@ import openfl.filters.ShaderFilter;
 
 class ShaderHandler
 {
-	private var playState:PlayState;
+	private var state:FlxState;
 	private var shaders = [];
 
-	public function new(playState:PlayState)
+	public function new(state:FlxState)
 	{
-		this.playState = playState;
+		this.state = state;
 	}
 
 	public function addShader(shader:ShaderEffect)
@@ -30,7 +31,7 @@ class ShaderHandler
 		}
 
 		@:privateAccess
-		playState.camGame.setFilters(newShaders);
+		state.camera.setFilters(newShaders);
 	}
 
 	public function removeShader(shader:ShaderEffect)
@@ -45,7 +46,7 @@ class ShaderHandler
 		}
 
 		@:privateAccess
-		playState.camGame.setFilters(newShaders);
+		state.camera.setFilters(newShaders);
 	}
 
 	public function update(elapsed:Float)

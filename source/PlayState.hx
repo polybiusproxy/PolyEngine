@@ -1,6 +1,9 @@
 package;
 
 import Section.SwagSection;
+import ShaderHandler.*;
+import ShaderHandler;
+import Shaders;
 import Song.SwagSong;
 import WiggleEffect.WiggleEffectType;
 import flixel.FlxBasic;
@@ -27,6 +30,7 @@ import flixel.util.FlxSort;
 import flixel.util.FlxTimer;
 import lime.app.Application;
 import openfl.Lib;
+import openfl.filters.ShaderFilter;
 
 using StringTools;
 
@@ -42,7 +46,7 @@ class PlayState extends MusicBeatState
 	public static var storyWeek:Int = 0;
 	public static var storyPlaylist:Array<String> = [];
 	public static var storyDifficulty:Int = 1;
-	public static var isBetaVer:Bool = true;
+	public static var isBetaVer:Bool = false;
 	public static var songEnded:Bool = false;
 	public static var deaths:Int = 0;
 
@@ -53,6 +57,8 @@ class PlayState extends MusicBeatState
 	private var dad:Character;
 	private var gf:Character;
 	private var boyfriend:Boyfriend;
+
+	private var shaders:ShaderHandler;
 
 	private var notes:FlxTypedGroup<Note>;
 	private var unspawnNotes:Array<Note> = [];
@@ -89,7 +95,7 @@ class PlayState extends MusicBeatState
 	private var camHUD:FlxCamera;
 	private var camGame:FlxCamera;
 
-	public static var daVersion:String = "2.1";
+	public static var daVersion:String = "2.1.4";
 	public static var uglyVersion:String = "0.2.7.1";
 
 	var dialogue:Array<String> = ['blah blah blah', 'coolswag'];
@@ -335,6 +341,12 @@ class PlayState extends MusicBeatState
 					var overlayShit:FlxSprite = new FlxSprite(-500, -600).loadGraphic(Paths.image('limo/limoOverlay'));
 					overlayShit.alpha = 0.5;
 					add(overlayShit);
+
+					/* working on shaders
+						var shaderBullshit = new BlendModeEffect(new OverlayShader(), FlxColor.RED);
+						FlxG.camera.setFilters([new ShaderFilter(shaderBullshit.shader)]);
+						overlayShit.shader = shaderBullshit;
+					 */
 
 					var limoTex = Paths.getSparrowAtlas('limo/limoDrive');
 
@@ -1123,7 +1135,8 @@ class PlayState extends MusicBeatState
 
 			for (songNotes in section.sectionNotes)
 			{
-				var daStrumTime:Float = songNotes[0] + 46;
+				// var daStrumTime:Float = songNotes[0] + FlxG.save.data.noteoffset;
+				var daStrumTime:Float = songNotes[0] + 46; // 30
 				var daNoteData:Int = Std.int(songNotes[1] % 4);
 
 				if (daStrumTime < 0)
@@ -1142,7 +1155,8 @@ class PlayState extends MusicBeatState
 				else
 					oldNote = null;
 
-				var swagNote:Note = new Note(daStrumTime + FlxG.save.data.noteoffset, daNoteData, oldNote);
+				// var swagNote:Note = new Note(daStrumTime + FlxG.save.data.noteoffset, daNoteData, oldNote);
+				var swagNote:Note = new Note(daStrumTime, daNoteData, oldNote);
 				swagNote.sustainLength = songNotes[2];
 				swagNote.scrollFactor.set(0, 0);
 
@@ -1155,8 +1169,7 @@ class PlayState extends MusicBeatState
 				{
 					oldNote = unspawnNotes[Std.int(unspawnNotes.length - 1)];
 
-					var sustainNote:Note = new Note(daStrumTime + (Conductor.stepCrochet * susNote) + Conductor.stepCrochet + FlxG.save.data.noteoffset,
-						daNoteData, oldNote, true);
+					var sustainNote:Note = new Note(daStrumTime + (Conductor.stepCrochet * susNote) + Conductor.stepCrochet, daNoteData, oldNote, true);
 					sustainNote.scrollFactor.set();
 					unspawnNotes.push(sustainNote);
 
@@ -1411,12 +1424,9 @@ class PlayState extends MusicBeatState
 				iconP1.animation.play(SONG.player1);
 			else
 				iconP1.animation.play('bf-old');
-
-			if (FlxG.keys.justPressed.ONE)
-			{
-				FlxG.resetState();
-			}
 		}
+
+		shaders.update(elapsed);
 
 		switch (curStage)
 		{
@@ -1654,7 +1664,7 @@ class PlayState extends MusicBeatState
 
 		if (health <= 0)
 		{
-			boyfriend.stunned = true;
+			boyfriend.stunned = false;
 
 			persistentUpdate = false;
 			persistentDraw = false;
@@ -1678,7 +1688,7 @@ class PlayState extends MusicBeatState
 
 		if (unspawnNotes[0] != null)
 		{
-			if (unspawnNotes[0].strumTime - Conductor.songPosition < 1500)
+			if (unspawnNotes[0].strumTime - Conductor.songPosition < 3500)
 			{
 				var dunceNote:Note = unspawnNotes[0];
 				notes.add(dunceNote);
@@ -1692,7 +1702,7 @@ class PlayState extends MusicBeatState
 		{
 			notes.forEachAlive(function(daNote:Note)
 			{
-				if (daNote.y > FlxG.height)
+				if (daNote.tooLate)
 				{
 					daNote.active = false;
 					daNote.visible = false;
@@ -1948,7 +1958,7 @@ class PlayState extends MusicBeatState
 			accuracy += 0.1;
 			score = 100;
 		}
-		else if (noteDiff > Conductor.safeZoneOffset * 0.2)
+		else if (noteDiff > Conductor.safeZoneOffset * 0.4)
 		{
 			daRating = 'good';
 			accuracy += 0.5;
@@ -2141,16 +2151,43 @@ class PlayState extends MusicBeatState
 			{
 				var daNote = possibleNotes[0];
 
-				// Input fix???
-				for (coolNote in possibleNotes)
+				// Jump notes
+				if (possibleNotes.length >= 2)
 				{
-					noteCheck(controlArray[coolNote.noteData], coolNote);
-					if (coolNote.wasGoodHit)
+					if (possibleNotes[0].strumTime == possibleNotes[1].strumTime)
 					{
-						coolNote.kill();
-						notes.remove(coolNote, true);
-						coolNote.destroy();
+						for (coolNote in possibleNotes)
+						{
+							if (controlArray[coolNote.noteData])
+								goodNoteHit(coolNote);
+							else
+							{
+								var inIgnoreList:Bool = false;
+								for (shit in 0...ignoreList.length)
+								{
+									if (controlArray[ignoreList[shit]])
+										inIgnoreList = true;
+								}
+								if (!inIgnoreList)
+									badNoteCheck();
+							}
+						}
 					}
+					else if (possibleNotes[0].noteData == possibleNotes[1].noteData)
+					{
+						noteCheck(controlArray[daNote.noteData], daNote);
+					}
+					else
+					{
+						for (coolNote in possibleNotes)
+						{
+							noteCheck(controlArray[coolNote.noteData], coolNote);
+						}
+					}
+				}
+				else // regular notes?
+				{
+					noteCheck(controlArray[daNote.noteData], daNote);
 				}
 			}
 			else
@@ -2219,6 +2256,7 @@ class PlayState extends MusicBeatState
 						spr.animation.play('static');
 			}
 
+			// THIS CAUSING CRASHES FOR SOME REASON???????
 			if (spr.animation.curAnim.name == 'confirm' && !curStage.startsWith('school'))
 			{
 				spr.centerOffsets();
@@ -2232,45 +2270,43 @@ class PlayState extends MusicBeatState
 
 	function noteMiss(direction:Int = 1):Void
 	{
-		if (!boyfriend.stunned)
+		// if (!boyfriend.stunned)
+		health -= 0.04;
+		accuracy -= 5.1;
+
+		if (combo > 5 && gf.animOffsets.exists('sad'))
 		{
-			health -= 0.005;
-			accuracy -= 5.1;
+			gf.playAnim('sad');
+		}
 
-			if (combo > 5 && gf.animOffsets.exists('sad'))
-			{
-				gf.playAnim('sad');
-			}
+		combo = 0;
+		misses++;
 
-			combo = 0;
-			misses++;
+		songScore -= 10;
+		updateAccuracy();
 
-			songScore -= 10;
-			updateAccuracy();
+		FlxG.sound.play(Paths.soundRandom('missnote', 1, 3), FlxG.random.float(0.1, 0.2));
+		// FlxG.sound.play(Paths.sound('missnote1'), 1, false);
+		// FlxG.log.add('played imss note');
 
-			FlxG.sound.play(Paths.soundRandom('missnote', 1, 3), FlxG.random.float(0.1, 0.2));
-			// FlxG.sound.play(Paths.sound('missnote1'), 1, false);
-			// FlxG.log.add('played imss note');
+		boyfriend.stunned = false;
 
-			boyfriend.stunned = true;
+		// get stunned for 5 seconds
+		new FlxTimer().start(5 / 60, function(tmr:FlxTimer)
+		{
+			boyfriend.stunned = false;
+		});
 
-			// get stunned for 5 seconds
-			new FlxTimer().start(5 / 60, function(tmr:FlxTimer)
-			{
-				boyfriend.stunned = false;
-			});
-
-			switch (direction)
-			{
-				case 0:
-					boyfriend.playAnim('singLEFTmiss', true);
-				case 1:
-					boyfriend.playAnim('singDOWNmiss', true);
-				case 2:
-					boyfriend.playAnim('singUPmiss', true);
-				case 3:
-					boyfriend.playAnim('singRIGHTmiss', true);
-			}
+		switch (direction)
+		{
+			case 0:
+				boyfriend.playAnim('singLEFTmiss', true);
+			case 1:
+				boyfriend.playAnim('singDOWNmiss', true);
+			case 2:
+				boyfriend.playAnim('singUPmiss', true);
+			case 3:
+				boyfriend.playAnim('singRIGHTmiss', true);
 		}
 	}
 
@@ -2385,7 +2421,6 @@ class PlayState extends MusicBeatState
 
 	var trainMoving:Bool = false;
 	var trainFrameTiming:Float = 0;
-
 	var trainCars:Int = 8;
 	var trainFinishing:Bool = false;
 	var trainCooldown:Int = 0;
