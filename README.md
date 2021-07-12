@@ -39,4 +39,5 @@ This game was made with love to Newgrounds and its community. Extra love to Tom 
 
 ### Shoutouts
 - [BrightFyre](https://github.com/brightfyregit) - Tester (i'm stealing ur code >:))))) ).
+- [RapperGF](https://github.com/RapperGF) - Helping with input fix.
 - [Idiocrasy]() - Artist for Dark assets in mod example. <!--- lol -->
