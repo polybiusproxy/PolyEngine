@@ -18,12 +18,12 @@ import flixel.addons.studio.FlxStudio;
 
 class Main extends Sprite
 {
-	var memoryMonitor:MemoryMonitor = new MemoryMonitor(10, 10, 0xffffff);
+	var memoryMonitor:MemoryMonitor = new MemoryMonitor(10, 3, 0xffffff);
 
 	var gameWidth:Int = 1280; // Width of the game in pixels (might be less / more in actual pixels depending on your zoom).
 	var gameHeight:Int = 720; // Height of the game in pixels (might be less / more in actual pixels depending on your zoom).
 
-	var initialState:Class<FlxState> = WarningState; // The FlxState the game starts with.
+	var initialState:Class<FlxState> = Cache; // The FlxState the game starts with.
 
 	var zoom:Float = -1; // If -1, zoom is automatically calculated to fit the window dimensions.
 	var framerate:Int = 60; // How many frames per second the game should run at.
@@ -75,10 +75,6 @@ class Main extends Sprite
 			gameHeight = Math.ceil(stageHeight / zoom);
 		}
 
-		#if debug
-		initialState = AmongUsState;
-		#end
-
 		addChild(new FlxGame(gameWidth, gameHeight, initialState, zoom, framerate, skipSplash, startFullscreen));
 
 		#if (web && debug)
@@ -100,6 +96,7 @@ class Main extends Sprite
 
 		#if (!web && !mobile)
 		addChild(memoryMonitor);
+		addChild(new FPS(10, 3, 0xFFFFFF));
 		#else
 		js.Browser.console.warn("MemoryMonitor can't work on JavaScript for some strange reason...");
 		addChild(new FPS(10, 3, 0xFFFFFF));

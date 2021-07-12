@@ -1,5 +1,7 @@
 package;
 
+import ShaderHandler.RayEffect;
+import flixel.FlxCamera;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.addons.transition.FlxTransitionSprite.GraphicTransTileDiamond;
@@ -19,6 +21,7 @@ import haxe.Http;
 import lime.app.Application;
 import openfl.Assets;
 import openfl.Lib;
+import openfl.filters.ShaderFilter;
 
 using StringTools;
 
@@ -37,13 +40,15 @@ class TitleState extends MusicBeatState
 
 	var blackScreen:FlxSprite;
 	var credGroup:FlxGroup;
-	var credTextShit:Alphabet;
 	var textGroup:FlxGroup;
 	var ngSpr:FlxSprite;
 
 	var curWacky:Array<String> = [];
 
-	var wackyImage:FlxSprite;
+	var ray:RayEffect;
+
+	private var camSHADER:FlxCamera;
+	private var camHUD:FlxCamera;
 
 	override public function create():Void
 	{
@@ -88,6 +93,15 @@ class TitleState extends MusicBeatState
 		add(modText);
 		#end
 
+		camSHADER = new FlxCamera();
+
+		ray = new RayEffect();
+		camSHADER.setFilters([new ShaderFilter(ray.shader)]);
+
+		// camSHADER.bgColor = FlxColor.TRANSPARENT;
+
+		FlxG.cameras.add(camSHADER);
+
 		#if desktop
 		Lib.current.stage.frameRate = 120;
 		#end
@@ -107,12 +121,10 @@ class TitleState extends MusicBeatState
 			FlxG.save.data.downscroll = false;
 		}
 
-		/*
-			if (FlxG.save.data.noteSplash == null)
-			{
-				FlxG.save.data.noteSplash = true;
-			}
-		 */
+		if (FlxG.save.data.basedVocals == null)
+		{
+			FlxG.save.data.basedVocals = false;
+		}
 
 		FlxG.game.focusLostFramerate = 60;
 
@@ -208,12 +220,14 @@ class TitleState extends MusicBeatState
 		logoBl.antialiasing = true;
 		logoBl.animation.addByPrefix('bump', 'logo bumpin', 24);
 		logoBl.animation.play('bump');
+		logoBl.visible = false;
 		logoBl.updateHitbox();
 
 		weekDay = new FlxText(5, 5, 0, "", 16);
 		weekDay.text = "DAY: ";
 		weekDay.setFormat(Paths.font("vcr.ttf"), 32);
 		weekDay.screenCenter(X);
+		weekDay.visible = false;
 
 		if (Date.now().getDay() == 0)
 			weekDay.text = "DAY: SUNDAY!";
@@ -235,6 +249,7 @@ class TitleState extends MusicBeatState
 		gfDance.animation.addByIndices('danceLeft', 'gfDance', [30, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14], "", 24, false);
 		gfDance.animation.addByIndices('danceRight', 'gfDance', [15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29], "", 24, false);
 		gfDance.antialiasing = true;
+		gfDance.visible = false;
 		add(gfDance);
 		add(logoBl);
 		add(weekDay);
@@ -246,7 +261,7 @@ class TitleState extends MusicBeatState
 		titleText.antialiasing = true;
 		titleText.animation.play('idle');
 		titleText.updateHitbox();
-		// titleText.screenCenter(X);
+		titleText.visible = false;
 		add(titleText);
 
 		FlxTween.tween(logoBl, {y: logoBl.y + 50}, 0.6, {ease: FlxEase.quadInOut, type: PINGPONG});
@@ -256,14 +271,8 @@ class TitleState extends MusicBeatState
 		textGroup = new FlxGroup();
 
 		blackScreen = new FlxSprite().makeGraphic(FlxG.width, FlxG.height, FlxColor.BLACK);
+		blackScreen.cameras = [camSHADER];
 		credGroup.add(blackScreen);
-
-		credTextShit = new Alphabet(0, 0, "THE FNF TEAM\nPolybiusProxy", true);
-		credTextShit.screenCenter();
-
-		// credTextShit.alignment = CENTER;
-
-		credTextShit.visible = false;
 
 		ngSpr = new FlxSprite(0, FlxG.height * 0.52).loadGraphic(Paths.image('newgrounds_logo'));
 		add(ngSpr);
@@ -272,8 +281,6 @@ class TitleState extends MusicBeatState
 		ngSpr.updateHitbox();
 		ngSpr.screenCenter(X);
 		ngSpr.antialiasing = true;
-
-		FlxTween.tween(credTextShit, {y: credTextShit.y + 20}, 2.9, {ease: FlxEase.quadInOut, type: PINGPONG});
 
 		FlxG.mouse.visible = false;
 
@@ -351,7 +358,7 @@ class TitleState extends MusicBeatState
 				// Get current version of Kade Engine
 				// ye i stole this from kade engine (srry dude!)
 
-				var http = new haxe.Http("https://raw.githubusercontent.com/notdonxd/PolyEngine/master/daversion");
+				var http = new haxe.Http("https://raw.githubusercontent.com/polybiusproxy/PolyEngine/master/daversion");
 
 				http.onData = function(data:String)
 				{
@@ -383,6 +390,7 @@ class TitleState extends MusicBeatState
 		}
 
 		super.update(elapsed);
+		ray.update(elapsed);
 	}
 
 	function createCoolText(textArray:Array<String>)
@@ -419,7 +427,7 @@ class TitleState extends MusicBeatState
 	{
 		super.beatHit();
 
-		FlxTween.tween(FlxG.camera, {zoom: 1.05}, 0.3, {ease: FlxEase.quadOut, type: BACKWARD});
+		// FlxTween.tween(FlxG.camera, {zoom: 1.05}, 0.3, {ease: FlxEase.quadOut, type: BACKWARD});
 
 		logoBl.animation.play('bump');
 		danceLeft = !danceLeft;
@@ -470,10 +478,22 @@ class TitleState extends MusicBeatState
 	{
 		if (!skippedIntro)
 		{
+			camSHADER.bgColor = FlxColor.TRANSPARENT;
+
+			gfDance.visible = true;
+			logoBl.visible = true;
+			weekDay.visible = true;
+			titleText.visible = true;
+
 			remove(ngSpr);
 
 			FlxG.camera.flash(FlxColor.WHITE, 4);
+			camSHADER.flash(FlxColor.WHITE, 4);
+
 			remove(credGroup);
+
+			camSHADER.setFilters([]);
+
 			skippedIntro = true;
 		}
 	}

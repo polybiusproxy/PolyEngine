@@ -11,9 +11,16 @@ class OptionsMenu extends MusicBeatState
 	var grpMenuShit:FlxTypedGroup<Alphabet>;
 
 	var menuItems:Array<String> = [];
+
+	#if debug
+	var optionItems:Array<String> = ['Keys', 'Scroll', 'DEBUG', 'Exit to menu'];
+	#else
 	var optionItems:Array<String> = ['Keys', 'Scroll', 'Exit to menu'];
+	#end
+
 	var keysItems:Array<String> = ['WASD', 'DFJK'];
 	var scrollItems:Array<String> = ['Downscroll', 'Upscroll'];
+	var debugItems:Array<String> = ['Diffbased Vocals', 'Disable Diffbased Vocals', 'Shaders'];
 
 	// var noteItems:Array<String> = ['Enable note splash', 'Disable note splash'];
 	var curSelected:Int = 0;
@@ -123,6 +130,9 @@ class OptionsMenu extends MusicBeatState
 				case "Scroll":
 					menuItems = scrollItems;
 					regenMenu();
+				case "DEBUG":
+					menuItems = debugItems;
+					regenMenu();
 				/*
 					case "Note":
 						menuItems = noteItems;
@@ -146,6 +156,16 @@ class OptionsMenu extends MusicBeatState
 					FlxG.save.data.downscroll = false;
 					menuItems = optionItems;
 					regenMenu();
+				case "Diffbased Vocals":
+					FlxG.save.data.basedVocals = true;
+					menuItems = optionItems;
+					regenMenu();
+				case "Disable Diffbased Vocals":
+					FlxG.save.data.basedVocals = false;
+					menuItems = optionItems;
+					regenMenu();
+				case "Shaders":
+					FlxG.switchState(new ShaderState());
 				/*
 					case "Enable note splash":
 						FlxG.save.data.noteSplash = true;

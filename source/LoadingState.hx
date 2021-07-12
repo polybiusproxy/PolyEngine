@@ -2,6 +2,7 @@ package;
 
 import ShaderHandler.*;
 import ShaderHandler;
+import flixel.FlxCamera;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.FlxState;
@@ -15,25 +16,29 @@ import lime.app.Promise;
 import lime.utils.AssetLibrary;
 import lime.utils.AssetManifest;
 import lime.utils.Assets as LimeAssets;
+import openfl.filters.ShaderFilter;
 import openfl.utils.Assets;
 
 class LoadingState extends MusicBeatState
 {
-	inline static var MIN_TIME = 1.0;
+	inline static var MIN_TIME = 5.0;
 
 	var target:FlxState;
 	var targetShit:Float = 0;
 	var stopMusic = false;
 	var callbacks:MultiCallback;
 
+	var desktop:Bool = false;
+
 	var grpProgress:FlxGroup;
 	var grpFinished:FlxGroup;
 
 	var logo:FlxSprite;
-	var pyramid:PyramidEffect;
+	var creation:CreationEffect;
 	var loadingBar:FlxSprite;
 
-	var shaders:ShaderHandler;
+	private var camSHADER:FlxCamera;
+	private var camHUD:FlxCamera;
 
 	function new(target:FlxState, stopMusic:Bool)
 	{
@@ -45,39 +50,65 @@ class LoadingState extends MusicBeatState
 
 	override function create()
 	{
-		logo = new FlxSprite(-150, -100);
-		logo.frames = Paths.getSparrowAtlas('logoBumpin');
-		logo.antialiasing = true;
-		logo.animation.addByPrefix('bump', 'logo bumpin', 24);
-		logo.animation.play('bump');
-		logo.updateHitbox();
-		logo.screenCenter();
-		add(logo);
+		/*
+			logo = new FlxSprite(-150, -100);
+			logo.frames = Paths.getSparrowAtlas('logoBumpin');
+			logo.antialiasing = true;
+			logo.animation.addByPrefix('bump', 'logo bumpin', 24);
+			logo.animation.play('bump');
+			logo.updateHitbox();
+			logo.screenCenter();
+			add(logo);
+		 */
 
-		// pyramid = new PyramidEffect();
-		// shaders.addShader(pyramid);
+		camSHADER = new FlxCamera();
+		camHUD = new FlxCamera();
+		camHUD.bgColor.alpha = 0;
+
+		FlxG.cameras.reset(camSHADER);
+		FlxG.cameras.add(camHUD);
+
+		FlxCamera.defaultCameras = [camSHADER];
+
+		persistentUpdate = true;
+		persistentDraw = true;
+
+		#if PRELOAD_ALL
+		desktop = true;
+		#end
+
+		creation = new CreationEffect();
+		camSHADER.setFilters([new ShaderFilter(creation.shader)]);
 
 		loadingBar = new FlxSprite(0, FlxG.height - 20).makeGraphic(FlxG.width, 10, FlxColor.GREEN);
 		loadingBar.screenCenter(FlxAxes.X);
 		add(loadingBar);
 
-		initSongsManifest().onComplete(function(lib)
-		{
-			callbacks = new MultiCallback(onLoad);
-			var introComplete = callbacks.add("introComplete");
-			checkLoadSong(getSongPath());
-			if (PlayState.SONG.needsVoices)
-				checkLoadSong(getVocalPath());
-			checkLibrary("shared");
-			if (PlayState.storyWeek > 0)
-				checkLibrary("week" + PlayState.storyWeek);
-			else
-				checkLibrary("tutorial");
+		FlxG.camera.fade(FlxG.camera.bgColor, 0.5, true);
+		new FlxTimer().start(0.5 + MIN_TIME, function(_) onLoad());
 
-			var fadeTime = 0.5;
-			FlxG.camera.fade(FlxG.camera.bgColor, fadeTime, true);
-			new FlxTimer().start(fadeTime + MIN_TIME, function(_) introComplete());
-		});
+		if (!desktop)
+		{
+			initSongsManifest().onComplete(function(lib)
+			{
+				callbacks = new MultiCallback(onLoad);
+				var introComplete = callbacks.add("introComplete");
+				checkLoadSong(getSongPath());
+				if (PlayState.SONG.needsVoices)
+					checkLoadSong(getVocalPath());
+				checkLibrary("shared");
+				if (PlayState.storyWeek > 0)
+					checkLibrary("week" + PlayState.storyWeek);
+				else
+					checkLibrary("tutorial");
+
+				var fadeTime = 0.5;
+				FlxG.camera.fade(FlxG.camera.bgColor, fadeTime, true);
+				new FlxTimer().start(fadeTime + MIN_TIME, function(_) introComplete());
+			});
+		}
+
+		loadingBar.cameras = [camHUD];
 	}
 
 	function checkLoadSong(path:String)
@@ -126,8 +157,7 @@ class LoadingState extends MusicBeatState
 	override function update(elapsed:Float)
 	{
 		super.update(elapsed);
-		// pyramid.update(elapsed);
-		// shaders.update(elapsed);
+		creation.update(elapsed);
 
 		/*
 			elapsed = 0.88 * FlxG.width;
@@ -174,6 +204,8 @@ class LoadingState extends MusicBeatState
 
 		if (!loaded)
 			return new LoadingState(target, stopMusic);
+		#elseif PRELOAD_ALL
+		return new LoadingState(target, stopMusic);
 		#end
 
 		if (stopMusic && FlxG.sound.music != null)

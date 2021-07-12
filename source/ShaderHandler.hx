@@ -1,20 +1,19 @@
 package;
 
-import Shaders.CreationShader;
-import Shaders.PyramidShader;
 import Shaders;
-import flixel.FlxState;
-import flixel.system.FlxAssets.FlxShader;
+import flixel.util.FlxColor;
 import openfl.Lib;
 import openfl.filters.BitmapFilter;
 import openfl.filters.ShaderFilter;
 
+// THIS IS FOR TESTING AND ONLY USED IN TITLESTATE
+// TODO: Make a system so this can be used by every state.
 class ShaderHandler
 {
-	private var state:FlxState;
+	private var state:TitleState;
 	private var shaders = [];
 
-	public function new(state:FlxState)
+	public function new(state:TitleState)
 	{
 		this.state = state;
 	}
@@ -23,7 +22,7 @@ class ShaderHandler
 	{
 		shaders.push(shader);
 
-		var newShaders:Array<BitmapFilter> = []; // IT SHUTS HAXE UP IDK WHY BUT WHATEVER IDK WHY I CANT JUST ARRAY<SHADERFILTER>
+		var newShaders:Array<BitmapFilter> = [];
 
 		for (i in shaders)
 		{
@@ -31,7 +30,7 @@ class ShaderHandler
 		}
 
 		@:privateAccess
-		state.camera.setFilters(newShaders);
+		state.camSHADER.setFilters(newShaders);
 	}
 
 	public function removeShader(shader:ShaderEffect)
@@ -46,7 +45,7 @@ class ShaderHandler
 		}
 
 		@:privateAccess
-		state.camera.setFilters(newShaders);
+		state.camSHADER.setFilters(newShaders);
 	}
 
 	public function update(elapsed:Float)
@@ -85,5 +84,50 @@ class CreationEffect
 	{
 		shader.u_time.value[0] += elapsed;
 		shader.u_resolution.value = [Lib.current.stage.stageWidth, Lib.current.stage.stageHeight];
+	}
+}
+
+class RayEffect
+{
+	public var shader:RayShader = new RayShader();
+
+	public function new()
+	{
+		shader.u_resolution.value = [Lib.current.stage.stageWidth, Lib.current.stage.stageHeight];
+		shader.u_time.value = [0];
+	}
+
+	public function update(elapsed:Float)
+	{
+		shader.u_time.value[0] += elapsed;
+		shader.u_resolution.value = [Lib.current.stage.stageWidth, Lib.current.stage.stageHeight];
+	}
+}
+
+class OverlayEffect
+{
+	public var shader:OverlayShader = new OverlayShader();
+
+	public function new(color:FlxColor):Void
+	{
+		shader.uBlendColor.value = [];
+		this.color = color;
+	}
+
+	public function update(elapsed:Float)
+	{
+	}
+
+	@:isVar
+	public var color(default, set):FlxColor;
+
+	function set_color(color:FlxColor):FlxColor
+	{
+		shader.uBlendColor.value[0] = color.redFloat;
+		shader.uBlendColor.value[1] = color.greenFloat;
+		shader.uBlendColor.value[2] = color.blueFloat;
+		shader.uBlendColor.value[3] = color.alphaFloat;
+
+		return this.color = color;
 	}
 }

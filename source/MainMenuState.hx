@@ -105,6 +105,10 @@ class MainMenuState extends MusicBeatState
 		{
 			versionShit.text = PlayState.uglyVersion + (" FNF - " + PlayState.daVersion + " - PolyEngine | [BETA VERSION]");
 		}
+		else
+		{
+			versionShit.text = PlayState.uglyVersion + (" FNF - " + PlayState.daVersion + " - PolyEngine");
+		}
 
 		versionShit.scrollFactor.set();
 		versionShit.setFormat("VCR OSD Mono", 16, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);

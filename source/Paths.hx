@@ -93,6 +93,7 @@ class Paths
 
 	inline static public function voices(song:String)
 	{
+		trace('contents/songs/${song.toLowerCase()}/Voices.$SOUND_EXT');
 		return 'contents/songs/${song.toLowerCase()}/Voices.$SOUND_EXT';
 	}
 

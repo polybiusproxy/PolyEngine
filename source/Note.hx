@@ -171,7 +171,7 @@ class Note extends FlxSprite
 				}
 
 				// prevNote.scale.y *= Conductor.stepCrochet / 100 * 1.5 * PlayState.SONG.speed;
-				prevNote.scale.y *= Conductor.stepCrochet / 100 * 1.8 * PlayState.SONG.speed;
+				prevNote.scale.y *= Conductor.stepCrochet / 100 * 1.5 * PlayState.SONG.speed;
 				prevNote.updateHitbox();
 				// prevNote.setGraphicSize();
 			}
@@ -186,8 +186,8 @@ class Note extends FlxSprite
 		if (mustPress)
 		{
 			// The * 0.5 is so that it's easier to hit them too late, instead of too early
-			if (strumTime >= Conductor.songPosition - (Conductor.safeZoneOffset)
-				&& strumTime <= Conductor.songPosition + (Conductor.safeZoneOffset * 0.55)) // poopy ninjamuffin
+			if (strumTime > Conductor.songPosition - (Conductor.safeZoneOffset * 1.5)
+				&& strumTime < Conductor.songPosition + (Conductor.safeZoneOffset * 0.55)) // poopy ninjamuffin
 				canBeHit = true;
 			else
 				canBeHit = false;
@@ -195,7 +195,7 @@ class Note extends FlxSprite
 			// if (strumTime < Conductor.songPosition - Conductor.safeZoneOffset * Conductor.timeScale && !wasGoodHit)
 			// tooLate = false;
 
-			if (strumTime < Conductor.songPosition - Conductor.safeZoneOffset && !wasGoodHit)
+			if (strumTime < Conductor.songPosition - Conductor.safeZoneOffset * Conductor.timeScale && !wasGoodHit)
 				tooLate = true;
 		}
 		else
