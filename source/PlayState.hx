@@ -192,15 +192,15 @@ class PlayState extends MusicBeatState
 		{
 			case 'tutorial':
 				dialogue = [
-					"Hey, you're pretty cute. heart",
-					'Use the arrow keys (lauadara) or DFJK to control the notes and keep up\nwith me singing!'
+					"Hey, you're pretty cute.",
+					'Use the arrow keys or DFJK to control the notes and keep up\nwith me singing!'
 				];
 			case 'bopeebo':
 				dialogue = [
 					'HEY!',
 					"You think you can just sing\nwith my daughter like that?",
 					"If you want to date her...",
-					"You're going to have to go \nthrough ME first! ng"
+					"You're going to have to go \nthrough ME first!"
 				];
 			case 'fresh':
 				dialogue = ["Not too shabby, boy."];
