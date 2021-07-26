@@ -103,31 +103,3 @@ class RayEffect
 		shader.u_resolution.value = [Lib.current.stage.stageWidth, Lib.current.stage.stageHeight];
 	}
 }
-
-class OverlayEffect
-{
-	public var shader:OverlayShader = new OverlayShader();
-
-	public function new(color:FlxColor):Void
-	{
-		shader.uBlendColor.value = [];
-		this.color = color;
-	}
-
-	public function update(elapsed:Float)
-	{
-	}
-
-	@:isVar
-	public var color(default, set):FlxColor;
-
-	function set_color(color:FlxColor):FlxColor
-	{
-		shader.uBlendColor.value[0] = color.redFloat;
-		shader.uBlendColor.value[1] = color.greenFloat;
-		shader.uBlendColor.value[2] = color.blueFloat;
-		shader.uBlendColor.value[3] = color.alphaFloat;
-
-		return this.color = color;
-	}
-}

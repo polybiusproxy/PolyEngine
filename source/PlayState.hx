@@ -52,8 +52,7 @@ class PlayState extends MusicBeatState
 
 	var halloweenLevel:Bool = false;
 
-	var shaderBullshit:OverlayEffect;
-
+	// var shaderBullshit:BlendModeEffect;
 	private var vocals:FlxSound;
 
 	private var dad:Character;
@@ -147,6 +146,7 @@ class PlayState extends MusicBeatState
 	#end
 
 	var trackedAssets:Array<FlxBasic> = [];
+	var canDie:Bool = true;
 
 	override public function create()
 	{
@@ -191,20 +191,23 @@ class PlayState extends MusicBeatState
 		switch (SONG.song.toLowerCase())
 		{
 			case 'tutorial':
-				dialogue = ["Hey you're pretty cute.", 'Use the arrow keys to keep up \nwith me singing.'];
+				dialogue = [
+					"Hey, you're pretty cute. heart",
+					'Use the arrow keys (lauadara) or DFJK to control the notes and keep up\nwith me singing!'
+				];
 			case 'bopeebo':
 				dialogue = [
 					'HEY!',
 					"You think you can just sing\nwith my daughter like that?",
 					"If you want to date her...",
-					"You're going to have to go \nthrough ME first!"
+					"You're going to have to go \nthrough ME first! ng"
 				];
 			case 'fresh':
-				dialogue = ["Not too shabby boy.", ""];
+				dialogue = ["Not too shabby, boy."];
 			case 'dadbattle':
 				dialogue = [
-					"Gah, you think you're hot stuff?",
-					"If you can beat me here...",
+					"Gah, you think you're hot stuff, huh?",
+					"If you beat me here...",
 					"Only then I will even CONSIDER letting\nyou date my daughter!"
 				];
 			case 'senpai':
@@ -346,11 +349,13 @@ class PlayState extends MusicBeatState
 					overlayShit.alpha = 0.5;
 					add(overlayShit);
 
-					// shaderBullshit = new OverlayEffect(FlxColor.RED);
+					/*
+						shaderBullshit = new BlendModeEffect(new OverlayShader(), FlxColor.RED);
 
-					// FlxG.camera.setFilters([new ShaderFilter(shaderBullshit.shader)]);
+						FlxG.camera.setFilters([new ShaderFilter(cast shaderBullshit.shader)]);
 
-					// overlayShit.shader = shaderBullshit;
+						// overlayShit.shader = shaderBullshit;
+					 */
 
 					var limoTex = Paths.getSparrowAtlas('limo/limoDrive');
 
@@ -884,7 +889,12 @@ class PlayState extends MusicBeatState
 
 		if (accuracy >= 100.00)
 		{
-			accuracy = 100;
+			if (misses == 0)
+				accuracy = 100.00;
+			else
+			{
+				accuracy = 99.98;
+			}
 		}
 	}
 
@@ -1463,7 +1473,7 @@ class PlayState extends MusicBeatState
 			accuracy = 100;
 		}
 
-		scoreTxt.text = "Score: " + songScore + " | Accuracy: " + truncateFloat(accuracy, 2) + "%";
+		scoreTxt.text = "Score: " + songScore + " | Misses: " + misses + " | Accuracy: " + truncateFloat(accuracy, 2) + "%";
 		scoreTxt.borderColor = FlxColor.BLACK;
 		scoreTxt.borderSize = 2;
 
@@ -1490,6 +1500,8 @@ class PlayState extends MusicBeatState
 		if (FlxG.keys.justPressed.SEVEN)
 		{
 			FlxG.switchState(new ChartingState());
+
+			canDie = false;
 
 			#if desktop
 			DiscordClient.changePresence("Chart Editor", null, null, true);
@@ -1674,7 +1686,7 @@ class PlayState extends MusicBeatState
 		}
 		#end
 
-		if (health <= 0)
+		if (health <= 0 && canDie)
 		{
 			boyfriend.stunned = true;
 
@@ -1845,7 +1857,10 @@ class PlayState extends MusicBeatState
 					daNote.destroy();
 				}
 
-				if (daNote.y < -daNote.height && !FlxG.save.data.downscroll || daNote.y > FlxG.height && FlxG.save.data.downscroll) // daNote.y >= strumLine.y + 106
+				if (daNote.y < strumLine.y - daNote.height
+					&& !FlxG.save.data.downscroll
+					|| daNote.y > strumLine.y + daNote.height + 50
+					&& FlxG.save.data.downscroll) // daNote.y >= strumLine.y + 106
 				{
 					if (daNote.isSustainNote && daNote.wasGoodHit)
 					{
@@ -2012,21 +2027,18 @@ class PlayState extends MusicBeatState
 			score = 200;
 		}
 
-		if (daRating == 'sick')
-		{
-			accuracy += 1;
-			score = 350;
-		}
-
 		// beta feature, lol!
 		switch (daRating)
 		{
 			case 'shit':
-			// do nothing i guess
+				// do nothing i guess
+				totalNotesHit += 1;
 			case 'bad':
-			// do nothing i guess
+				// do nothing i guess
+				totalNotesHit += 1;
 			case 'good':
-			// do nothing i guess
+				// do nothing i guess
+				totalNotesHit += 1;
 			case 'sick':
 				var recycledNote = grpNoteSplashes.recycle(NoteSplash);
 
@@ -2034,6 +2046,8 @@ class PlayState extends MusicBeatState
 				grpNoteSplashes.add(recycledNote);
 
 				totalNotesHit += 1;
+				accuracy += 1;
+				score = 350;
 		}
 
 		songScore += score;
@@ -2238,6 +2252,11 @@ class PlayState extends MusicBeatState
 				{
 					noteCheck(controlArray[daNote.noteData], daNote);
 				}
+
+				if (daNote.wasGoodHit)
+				{
+					daNote.destroy();
+				}
 			}
 			else
 			{
@@ -2361,10 +2380,9 @@ class PlayState extends MusicBeatState
 		}
 	}
 
-	function badNoteCheck()
+	// function newNoteMiss()
+	function badNoteCheck(?daNote:Note)
 	{
-		// just double pasting this shit cuz fuk u
-		// REDO THIS SYSTEM!
 		var upP = controls.UP_P;
 		var rightP = controls.RIGHT_P;
 		var downP = controls.DOWN_P;

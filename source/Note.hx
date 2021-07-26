@@ -182,20 +182,29 @@ class Note extends FlxSprite
 	{
 		super.update(elapsed);
 
-		// make a system for sustain notes
+		// TODO: make a system for sustain notes -- kinda done
 		if (mustPress)
 		{
-			// The * 0.5 is so that it's easier to hit them too late, instead of too early
-			if (strumTime > Conductor.songPosition - (Conductor.safeZoneOffset * 1.5)
-				&& strumTime < Conductor.songPosition + (Conductor.safeZoneOffset * 0.55)) // poopy ninjamuffin
-				canBeHit = true;
+			/*
+				// The * 0.5 is so that it's easier to hit them too late, instead of too early
+				if (strumTime > Conductor.songPosition - (Conductor.safeZoneOffset * 1.5)
+					&& strumTime < Conductor.songPosition + (Conductor.safeZoneOffset * 0.55)) // poopy ninjamuffin
+					canBeHit = true;
+				else
+					canBeHit = false;
+			 */
+
+			if (isSustainNote)
+			{
+				canBeHit = (strumTime < Conductor.songPosition + Conductor.safeZoneOffset * 0.25);
+			}
 			else
-				canBeHit = false;
+			{
+				canBeHit = (strumTime > Conductor.songPosition - Conductor.safeZoneOffset
+					&& strumTime < Conductor.songPosition + Conductor.safeZoneOffset);
+			}
 
-			// if (strumTime < Conductor.songPosition - Conductor.safeZoneOffset * Conductor.timeScale && !wasGoodHit)
-			// tooLate = false;
-
-			if (strumTime < Conductor.songPosition - Conductor.safeZoneOffset * Conductor.timeScale && !wasGoodHit)
+			if (strumTime < Conductor.songPosition - Conductor.safeZoneOffset)
 				tooLate = true;
 		}
 		else

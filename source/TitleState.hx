@@ -423,6 +423,8 @@ class TitleState extends MusicBeatState
 		}
 	}
 
+	var failedToPrint:Bool = true;
+
 	override function beatHit()
 	{
 		super.beatHit();
@@ -442,8 +444,15 @@ class TitleState extends MusicBeatState
 		switch (curBeat)
 		{
 			case 1:
-				createCoolText(['the fnf team', 'polybiusproxy']);
+				createCoolText(['the fnf team', 'polybiusproxy', 'trsf2.0']);
+				failedToPrint = false;
+				trace('printed');
 			case 3:
+				if (failedToPrint)
+				{
+					createCoolText(['the fnf team', 'polybiusproxy', 'trsf2.0']);
+					trace('ADD AGAIN FOR SOME REASON');
+				}
 				addMoreText('present...');
 			case 4:
 				deleteCoolText();

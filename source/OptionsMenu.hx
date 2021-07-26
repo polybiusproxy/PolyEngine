@@ -20,7 +20,7 @@ class OptionsMenu extends MusicBeatState
 
 	var keysItems:Array<String> = ['WASD', 'DFJK'];
 	var scrollItems:Array<String> = ['Downscroll', 'Upscroll'];
-	var debugItems:Array<String> = ['Diffbased Vocals', 'Disable Diffbased Vocals', 'Shaders'];
+	var debugItems:Array<String> = ['Diffbased Vocals', 'Disable Diffbased Vocals', 'Shaders', 'Video (WEB ONLY)'];
 
 	// var noteItems:Array<String> = ['Enable note splash', 'Disable note splash'];
 	var curSelected:Int = 0;
@@ -166,6 +166,8 @@ class OptionsMenu extends MusicBeatState
 					regenMenu();
 				case "Shaders":
 					FlxG.switchState(new ShaderState());
+				case "Video (WEB ONLY)":
+					FlxG.addChildBelowMouse(VideoState.playVideo(Paths.video('polyEngine')));
 				/*
 					case "Enable note splash":
 						FlxG.save.data.noteSplash = true;

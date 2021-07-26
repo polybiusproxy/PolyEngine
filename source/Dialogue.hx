@@ -61,7 +61,7 @@ class Dialogue extends FlxSpriteGroup
 			dialogueStarted = true;
 		}
 
-		if (FlxG.keys.justPressed.SPACE || FlxG.keys.justPressed.ENTER)
+		if (FlxG.keys.justPressed.ANY)
 		{
 			remove(dialogue);
 
