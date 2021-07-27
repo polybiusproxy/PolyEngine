@@ -42,12 +42,12 @@ class Paths
 
 	inline static function getLibraryPathForce(file:String, library:String)
 	{
-		return 'contents/$library/$file';
+		return '$library:assets/$library/$file';
 	}
 
 	inline static function getPreloadPath(file:String)
 	{
-		return 'contents/$file';
+		return 'assets/$file';
 	}
 
 	inline static public function file(file:String, type:AssetType = TEXT, ?library:String)
@@ -80,27 +80,25 @@ class Paths
 		return sound(key + FlxG.random.int(min, max), library);
 	}
 
+	inline static public function video(key:String, ?library:String)
+	{
+		trace('assets/videos/$key.mp4');
+		return getPath('videos/$key.mp4', BINARY, library);
+	}
+
 	inline static public function music(key:String, ?library:String)
 	{
 		return getPath('music/$key.$SOUND_EXT', MUSIC, library);
 	}
 
-	inline static public function video(key:String, ?library:String)
-	{
-		trace('contents/videos/$key.mp4');
-		return getPath('videos/$key.mp4', BINARY, library);
-	}
-
 	inline static public function voices(song:String)
 	{
-		trace('contents/songs/${song.toLowerCase()}/Voices.$SOUND_EXT');
-		return 'contents/songs/${song.toLowerCase()}/Voices.$SOUND_EXT';
+		return 'songs:assets/songs/${song.toLowerCase()}/Voices.$SOUND_EXT';
 	}
 
 	inline static public function inst(song:String)
 	{
-		trace('contents/songs/${song.toLowerCase()}/Inst.$SOUND_EXT');
-		return 'contents/songs/${song.toLowerCase()}/Inst.$SOUND_EXT';
+		return 'songs:assets/songs/${song.toLowerCase()}/Inst.$SOUND_EXT';
 	}
 
 	inline static public function image(key:String, ?library:String)
@@ -108,14 +106,9 @@ class Paths
 		return getPath('images/$key.png', IMAGE, library);
 	}
 
-	inline static public function icon(key:String, ?library:String)
-	{
-		return getPath('images/icons/$key.png', IMAGE, library);
-	}
-
 	inline static public function font(key:String)
 	{
-		return 'contents/fonts/$key';
+		return 'assets/fonts/$key';
 	}
 
 	inline static public function getSparrowAtlas(key:String, ?library:String)

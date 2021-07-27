@@ -77,7 +77,15 @@ class TitleState extends MusicBeatState
 			modRoot: "mods",
 			dirs: modDirectory,
 			errorCallback: errors,
-			ignoredFiles: polymod.Polymod.getDefaultIgnoreList()
+			framework: OPENFL,
+			ignoredFiles: polymod.Polymod.getDefaultIgnoreList(),
+			frameworkParams: {
+				assetLibraryPaths: [
+					"exclude" => "exclude", "fonts" => "fonts", "songs" => "songs", "data" => "data", "images" => "images", "music" => "music",
+					"sounds" => "sounds", "shared" => "shared", "tutorial" => "tutorial", "videos" => "videos", "week1" => "week1", "week2" => "week2",
+					"week3" => "week3", "week4" => "week4", "week5" => "week5", "week6" => "week6"
+				]
+			}
 		});
 
 		// Display active mods
