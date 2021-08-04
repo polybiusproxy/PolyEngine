@@ -34,6 +34,11 @@ class Note extends FlxSprite
 	public static var BLUE_NOTE:Int = 1;
 	public static var RED_NOTE:Int = 3;
 
+	public static var canMissLeft:Bool = true;
+	public static var canMissRight:Bool = true;
+	public static var canMissUp:Bool = true;
+	public static var canMissDown:Bool = true;
+
 	public function new(strumTime:Float, noteData:Int, ?prevNote:Note, ?sustainNote:Bool = false)
 	{
 		super();
@@ -171,7 +176,7 @@ class Note extends FlxSprite
 				}
 
 				// prevNote.scale.y *= Conductor.stepCrochet / 100 * 1.5 * PlayState.SONG.speed;
-				prevNote.scale.y *= Conductor.stepCrochet / 100 * 1.5 * PlayState.SONG.speed;
+				prevNote.scale.y *= Conductor.stepCrochet / 100 * 1.8 * PlayState.SONG.speed;
 				prevNote.updateHitbox();
 				// prevNote.setGraphicSize();
 			}
@@ -183,29 +188,50 @@ class Note extends FlxSprite
 		super.update(elapsed);
 
 		// TODO: make a system for sustain notes -- kinda done
-		if (mustPress)
-		{
-			/*
-				// The * 0.5 is so that it's easier to hit them too late, instead of too early
-				if (strumTime > Conductor.songPosition - (Conductor.safeZoneOffset * 1.5)
-					&& strumTime < Conductor.songPosition + (Conductor.safeZoneOffset * 0.55)) // poopy ninjamuffin
-					canBeHit = true;
-				else
-					canBeHit = false;
-			 */
-
-			if (isSustainNote)
+		/*
+			if (mustPress)
 			{
-				canBeHit = (strumTime < Conductor.songPosition + Conductor.safeZoneOffset * 0.25);
+				if (isSustainNote)
+				{
+					canBeHit = (strumTime < Conductor.songPosition + Conductor.safeZoneOffset * 0.25);
+				}
+				else
+				{
+					canBeHit = (strumTime > Conductor.songPosition - Conductor.safeZoneOffset
+						&& strumTime < Conductor.songPosition + Conductor.safeZoneOffset);
+				}
+
+				if (strumTime < Conductor.songPosition - Conductor.safeZoneOffset)
+					tooLate = true;
 			}
 			else
 			{
-				canBeHit = (strumTime > Conductor.songPosition - Conductor.safeZoneOffset
-					&& strumTime < Conductor.songPosition + Conductor.safeZoneOffset);
-			}
+				canBeHit = false;
 
-			if (strumTime < Conductor.songPosition - Conductor.safeZoneOffset)
+				if (strumTime <= Conductor.songPosition)
+					wasGoodHit = true;
+			}
+		 */
+
+		if (mustPress)
+		{
+			// The * 0.5 is so that it's easier to hit them too late, instead of too early
+			if (strumTime > Conductor.songPosition - Conductor.safeZoneOffset
+				&& strumTime < Conductor.songPosition + (Conductor.safeZoneOffset * 0.5))
+			{
+				canBeHit = true;
+				setCanMiss(noteData, false);
+			}
+			else
+			{
+				canBeHit = false;
+				setCanMiss(noteData, true);
+			}
+			if (strumTime < Conductor.songPosition - Conductor.safeZoneOffset && !wasGoodHit)
+			{
 				tooLate = true;
+				setCanMiss(noteData, false);
+			}
 		}
 		else
 		{
@@ -219,6 +245,21 @@ class Note extends FlxSprite
 		{
 			if (alpha > 0.3)
 				alpha = 0.3;
+		}
+	}
+
+	public static function setCanMiss(data:Int, bool:Bool)
+	{
+		switch (data)
+		{
+			case 0:
+				canMissLeft = bool;
+			case 1:
+				canMissDown = bool;
+			case 2:
+				canMissUp = bool;
+			case 3:
+				canMissRight = bool;
 		}
 	}
 }

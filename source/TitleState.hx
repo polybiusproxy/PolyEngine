@@ -1,5 +1,6 @@
 package;
 
+import ShaderHandler.ColorSwapEffect;
 import ShaderHandler.RayEffect;
 import flixel.FlxCamera;
 import flixel.FlxG;
@@ -46,6 +47,7 @@ class TitleState extends MusicBeatState
 	var curWacky:Array<String> = [];
 
 	var ray:RayEffect;
+	var swagShader:ColorSwapEffect;
 
 	private var camSHADER:FlxCamera;
 	private var camHUD:FlxCamera;
@@ -104,6 +106,8 @@ class TitleState extends MusicBeatState
 		camSHADER = new FlxCamera();
 
 		ray = new RayEffect();
+		swagShader = new ColorSwapEffect();
+
 		camSHADER.setFilters([new ShaderFilter(ray.shader)]);
 
 		// camSHADER.bgColor = FlxColor.TRANSPARENT;
@@ -230,6 +234,7 @@ class TitleState extends MusicBeatState
 		logoBl.animation.play('bump');
 		logoBl.visible = false;
 		logoBl.updateHitbox();
+		logoBl.shader = swagShader.shader;
 
 		weekDay = new FlxText(5, 5, 0, "", 16);
 		weekDay.text = "DAY: ";
@@ -258,6 +263,7 @@ class TitleState extends MusicBeatState
 		gfDance.animation.addByIndices('danceRight', 'gfDance', [15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29], "", 24, false);
 		gfDance.antialiasing = true;
 		gfDance.visible = false;
+		gfDance.shader = swagShader.shader;
 		add(gfDance);
 		add(logoBl);
 		add(weekDay);
@@ -399,6 +405,16 @@ class TitleState extends MusicBeatState
 
 		super.update(elapsed);
 		ray.update(elapsed);
+
+		if (FlxG.keys.pressed.LEFT)
+		{
+			swagShader.update(0.1 * -elapsed);
+		}
+
+		if (FlxG.keys.pressed.RIGHT)
+		{
+			swagShader.update(0.1 * elapsed);
+		}
 	}
 
 	function createCoolText(textArray:Array<String>)
@@ -476,6 +492,8 @@ class TitleState extends MusicBeatState
 				createCoolText([curWacky[0]]);
 			case 11:
 				addMoreText(curWacky[1]);
+				addMoreText(curWacky[2]);
+				addMoreText(curWacky[3]);
 			case 12:
 				deleteCoolText();
 			case 13:

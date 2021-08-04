@@ -1,6 +1,8 @@
 package;
 
 import Shaders;
+import flixel.FlxG;
+import flixel.FlxState;
 import flixel.util.FlxColor;
 import openfl.Lib;
 import openfl.filters.BitmapFilter;
@@ -10,10 +12,10 @@ import openfl.filters.ShaderFilter;
 // TODO: Make a system so this can be used by every state.
 class ShaderHandler
 {
-	private var state:TitleState;
+	private var state:FlxState;
 	private var shaders = [];
 
-	public function new(state:TitleState)
+	public function new(state:FlxState)
 	{
 		this.state = state;
 	}
@@ -30,7 +32,7 @@ class ShaderHandler
 		}
 
 		@:privateAccess
-		state.camSHADER.setFilters(newShaders);
+		FlxG.camera.setFilters(newShaders);
 	}
 
 	public function removeShader(shader:ShaderEffect)
@@ -45,7 +47,7 @@ class ShaderHandler
 		}
 
 		@:privateAccess
-		state.camSHADER.setFilters(newShaders);
+		FlxG.camera.setFilters(newShaders);
 	}
 
 	public function update(elapsed:Float)
@@ -101,5 +103,25 @@ class RayEffect
 	{
 		shader.u_time.value[0] += elapsed;
 		shader.u_resolution.value = [Lib.current.stage.stageWidth, Lib.current.stage.stageHeight];
+	}
+}
+
+class ColorSwapEffect
+{
+	public var shader:ColorSwapShader = new ColorSwapShader();
+	public var hueShit:Float = 0;
+	public var hasOutline:Bool = false;
+
+	public function new()
+	{
+		shader.uTime.value = [0];
+		shader.money.value = [0];
+		shader.awesomeOutline.value = [hasOutline];
+	}
+
+	public function update(elapsed:Float)
+	{
+		shader.uTime.value[0] += elapsed;
+		hueShit += elapsed;
 	}
 }

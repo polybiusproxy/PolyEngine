@@ -77,13 +77,6 @@ class Main extends Sprite
 
 		addChild(new FlxGame(gameWidth, gameHeight, initialState, zoom, framerate, skipSplash, startFullscreen));
 
-		#if (web && debug)
-		new FlxTimer().start(3, function(tmr:FlxTimer)
-		{
-			FlxG.addChildBelowMouse(VideoState.playVideo(Paths.video('polyEngine')));
-		});
-		#end
-
 		#if desktop
 		if (PlayState.isBetaVer)
 		{

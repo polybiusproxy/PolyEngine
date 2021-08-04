@@ -7,6 +7,7 @@ import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.FlxState;
 import flixel.group.FlxGroup;
+import flixel.math.FlxMath;
 import flixel.util.FlxAxes;
 import flixel.util.FlxColor;
 import flixel.util.FlxTimer;
@@ -21,7 +22,7 @@ import openfl.utils.Assets;
 
 class LoadingState extends MusicBeatState
 {
-	inline static var MIN_TIME = 5.0;
+	inline static var MIN_TIME = 1.0;
 
 	var target:FlxState;
 	var targetShit:Float = 0;
@@ -159,15 +160,21 @@ class LoadingState extends MusicBeatState
 		super.update(elapsed);
 		creation.update(elapsed);
 
-		/*
-			elapsed = 0.88 * FlxG.width;
+		#if debug
+		if (FlxG.keys.justPressed.SPACE)
+			trace('fired: ' + callbacks.getFired() + " unfired:" + callbacks.getUnfired());
+		#end
 
-			if (callbacks != null)
-				targetShit = FlxMath.remapToRange(callbacks.numRemaining / callbacks.length, 1, 0, 0, 1);
+		#if NO_PRELOAD_ALL
+		// elapsed = 0.88 * FlxG.width;
 
-			loadingBar.scale.set(target + 0.5 * (targetShit - target));
-			loadingBar.updateHitbox();
-		 */
+		if (callbacks != null)
+			targetShit = FlxMath.remapToRange(callbacks.numRemaining / callbacks.length, 1, 0, 0, 1);
+
+		var loadScale = loadingBar.scale.x;
+		loadingBar.scale.x = loadScale + 0.5 * (targetShit - loadScale);
+		loadingBar.updateHitbox();
+		#end
 	}
 
 	function onLoad()
@@ -196,8 +203,7 @@ class LoadingState extends MusicBeatState
 	static function getNextState(target:FlxState, stopMusic = false):FlxState
 	{
 		Paths.setCurrentLevel("week" + PlayState.storyWeek);
-
-		#if NO_PRELOAD_ALL // html5
+		#if NO_PRELOAD_ALL
 		var loaded = isSoundLoaded(getSongPath())
 			&& (!PlayState.SONG.needsVoices || isSoundLoaded(getVocalPath()))
 			&& isLibraryLoaded("shared");
@@ -207,7 +213,6 @@ class LoadingState extends MusicBeatState
 		#elseif PRELOAD_ALL
 		return new LoadingState(target, stopMusic);
 		#end
-
 		if (stopMusic && FlxG.sound.music != null)
 			FlxG.sound.music.stop();
 

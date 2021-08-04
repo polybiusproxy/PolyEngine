@@ -38,7 +38,6 @@ class MainMenuState extends MusicBeatState
 	var trackedAssets:Array<Dynamic> = [];
 
 	var versionShit:FlxText;
-	var escText:FlxText;
 
 	override function create()
 	{
@@ -101,10 +100,6 @@ class MainMenuState extends MusicBeatState
 		}
 
 		FlxG.camera.follow(camFollow, null, 0.06);
-
-		escText = new FlxText(5, FlxG.height - 50, 0, "Press CTRL+ESC to exit!", 15);
-		escText.visible = false;
-		add(escText);
 
 		versionShit = new FlxText(5, FlxG.height - 18, 0, "", 12);
 
@@ -202,15 +197,6 @@ class MainMenuState extends MusicBeatState
 					});
 				}
 			}
-		}
-
-		if (FlxG.keys.justPressed.ESCAPE)
-		{
-			escText.visible = true;
-		}
-		else if (FlxG.keys.justPressed.CONTROL && FlxG.keys.justPressed.ESCAPE)
-		{
-			System.exit(0);
 		}
 
 		super.update(elapsed);

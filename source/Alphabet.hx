@@ -317,6 +317,9 @@ class AlphaCharacter extends FlxSprite
 			case "!":
 				animation.addByPrefix(letter, 'exclamation point', 24);
 				animation.play(letter);
+			case ",":
+				animation.addByPrefix(letter, 'comma', 24);
+				animation.play(letter);
 		}
 
 		updateHitbox();

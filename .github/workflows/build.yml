@@ -33,7 +33,7 @@ jobs:
           haxelib git flixel-studio https://github.com/Dovyski/flixel-studio.git
           haxelib install flixel-addons
           haxelib git systools https://github.com/polybiusproxy/systools.git
-          haxelib git polymod https://github.com/larsiusprime/polymod.git
+          haxelib git polymod https://github.com/larsiusprime/polymod.git funkinfixes
           haxelib git discord_rpc https://github.com/Aidan63/linc_discord-rpc
           haxelib list
       - name: Build time! (macOS)

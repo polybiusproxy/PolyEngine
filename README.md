@@ -13,13 +13,11 @@
  - **Downscroll and input**
 	 - An improved input system, similar to osu!, with less delays, downscroll, and more!
  - **DFJK**
-	 - Tired of being forced to use arrow keys and WASD? Well, you can now change to DFJK! (keybinding soon)
- - **Misses counter**
-     - While you're playing, you can see your misses!
- - **Options menu**
-	 - A full overhaul of the options menu where you can adjust several PolyEngine features!
- - **Pause menu overhaul**
-     - An improved pause menu where you can see your current score, your deaths, and change difficulty.
+	 - An option that lets you switch between WASD and DFJK. (keybinding soon).
+ - **Polymod support**
+     - it explains all
+ - **Video support**
+	 - An experimental media support of MP4 files. (ONLY WINDOWS AND HTML5)
  - **Note offset** (in beta)
 	 - Change the offset of the notes. It's useful if you have a Bluetooth speaker / headphones.
 
@@ -35,9 +33,12 @@ This game was made with love to Newgrounds and its community. Extra love to Tom 
 ### PolyEngine
 - [PolybiusProxy](https://twitter.com/polybiusproxy) - Lead programmer.
 - [TRSF2.0](https://github.com/TRSF-sonicman) - also programmer.
+- [Idiocrasy]() - Artist for Dark assets in mod example. <!--- lol -->
 
 
 ### Shoutouts
 - [BrightFyre](https://github.com/brightfyregit) - Tester (i'm stealing ur code >:))))) ).
 - [RapperGF](https://github.com/RapperGF) - Helping with input fix.
-- [Idiocrasy]() - Artist for Dark assets in mod example. <!--- lol -->
+- [datee]() - Developing HaxeVLC (all the contents in the 'vlc' folder belongs to datee).
+- [u/Henry34111](https://www.reddit.com/user/Henry34111/) - Making the loading art.
+- [The VideoLAN team]() - Making the VLC media player.

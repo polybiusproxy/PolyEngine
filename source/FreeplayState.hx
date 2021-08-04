@@ -63,11 +63,14 @@ class FreeplayState extends MusicBeatState
 		isDebug = true;
 		#end
 
-		if (StoryMenuState.weekUnlocked[2] || isDebug)
+		if (isDebug)
+			addWeek(['Test'], 1, ['bf-pixel']);
+
+		if (StoryMenuState.weekUnlocked[1] || isDebug)
 			addWeek(['Bopeebo', 'Fresh', 'Dadbattle'], 1, ['dad']);
 
 		if (StoryMenuState.weekUnlocked[2] || isDebug)
-			addWeek(['Spookeez', 'South', 'Monster'], 2, ['spooky']);
+			addWeek(['Spookeez', 'South', 'Monster'], 2, ['spooky', 'spooky', 'monster']);
 
 		if (StoryMenuState.weekUnlocked[3] || isDebug)
 			addWeek(['Pico', 'Philly', 'Blammed'], 3, ['pico']);
@@ -143,6 +146,7 @@ class FreeplayState extends MusicBeatState
 	public function addSong(songName:String, weekNum:Int, songCharacter:String)
 	{
 		songs.push(new SongMetadata(songName, weekNum, songCharacter));
+		FlxG.sound.cache(Paths.inst(songName));
 	}
 
 	public function addWeek(songs:Array<String>, weekNum:Int, ?songCharacters:Array<String>)
@@ -260,12 +264,7 @@ class FreeplayState extends MusicBeatState
 		#end
 
 		#if PRELOAD_ALL // desktop
-		songWait.cancel();
-
-		songWait.start(1, function(tmr:FlxTimer)
-		{
-			FlxG.sound.playMusic(Paths.inst(songs[curSelected].songName), 0);
-		});
+		FlxG.sound.playMusic(Paths.inst(songs[curSelected].songName), 0);
 		#end
 
 		var bullShit:Int = 0;
