@@ -12,6 +12,6 @@ video.playWebMP4(Paths.video('nameofyourvideohere'), new MainMenuState());
 Windows:
 ```haxe
 var video:VideoHandler = new VideoHandler();
-video.playWebMP4(Paths.video('nameofyourvideohere'), new MainMenuState(), false, true);
+video.playMP4(Paths.video('nameofyourvideohere'), new MainMenuState(), false, false);
 ```
 3. Build... and enjoy!
