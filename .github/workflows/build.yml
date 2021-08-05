@@ -28,10 +28,9 @@ jobs:
           haxelib install flixel-tools
           haxelib install flixel-addons
           haxelib install flixel-ui
-          haxelib install colyseus
+          haxelib git flixel-studio https://github.com/Dovyski/flixel-studio.git
           haxelib install hscript
           haxelib install newgrounds
-          haxelib git flixel-studio https://github.com/Dovyski/flixel-studio.git
           haxelib install flixel-addons
           haxelib git systools https://github.com/polybiusproxy/systools.git
           haxelib git polymod https://github.com/larsiusprime/polymod.git funkinfixes

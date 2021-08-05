@@ -21,7 +21,6 @@ install:
   - haxelib install flixel-tools
   - haxelib install flixel-addons
   - haxelib install flixel-ui
-  - haxelib install colyseus
   - haxelib git flixel-studio https://github.com/Dovyski/flixel-studio.git
   - haxelib install hscript
   - haxelib install newgrounds
