@@ -246,6 +246,24 @@ class Note extends FlxSprite
 			if (alpha > 0.3)
 				alpha = 0.3;
 		}
+
+		/*
+			? = &&
+			, = new if / else
+			: = else (maybe)
+			!0 = true
+			!1 = false
+			&& = {}
+
+			this.mustPress
+					? this.willMiss && !this.wasGoodHit
+						? ((this.tooLate = !0), (this.canBeHit = !1))
+						: this.strumTime > Z.songPosition - Z.safeZoneOffset
+						? this.strumTime < Z.songPosition + 0.5 * Z.safeZoneOffset && (this.canBeHit = !0)
+						: (this.willMiss = this.canBeHit = !0)
+					: ((this.canBeHit = !1), this.strumTime <= Z.songPosition && (this.wasGoodHit = !0));
+				this.tooLate && 0.3 < this.alpha && this.set_alpha(0.3);
+		 */
 	}
 
 	public static function setCanMiss(data:Int, bool:Bool)

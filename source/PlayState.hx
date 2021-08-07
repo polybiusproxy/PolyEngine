@@ -1186,7 +1186,7 @@ class PlayState extends MusicBeatState
 			for (songNotes in section.sectionNotes)
 			{
 				// var daStrumTime:Float = songNotes[0] + FlxG.save.data.noteoffset;
-				var daStrumTime:Float = songNotes[0] + 46; // 30
+				var daStrumTime:Float = songNotes[0];
 				var daNoteData:Int = Std.int(songNotes[1] % 4);
 
 				if (daStrumTime < 0)
@@ -1784,25 +1784,6 @@ class PlayState extends MusicBeatState
 					daNote.active = true;
 				}
 
-				/*
-					var c = b.strumLine.y + lc.swagWidth / 2;
-					if (ub.getPref("downscroll"))
-					{
-						if (a.isSustainNote) {
-							(!a.mustPress || a.wasGoodHit || a.prevNote.wasGoodHit && !a.canBeHit)
-							&& a.y - a.offset.y * a.scale.y + a.get_height() >= c
-							&& (d = new sa(0, 0, a.frameWidth,
-								a.frameHeight), d.height = (c - a.y) / NOTE.scale.y, swagRect.y = NOTE.frameHeight - d.height, a.set_clipRect(d))}
-					}
-					else
-						a.set_y(b.strumLine.y - .45 * (Z.songPosition - a.strumTime) * pd.roundDecimal(M.SONG.speed, 2)),
-					a.isSustainNote
-					&& (!a.mustPress || a.wasGoodHit || a.prevNote.wasGoodHit && !daNote.canBeHit)
-					&& a.y + a.offset.y * a.scale.y <= c
-					&& (swagRect = new sa(0, 0, daNote.width / daNote.scale.x,
-						daNote.height / daNote.scale.y), swagRect.y = (c - daNote.y) / daNote.scale.y, swagRect.height -= swagRect.y, a.set_clipRect(d));
-				 */
-
 				// i fucked up with inputs sooo i took them from week 7 :troll:
 
 				var strumRect = strumLine.y + Note.swagWidth / 2;
@@ -1933,6 +1914,15 @@ class PlayState extends MusicBeatState
 		if (FlxG.keys.justPressed.ONE)
 			endSong();
 		#end
+
+		leftPress = false;
+		leftRelease = false;
+		downPress = false;
+		downRelease = false;
+		upPress = false;
+		upRelease = false;
+		rightPress = false;
+		rightRelease = false;
 	}
 
 	#if windows
@@ -2033,7 +2023,28 @@ class PlayState extends MusicBeatState
 		{
 			trace('WENT BACK TO FREEPLAY??');
 			unloadAssets();
+
+			#if debug
+			new FlxTimer().start(1, function(tmr:FlxTimer)
+			{
+				if (curSong.toLowerCase() == "test")
+				{
+					var video:VideoHandler = new VideoHandler();
+
+					#if desktop
+					video.playMP4(Paths.video('ughCutscene'), new FreeplayState(), false, false);
+					#else
+					video.playWebMP4(Paths.video('ughCutscene'), new FreeplayState());
+					#end
+				}
+				else
+				{
+					FlxG.switchState(new FreeplayState());
+				}
+			});
+			#else
 			FlxG.switchState(new FreeplayState());
+			#end
 		}
 	}
 
@@ -2329,6 +2340,7 @@ class PlayState extends MusicBeatState
 								noteCheck(leftP, daNote);
 					}
 				 */
+
 				if (daNote.wasGoodHit)
 				{
 					daNote.destroy();

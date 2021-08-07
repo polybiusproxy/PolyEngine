@@ -169,7 +169,7 @@ class OptionsMenu extends MusicBeatState
 				case "Video":
 					var video:VideoHandler = new VideoHandler();
 					#if desktop
-					video.playMP4(Paths.video('bigChungus'), new MainMenuState(), false, true);
+					video.playMP4(Paths.video('bigChungus'), new MainMenuState(), false, false);
 					#else
 					video.playWebMP4(Paths.video('bigChungus'), new MainMenuState());
 					#end
