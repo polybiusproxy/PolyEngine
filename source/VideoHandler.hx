@@ -62,9 +62,11 @@ class VideoHandler
 		finishCallback = callback;
 
 		vlcBitmap = new VlcBitmap();
+		vlcBitmap.set_height(FlxG.stage.stageHeight);
+		vlcBitmap.set_width(FlxG.stage.stageHeight * (16 / 9));
 
-		vlcBitmap.videoWidth = FlxG.width;
-		vlcBitmap.videoHeight = FlxG.height;
+		trace("Setting width to " + FlxG.stage.stageHeight * (16 / 9));
+		trace("Setting height to " + FlxG.stage.stageHeight);
 
 		vlcBitmap.onVideoReady = onVLCVideoReady;
 		vlcBitmap.onComplete = onVLCComplete;
@@ -106,7 +108,7 @@ class VideoHandler
 		trace("video loaded!");
 	}
 
-	function onVLCComplete()
+	public function onVLCComplete()
 	{
 		vlcBitmap.stop();
 

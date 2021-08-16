@@ -1,5 +1,6 @@
 package vlc;
 
+import flixel.FlxG;
 import openfl.system.Capabilities;
 #if (cpp && !mobile)
 import cpp.NativeArray;
@@ -285,8 +286,8 @@ class VlcBitmap extends Bitmap
 
 	function onResize(e:Event):Void
 	{
-		set_width(Application.current.window.width);
-		set_height(Application.current.window.height);
+		set_height(FlxG.stage.stageHeight);
+		set_width(FlxG.stage.stageHeight * (16 / 9));
 	}
 
 	/////////////////////////////////////////////////////////////////////////////////////
@@ -511,7 +512,7 @@ class VlcBitmap extends Bitmap
 		return _width;
 	}
 
-	private override function set_width(value:Float):Float
+	public override function set_width(value:Float):Float
 	{
 		_width = value;
 		return super.set_width(value);
@@ -522,7 +523,7 @@ class VlcBitmap extends Bitmap
 		return _height;
 	}
 
-	private override function set_height(value:Float):Float
+	public override function set_height(value:Float):Float
 	{
 		_height = value;
 		return super.set_height(value);

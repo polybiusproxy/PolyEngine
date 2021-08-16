@@ -212,22 +212,14 @@ class Note extends FlxSprite
 		if (mustPress)
 		{
 			// The * 0.5 is so that it's easier to hit them too late, instead of too early
-			if (strumTime >= Conductor.songPosition - Conductor.safeZoneOffset
+			if (strumTime >= Conductor.songPosition - (Conductor.safeZoneOffset * 1.5)
 				&& strumTime <= Conductor.songPosition + (Conductor.safeZoneOffset * 0.5))
-			{
 				canBeHit = true;
-				setCanMiss(noteData, false);
-			}
 			else
-			{
 				canBeHit = false;
-				setCanMiss(noteData, true);
-			}
-			if (strumTime < Conductor.songPosition - Conductor.safeZoneOffset && !wasGoodHit)
-			{
+
+			if (strumTime < Conductor.songPosition - Conductor.safeZoneOffset * Conductor.timeScale && !wasGoodHit)
 				tooLate = true;
-				setCanMiss(noteData, false);
-			}
 		}
 		else
 		{
@@ -260,20 +252,5 @@ class Note extends FlxSprite
 					: ((this.canBeHit = !1), this.strumTime <= Z.songPosition && (this.wasGoodHit = !0));
 				this.tooLate && 0.3 < this.alpha && this.set_alpha(0.3);
 		 */
-	}
-
-	public static function setCanMiss(data:Int, bool:Bool)
-	{
-		switch (data)
-		{
-			case 0:
-				canMissLeft = bool;
-			case 1:
-				canMissDown = bool;
-			case 2:
-				canMissUp = bool;
-			case 3:
-				canMissRight = bool;
-		}
 	}
 }

@@ -2042,12 +2042,7 @@ class PlayState extends MusicBeatState
 				if (curSong.toLowerCase() == "test")
 				{
 					var video:VideoHandler = new VideoHandler();
-
-					#if desktop
-					video.playMP4(Paths.video('ughCutscene'), new FreeplayState(), false, false);
-					#else
-					video.playWebMP4(Paths.video('ughCutscene'), new FreeplayState());
-					#end
+					video.playMP4(Paths.video('ughCutscene'), new FreeplayState(), false, false, false);
 				}
 				else
 				{
@@ -2271,7 +2266,7 @@ class PlayState extends MusicBeatState
 
 			notes.forEachAlive(function(daNote:Note)
 			{
-				if (daNote.canBeHit && daNote.mustPress && !daNote.tooLate)
+				if (daNote.canBeHit && daNote.mustPress && !daNote.tooLate && !daNote.wasGoodHit)
 				{
 					// the sorting probably doesn't need to be in here? who cares lol
 					possibleNotes.push(daNote);
