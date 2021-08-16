@@ -2,11 +2,11 @@ package;
 
 import flixel.FlxG;
 import flixel.FlxState;
-import flixel.text.FlxText;
-import flixel.util.FlxColor;
+import openfl.events.Event;
 import openfl.media.Video;
 import openfl.net.NetConnection;
 import openfl.net.NetStream;
+import systools.Dialogs;
 import vlc.VlcBitmap;
 
 // THIS IS FOR TESTING
@@ -31,27 +31,9 @@ class VideoHandler
 		}
 	}
 
-	public function playWebMP4(videoPath:String, callback:FlxState)
+	public function playMP4(path:String, callback:FlxState, ?repeat:Bool = false, ?isWindow:Bool = false, ?isFullscreen:Bool = false):Void
 	{
-		/*
-			var nc:NetConnection = new NetConnection();
-			nc.connect(null);
-
-			var ns:NetStream = new NetStream(nc);
-
-			var myVideo:Video = new Video();
-
-			myVideo.width = FlxG.width;
-			myVideo.height = FlxG.height;
-			myVideo.attachNetStream(ns);
-
-			ns.play(path);
-
-			return myVideo;
-
-			ns.close();
-		 */
-
+		#if html5
 		FlxG.autoPause = false;
 
 		if (FlxG.sound.music != null)
@@ -75,18 +57,20 @@ class VideoHandler
 
 		nc.addEventListener("netStatus", netConnection_onNetStatus);
 
-		netStream.play(videoPath);
-	}
-
-	#if desktop
-	public function playMP4(path:String, callback:FlxState, ?repeat:Bool = false, ?isWindow:Bool = false, ?isFullscreen:Bool = false):Void
-	{
+		netStream.play(path);
+		#else
 		finishCallback = callback;
 
 		vlcBitmap = new VlcBitmap();
+
+		vlcBitmap.videoWidth = FlxG.width;
+		vlcBitmap.videoHeight = FlxG.height;
+
 		vlcBitmap.onVideoReady = onVLCVideoReady;
 		vlcBitmap.onComplete = onVLCComplete;
-		vlcBitmap.volume = FlxG.sound.music.volume;
+		vlcBitmap.onError = onVLCError;
+
+		FlxG.stage.addEventListener(Event.ENTER_FRAME, update);
 
 		if (repeat)
 			vlcBitmap.repeat = -1;
@@ -98,12 +82,15 @@ class VideoHandler
 
 		FlxG.addChildBelowMouse(vlcBitmap);
 		vlcBitmap.play(checkFile(path));
+		#end
 	}
 
+	#if desktop
 	function checkFile(fileName:String):String
 	{
 		var pDir = "";
 		var appDir = "file:///" + Sys.getCwd() + "/";
+
 		if (fileName.indexOf(":") == -1) // Not a path
 			pDir = appDir;
 		else if (fileName.indexOf("file://") == -1 || fileName.indexOf("http") == -1) // C:, D: etc? ..missing "file:///" ?
@@ -135,14 +122,29 @@ class VideoHandler
 
 		if (finishCallback != null)
 		{
-			FlxG.switchState(finishCallback);
+			LoadingState.loadAndSwitchState(finishCallback);
 		}
+	}
+
+	function onVLCError()
+	{
+		Dialogs.message("PolyEngine", "An error has occured while trying to load the video.\nPlease, check if the file you're loading exists.", true);
+
+		if (finishCallback != null)
+		{
+			LoadingState.loadAndSwitchState(finishCallback);
+		}
+	}
+
+	function update(e:Event)
+	{
+		vlcBitmap.volume = FlxG.sound.volume; // shitty volume fix
 	}
 	#end
 
 	/////////////////////////////////////////////////////////////////////////////////////
 
-	function client_onMetaData(videoPath)
+	function client_onMetaData(path)
 	{
 		video.attachNetStream(netStream);
 
@@ -150,9 +152,9 @@ class VideoHandler
 		video.height = FlxG.height;
 	}
 
-	function netConnection_onNetStatus(videoPath)
+	function netConnection_onNetStatus(path)
 	{
-		if (videoPath.info.code == "NetStream.Play.Complete")
+		if (path.info.code == "NetStream.Play.Complete")
 		{
 			finishVideo();
 		}
@@ -169,9 +171,29 @@ class VideoHandler
 
 		if (finishCallback != null)
 		{
-			FlxG.switchState(finishCallback);
+			LoadingState.loadAndSwitchState(finishCallback);
 		}
 		else
-			FlxG.switchState(new MainMenuState());
+			LoadingState.loadAndSwitchState(new MainMenuState());
 	}
+
+	// old html5 player
+	/*
+		var nc:NetConnection = new NetConnection();
+		nc.connect(null);
+
+		var ns:NetStream = new NetStream(nc);
+
+		var myVideo:Video = new Video();
+
+		myVideo.width = FlxG.width;
+		myVideo.height = FlxG.height;
+		myVideo.attachNetStream(ns);
+
+		ns.play(path);
+
+		return myVideo;
+
+		ns.close();
+	 */
 }

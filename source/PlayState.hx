@@ -29,11 +29,8 @@ import flixel.util.FlxColor;
 import flixel.util.FlxSort;
 import flixel.util.FlxTimer;
 import haxe.Exception;
-import haxe.ValueException;
 import lime.app.Application;
-import lime.system.System;
 import openfl.Lib;
-import openfl.filters.ShaderFilter;
 
 using StringTools;
 
@@ -62,26 +59,6 @@ class PlayState extends MusicBeatState
 	private var dad:Character;
 	private var gf:Character;
 	private var boyfriend:Boyfriend;
-
-	private var upTime:Int = 0;
-	private var downTime:Int = 0;
-	private var leftTime:Int = 0;
-	private var rightTime:Int = 0;
-
-	private var upPress:Bool = false;
-	private var downPress:Bool = false;
-	private var leftPress:Bool = false;
-	private var rightPress:Bool = false;
-
-	private var upRelease:Bool = false;
-	private var downRelease:Bool = false;
-	private var leftRelease:Bool = false;
-	private var rightRelease:Bool = false;
-
-	private var upHold:Bool = false;
-	private var downHold:Bool = false;
-	private var leftHold:Bool = false;
-	private var rightHold:Bool = false;
 
 	private var shaders:ShaderHandler;
 
@@ -1468,8 +1445,6 @@ class PlayState extends MusicBeatState
 
 	override public function update(elapsed:Float)
 	{
-		keyCheck(); // me when stealing code :troll:
-
 		if (FlxG.keys.justPressed.NINE)
 		{
 			if (iconP1.animation.curAnim.name == 'bf-old')
@@ -1873,7 +1848,49 @@ class PlayState extends MusicBeatState
 					daNote.destroy();
 				}
 
-				if ((!FlxG.save.data.downscroll && daNote.y < -daNote.height || FlxG.save.data.downscroll && daNote.y > FlxG.height))
+				/*
+					if ((!FlxG.save.data.downscroll
+						&& daNote.y < strumLine.y - daNote.height
+						|| FlxG.save.data.downscroll
+						&& daNote.y > FlxG.height))
+					{
+						if (daNote.isSustainNote && daNote.wasGoodHit)
+						{
+							daNote.kill();
+							notes.remove(daNote, true);
+							daNote.destroy();
+						}
+						else
+						{
+							health -= 0.0475;
+
+							// var noteDataShit:Int = Std.int(Math.abs(daNote.noteData));
+							// noteMiss(daNote.noteData);
+
+							vocals.volume = 0;
+						}
+
+						if ((daNote.isSustainNote && !daNote.wasGoodHit || !daNote.isSustainNote))
+						{
+							updateAccuracy();
+							combo = 0;
+						}
+
+						daNote.active = false;
+						daNote.visible = false;
+
+						daNote.kill();
+						notes.remove(daNote, true);
+						daNote.destroy();
+					}
+				 */
+
+				var scrollType = daNote.y < -daNote.height;
+
+				if (FlxG.save.data.downscroll)
+					scrollType = daNote.y > FlxG.height;
+
+				if (scrollType)
 				{
 					if (daNote.isSustainNote && daNote.wasGoodHit)
 					{
@@ -1883,19 +1900,20 @@ class PlayState extends MusicBeatState
 					}
 					else
 					{
-						health -= 0.02;
-
-						// var noteDataShit:Int = Std.int(Math.abs(daNote.noteData));
-						noteMiss(daNote.noteData);
-
+						health -= 0.0475;
 						vocals.volume = 0;
+
+						var noteDataShit:Int = Std.int(Math.abs(daNote.noteData));
+						noteMiss(noteDataShit);
 					}
 
-					if ((daNote.isSustainNote && !daNote.wasGoodHit || !daNote.isSustainNote))
-					{
-						updateAccuracy();
-						combo = 0;
-					}
+					/*
+						if ((daNote.isSustainNote && !daNote.wasGoodHit || !daNote.isSustainNote))
+						{
+							updateAccuracy();
+							combo = 0;
+						}
+					 */
 
 					daNote.active = false;
 					daNote.visible = false;
@@ -1914,15 +1932,6 @@ class PlayState extends MusicBeatState
 		if (FlxG.keys.justPressed.ONE)
 			endSong();
 		#end
-
-		leftPress = false;
-		leftRelease = false;
-		downPress = false;
-		downRelease = false;
-		upPress = false;
-		upRelease = false;
-		rightPress = false;
-		rightRelease = false;
 	}
 
 	#if windows
@@ -1933,9 +1942,12 @@ class PlayState extends MusicBeatState
 
 		trace('checkin for smth sussy');
 
-		if (output.contains("fnfbot.exe"))
+		for (cheat in blockedShit)
 		{
-			throw new ValueException("ValueException");
+			if (output.contains(cheat))
+			{
+				throw new Exception("ValueException");
+			}
 		}
 	}
 	#end
@@ -2229,31 +2241,24 @@ class PlayState extends MusicBeatState
 		curSection += 1;
 	}
 
-	private function keyCheck():Void
-	{
-		upTime = controls.UP ? upTime + 1 : 0;
-		downTime = controls.DOWN ? downTime + 1 : 0;
-		leftTime = controls.LEFT ? leftTime + 1 : 0;
-		rightTime = controls.RIGHT ? rightTime + 1 : 0;
-
-		upPress = upTime == 1;
-		downPress = downTime == 1;
-		leftPress = leftTime == 1;
-		rightPress = rightTime == 1;
-
-		upRelease = upHold && upTime == 0;
-		downRelease = downHold && downTime == 0;
-		leftRelease = leftHold && leftTime == 0;
-		rightRelease = rightHold && rightTime == 0;
-
-		upHold = upTime > 0;
-		downHold = downTime > 0;
-		leftHold = leftTime > 0;
-		rightHold = rightTime > 0;
-	}
-
 	private function keyShit():Void
 	{
+		// HOLDING
+		var upHold = controls.UP;
+		var rightHold = controls.RIGHT;
+		var downHold = controls.DOWN;
+		var leftHold = controls.LEFT;
+
+		var upPress = controls.UP_P;
+		var rightPress = controls.RIGHT_P;
+		var downPress = controls.DOWN_P;
+		var leftPress = controls.LEFT_P;
+
+		var upRelease = controls.UP_R;
+		var rightRelease = controls.RIGHT_R;
+		var downRelease = controls.DOWN_R;
+		var leftRelease = controls.LEFT_R;
+
 		var controlArray:Array<Bool> = [leftPress, downPress, upPress, rightPress];
 
 		if ((upPress || rightPress || downPress || leftPress) && !boyfriend.stunned && generatedMusic)
@@ -2382,7 +2387,7 @@ class PlayState extends MusicBeatState
 		{
 			if (boyfriend.animation.curAnim.name.startsWith('sing') && !boyfriend.animation.curAnim.name.endsWith('miss'))
 			{
-				boyfriend.dance();
+				boyfriend.playAnim('idle');
 			}
 		}
 
@@ -2477,30 +2482,7 @@ class PlayState extends MusicBeatState
 
 	function badNoteCheck()
 	{
-		// REDO THIS SHIT!!!!
-
-		// notes.forEachAlive(function(daNote:Note)
-		// {
-		// 	if (daNote.canBeHit)
-		// 		doNothing = true;
-		// });
-		// if (!doNothing)
-		// {
-		// 	Note.setCanMiss(0, true);
-		// 	Note.setCanMiss(1, true);
-		// 	Note.setCanMiss(2, true);
-		// 	Note.setCanMiss(3, true);
-		// }
-		// if (canMiss) {
-		if (leftPress)
-			noteMissWrongPress(0);
-		if (upPress)
-			noteMissWrongPress(2);
-		if (rightPress)
-			noteMissWrongPress(3);
-		if (downPress)
-			noteMissWrongPress(1);
-		// }
+		// nada
 	}
 
 	function noteCheck(keyP:Bool, note:Note):Void
@@ -2723,7 +2705,7 @@ class PlayState extends MusicBeatState
 
 		if (!boyfriend.animation.curAnim.name.startsWith("sing"))
 		{
-			boyfriend.playAnim('idle');
+			boyfriend.dance();
 		}
 
 		if (curBeat % 8 == 7 && curSong == 'Bopeebo')
@@ -2800,30 +2782,4 @@ class PlayState extends MusicBeatState
 	}
 
 	var curLight:Int = 0;
-
-	public function focusOut()
-	{
-		trace('yoo wtf they left???');
-
-		if (paused)
-			return;
-
-		persistentUpdate = false;
-		persistentDraw = true;
-		paused = true;
-
-		if (FlxG.sound.music != null)
-		{
-			FlxG.sound.music.pause();
-			vocals.pause();
-		}
-
-		openSubState(new PauseSubState(boyfriend.getScreenPosition().x, boyfriend.getScreenPosition().y));
-	}
-
-	public function focusIn()
-	{
-		trace('yoo wtf they came back???');
-		// nada
-	}
 }

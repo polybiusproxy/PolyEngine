@@ -168,11 +168,7 @@ class OptionsMenu extends MusicBeatState
 					FlxG.switchState(new ShaderState());
 				case "Video":
 					var video:VideoHandler = new VideoHandler();
-					#if desktop
 					video.playMP4(Paths.video('bigChungus'), new MainMenuState(), false, false);
-					#else
-					video.playWebMP4(Paths.video('bigChungus'), new MainMenuState());
-					#end
 				/*
 					case "Enable note splash":
 						FlxG.save.data.noteSplash = true;

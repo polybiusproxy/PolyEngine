@@ -193,7 +193,6 @@ class TitleState extends MusicBeatState
 	var gfDance:FlxSprite;
 	var danceLeft:Bool = false;
 	var titleText:FlxSprite;
-	var weekDay:FlxText;
 
 	function startIntro()
 	{
@@ -219,9 +218,6 @@ class TitleState extends MusicBeatState
 			// music.loadStream(Paths.music('freakyMenu'));
 			// FlxG.sound.list.add(music);
 			// music.play();
-			FlxG.sound.playMusic(Paths.music('freakyMenu'), 0);
-
-			FlxG.sound.music.fadeIn(4, 0, 0.7);
 		}
 
 		Conductor.changeBPM(102);
@@ -235,28 +231,6 @@ class TitleState extends MusicBeatState
 		logoBl.visible = false;
 		logoBl.updateHitbox();
 		logoBl.shader = swagShader.shader;
-
-		weekDay = new FlxText(5, 5, 0, "", 16);
-		weekDay.text = "DAY: ";
-		weekDay.setFormat(Paths.font("vcr.ttf"), 32);
-		weekDay.screenCenter(X);
-		weekDay.visible = false;
-
-		if (Date.now().getDay() == 0)
-			weekDay.text = "DAY: SUNDAY!";
-		else if (Date.now().getDay() == 1)
-			weekDay.text = "DAY: MONDAY!";
-		else if (Date.now().getDay() == 2)
-			weekDay.text = "DAY: TUESDAY!";
-		else if (Date.now().getDay() == 3)
-			weekDay.text = "DAY: WEDNESDAY!";
-		else if (Date.now().getDay() == 4)
-			weekDay.text = "DAY: THURSDAY!";
-		else if (Date.now().getDay() == 5)
-			weekDay.text = "DAY: FRIDAY!";
-		else if (Date.now().getDay() == 6)
-			weekDay.text = "DAY: SATURDAY!";
-
 		gfDance = new FlxSprite(FlxG.width * 0.4, FlxG.height * 0.07);
 		gfDance.frames = Paths.getSparrowAtlas('gfDanceTitle');
 		gfDance.animation.addByIndices('danceLeft', 'gfDance', [30, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14], "", 24, false);
@@ -266,7 +240,6 @@ class TitleState extends MusicBeatState
 		gfDance.shader = swagShader.shader;
 		add(gfDance);
 		add(logoBl);
-		add(weekDay);
 
 		titleText = new FlxSprite(100, FlxG.height * 0.8);
 		titleText.frames = Paths.getSparrowAtlas('titleEnter');
@@ -295,6 +268,9 @@ class TitleState extends MusicBeatState
 		ngSpr.updateHitbox();
 		ngSpr.screenCenter(X);
 		ngSpr.antialiasing = true;
+
+		FlxG.sound.playMusic(Paths.music('freakyMenu'), 0);
+		FlxG.sound.music.fadeIn(4, 0, 0.7);
 
 		FlxG.mouse.visible = false;
 
@@ -447,8 +423,6 @@ class TitleState extends MusicBeatState
 		}
 	}
 
-	var failedToPrint:Bool = true;
-
 	override function beatHit()
 	{
 		super.beatHit();
@@ -468,15 +442,8 @@ class TitleState extends MusicBeatState
 		switch (curBeat)
 		{
 			case 1:
-				createCoolText(['the fnf team', 'polybiusproxy', 'trsf2.0']);
-				failedToPrint = false;
-				trace('printed');
+				createCoolText(['the fnf team', 'polybiusproxy', 'trsf']);
 			case 3:
-				if (failedToPrint)
-				{
-					createCoolText(['the fnf team', 'polybiusproxy', 'trsf2.0']);
-					trace('ADD AGAIN FOR SOME REASON');
-				}
 				addMoreText('present...');
 			case 4:
 				deleteCoolText();
@@ -517,7 +484,6 @@ class TitleState extends MusicBeatState
 
 			gfDance.visible = true;
 			logoBl.visible = true;
-			weekDay.visible = true;
 			titleText.visible = true;
 
 			remove(ngSpr);

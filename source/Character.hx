@@ -571,25 +571,18 @@ class Character extends FlxSprite
 			{
 				case 'mom':
 					playAnim('idle');
-
 				case 'mom-car':
 					if (danced)
 						playAnim('idle', true);
-
 					danced = !danced;
-
 				case 'bf':
 					playAnim('idle');
-
 				case 'bf-christmas':
 					playAnim('idle');
-
 				case 'bf-car':
 					if (!danced)
 						playAnim('idle', true);
-
 					danced = !danced;
-
 				case 'gf':
 					if (!animation.curAnim.name.startsWith('hair'))
 					{
@@ -600,7 +593,6 @@ class Character extends FlxSprite
 						else
 							playAnim('danceLeft');
 					}
-
 				case 'gf-christmas':
 					if (!animation.curAnim.name.startsWith('hair'))
 					{
@@ -611,7 +603,6 @@ class Character extends FlxSprite
 						else
 							playAnim('danceLeft');
 					}
-
 				case 'gf-car':
 					if (!animation.curAnim.name.startsWith('hair'))
 					{
@@ -622,7 +613,6 @@ class Character extends FlxSprite
 						else
 							playAnim('danceLeft');
 					}
-
 				case 'gf-pixel':
 					if (!animation.curAnim.name.startsWith('hair'))
 					{
@@ -633,7 +623,6 @@ class Character extends FlxSprite
 						else
 							playAnim('danceLeft');
 					}
-
 				case 'spooky':
 					danced = !danced;
 
@@ -641,7 +630,6 @@ class Character extends FlxSprite
 						playAnim('danceRight');
 					else
 						playAnim('danceLeft');
-
 				default:
 					playAnim('idle');
 			}
