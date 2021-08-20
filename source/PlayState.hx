@@ -79,6 +79,7 @@ class PlayState extends MusicBeatState
 
 	private var strumLineNotes:FlxTypedGroup<FlxSprite>;
 	private var playerStrums:FlxTypedGroup<FlxSprite>;
+	private var cpuStrums:FlxTypedGroup<FlxSprite>;
 	private var grpNoteSplashes:FlxTypedGroup<NoteSplash>;
 
 	private var camZooming:Bool = false;
@@ -752,6 +753,7 @@ class PlayState extends MusicBeatState
 		add(grpNoteSplashes);
 
 		playerStrums = new FlxTypedGroup<FlxSprite>();
+		cpuStrums = new FlxTypedGroup<FlxSprite>();
 
 		generateSong(SONG.song);
 
@@ -1329,6 +1331,10 @@ class PlayState extends MusicBeatState
 			{
 				playerStrums.add(babyArrow);
 			}
+			else
+			{
+				cpuStrums.add(babyArrow);
+			}
 
 			babyArrow.animation.play('static');
 			babyArrow.x += 50;
@@ -1770,6 +1776,7 @@ class PlayState extends MusicBeatState
 
 				if (FlxG.save.data.downscroll)
 				{
+					// without this, we get the classic graphical gaps :D
 					if (daNote.isSustainNote)
 					{
 						if (daNote.animation.curAnim.name.endsWith("end") && daNote.prevNote != null)
@@ -1783,8 +1790,8 @@ class PlayState extends MusicBeatState
 					}
 
 					if (daNote.isSustainNote
-						&& daNote.y - daNote.offset.y * daNote.scale.y + daNote.height >= strumRect
-						&& (!daNote.mustPress || (daNote.wasGoodHit || (daNote.prevNote.wasGoodHit && !daNote.canBeHit))))
+						&& (!daNote.mustPress || daNote.wasGoodHit || daNote.prevNote.wasGoodHit && !daNote.canBeHit)
+						&& daNote.y - daNote.offset.y * daNote.scale.y + daNote.height >= strumRect)
 					{
 						var swagRect = new FlxRect(0, 0, daNote.frameWidth * 2, daNote.frameHeight * 2);
 						swagRect.height = (strumRect - daNote.y) / daNote.scale.y;
@@ -1797,8 +1804,8 @@ class PlayState extends MusicBeatState
 				{
 					// i am so fucking sorry for this if condition
 					if (daNote.isSustainNote
-						&& daNote.y + daNote.offset.y * daNote.scale.y <= strumRect
-						&& (!daNote.mustPress || (daNote.wasGoodHit || (daNote.prevNote.wasGoodHit && !daNote.canBeHit))))
+						&& (!daNote.mustPress || daNote.wasGoodHit || daNote.prevNote.wasGoodHit && !daNote.canBeHit)
+						&& daNote.y + (daNote.offset.y * daNote.scale.y) <= strumRect)
 					{
 						var swagRect = new FlxRect(0, 0, daNote.width / daNote.scale.x, daNote.height / daNote.scale.y);
 						swagRect.y = (strumRect - daNote.y) / daNote.scale.y;
@@ -1810,6 +1817,14 @@ class PlayState extends MusicBeatState
 
 				if (!daNote.mustPress && daNote.wasGoodHit)
 				{
+					cpuStrums.forEach(function(spr:FlxSprite)
+					{
+						if (Math.abs(daNote.noteData) == spr.ID)
+						{
+							spr.animation.play('confirm', true);
+						}
+					});
+
 					if (SONG.song != 'Tutorial')
 						camZooming = true;
 
@@ -1924,6 +1939,24 @@ class PlayState extends MusicBeatState
 				}
 			});
 		}
+
+		cpuStrums.forEach(function(spr:FlxSprite)
+		{
+			if (spr.animation.finished && spr.animation.curAnim.name == 'confirm')
+			{
+				spr.animation.play('static', true);
+				spr.centerOffsets();
+			}
+
+			if (spr.animation.curAnim.name == 'confirm' && !curStage.startsWith('school'))
+			{
+				spr.centerOffsets();
+				spr.offset.x -= 13;
+				spr.offset.y -= 13;
+			}
+			else
+				spr.centerOffsets();
+		});
 
 		if (!inCutscene)
 			keyShit();

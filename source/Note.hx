@@ -243,14 +243,8 @@ class Note extends FlxSprite
 			!1 = false
 			&& = {}
 
-			this.mustPress
-					? this.willMiss && !this.wasGoodHit
-						? ((this.tooLate = !0), (this.canBeHit = !1))
-						: this.strumTime > Z.songPosition - Z.safeZoneOffset
-						? this.strumTime < Z.songPosition + 0.5 * Z.safeZoneOffset && (this.canBeHit = !0)
-						: (this.willMiss = this.canBeHit = !0)
-					: ((this.canBeHit = !1), this.strumTime <= Z.songPosition && (this.wasGoodHit = !0));
-				this.tooLate && 0.3 < this.alpha && this.set_alpha(0.3);
+			this.mustPress ? this.willMiss && !this.wasGoodHit ? (this.tooLate = !0,
+					this.canBeHit = !1) : this.strumTime > Z.songPosition - Z.safeZoneOffset ? this.strumTime < Z.songPosition + .5 * Z.safeZoneOffset && (this.canBeHit = !0) : this.willMiss = this.canBeHit = !0
 		 */
 	}
 }
