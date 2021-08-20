@@ -2,8 +2,12 @@ package;
 
 import flixel.FlxG;
 import flixel.graphics.frames.FlxAtlasFrames;
+import flixel.system.FlxAssets.FlxGraphicAsset;
+import flixel.system.FlxAssets.FlxSoundAsset;
 import openfl.utils.AssetType;
 import openfl.utils.Assets as OpenFlAssets;
+
+using StringTools;
 
 class Paths
 {
@@ -60,6 +64,21 @@ class Paths
 		return getPath('data/$key.txt', TEXT, library);
 	}
 
+	inline public static function offsets(path:String, ?library:String):Array<String>
+	{
+		var daList:Array<String> = [];
+
+		// CRINGE ASS!
+		daList = lime.utils.Assets.getText('shared:assets/shared/images/characters/$path.txt').trim().split('\n');
+
+		for (i in 0...daList.length)
+		{
+			daList[i] = daList[i].trim();
+		}
+
+		return daList;
+	}
+
 	inline static public function xml(key:String, ?library:String)
 	{
 		return getPath('data/$key.xml', TEXT, library);
@@ -70,7 +89,7 @@ class Paths
 		return getPath('data/$key.json', TEXT, library);
 	}
 
-	static public function sound(key:String, ?library:String)
+	static public function sound(key:String, ?library:String):FlxSoundAsset
 	{
 		return getPath('sounds/$key.$SOUND_EXT', SOUND, library);
 	}
@@ -86,22 +105,24 @@ class Paths
 		return getPath('videos/$key.mp4', BINARY, library);
 	}
 
-	inline static public function music(key:String, ?library:String)
+	inline static public function music(key:String, ?library:String):FlxSoundAsset
 	{
 		return getPath('music/$key.$SOUND_EXT', MUSIC, library);
 	}
 
 	inline static public function voices(song:String)
 	{
-		return 'songs:assets/songs/${song.toLowerCase()}/Voices.$SOUND_EXT';
+		var rawSound:flixel.system.FlxAssets.FlxSoundAsset = 'songs:assets/songs/${song.toLowerCase()}/Voices.$SOUND_EXT';
+		return rawSound;
 	}
 
 	inline static public function inst(song:String)
 	{
-		return 'songs:assets/songs/${song.toLowerCase()}/Inst.$SOUND_EXT';
+		var rawSound:flixel.system.FlxAssets.FlxSoundAsset = 'songs:assets/songs/${song.toLowerCase()}/Inst.$SOUND_EXT';
+		return rawSound;
 	}
 
-	inline static public function image(key:String, ?library:String)
+	inline static public function image(key:String, ?library:String):FlxGraphicAsset
 	{
 		return getPath('images/$key.png', IMAGE, library);
 	}
