@@ -26,20 +26,22 @@ class StoryMenuState extends MusicBeatState
 		['Pico', 'Philly', "Blammed"],
 		['Satin-Panties', "High", "Milf"],
 		['Cocoa', 'Eggnog', 'Winter-Horrorland'],
-		['Senpai', 'Roses', 'Thorns']
+		['Senpai', 'Roses', 'Thorns'],
+		['Ugh', 'Guns', 'Stress']
 	];
 	var curDifficulty:Int = 1;
 
 	public static var weekUnlocked:Array<Bool> = [true, true, true, true, true, true, true];
 
 	var weekCharacters:Array<Dynamic> = [
-		['dad', 'bf', 'gf'],
+		['', 'bf', 'gf'],
 		['dad', 'bf', 'gf'],
 		['spooky', 'bf', 'gf'],
 		['pico', 'bf', 'gf'],
 		['mom', 'bf', 'gf'],
 		['parents-christmas', 'bf', 'gf'],
-		['senpai', 'bf', 'gf']
+		['senpai', 'bf', 'gf'],
+		['tankman', 'bf', 'gf']
 	];
 
 	var weekNames:Array<String> = [
@@ -49,7 +51,8 @@ class StoryMenuState extends MusicBeatState
 		"PICO",
 		"MOMMY MUST MURDER",
 		"RED SNOW",
-		"hating simulator"
+		"hating simulator",
+		"TANKMAN"
 	];
 
 	var txtWeekTitle:FlxText;
@@ -144,6 +147,7 @@ class StoryMenuState extends MusicBeatState
 			var weekCharacterThing:MenuCharacter = new MenuCharacter((FlxG.width * 0.25) * (1 + char) - 150, weekCharacters[curWeek][char]);
 			weekCharacterThing.y += 70;
 			weekCharacterThing.antialiasing = true;
+
 			switch (weekCharacterThing.character)
 			{
 				case 'dad':
@@ -160,6 +164,12 @@ class StoryMenuState extends MusicBeatState
 					weekCharacterThing.flipX = true;
 				case 'parents-christmas':
 					weekCharacterThing.setGraphicSize(Std.int(weekCharacterThing.width * 0.9));
+					weekCharacterThing.updateHitbox();
+				case "senpai":
+					weekCharacterThing.setGraphicSize(Std.int(weekCharacterThing.width * 1.4));
+					weekCharacterThing.updateHitbox();
+				case "tankman":
+					weekCharacterThing.setGraphicSize(Std.int(weekCharacterThing.width));
 					weekCharacterThing.updateHitbox();
 			}
 
@@ -395,7 +405,7 @@ class StoryMenuState extends MusicBeatState
 
 		switch (grpWeekCharacters.members[0].animation.curAnim.name)
 		{
-			case 'parents-christmas':
+			case 'parents':
 				grpWeekCharacters.members[0].offset.set(250, 200);
 				grpWeekCharacters.members[0].setGraphicSize(Std.int(grpWeekCharacters.members[0].width * 1.5));
 

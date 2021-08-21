@@ -630,7 +630,7 @@ class PlayState extends MusicBeatState
 		if (curStage != 'schoolEvil')
 		{
 			Application.current.window.title = "Friday Night Funkin' - PolyEngine - PLAYING: " + artist + ' - ' + SONG.song.toUpperCase() + ' ['
-				+ storyDifficultyText + ']';
+				+ storyDifficultyText.toUpperCase() + ']';
 		}
 
 		if (songEnded)
@@ -682,6 +682,8 @@ class PlayState extends MusicBeatState
 				dad.x -= 150;
 				dad.y += 100;
 				camPos.set(dad.getGraphicMidpoint().x + 300, dad.getGraphicMidpoint().y);
+			case "tankman":
+				dad.y += 180;
 		}
 
 		boyfriend = new Boyfriend(770, 450, SONG.player1);
