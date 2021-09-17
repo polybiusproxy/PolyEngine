@@ -113,7 +113,8 @@ class MainMenuState extends MusicBeatState
 			{
 				versionShit.text = PlayState.uglyVersion + (" Fortnite - " + "0.8102392039103921039210" + " - BobuxEngine);
 			}
-			else{
+			else
+			{
 				versionShit.text = PlayState.uglyVersion + (" FNF - " + PlayState.daVersion + " - PolyEngine");
 			}
 		}
