@@ -7,6 +7,7 @@ import flixel.math.FlxMath;
 import flixel.text.FlxText;
 import flixel.util.FlxColor;
 import flixel.util.FlxTimer;
+import flixel.tweens.FlxTween;
 
 using StringTools;
 
@@ -33,7 +34,11 @@ class FreeplayState extends MusicBeatState
 	private var curPlaying:Bool = false;
 
 	private var iconArray:Array<HealthIcon> = [];
+	public static var coolColors:Array<Int> = [0xFF9271FD, 0xFF9271FD, 0xFF223344, 0xFF941653, 0xFFFC96D7, 0xFFA0D1FF, 0xFFFF78BF];
 	var trackedAssets:Array<Dynamic> = [];
+	
+	var bg:FlxSprite;
+	private var intendedColor:Int;
 
 	override function create()
 	{
@@ -91,7 +96,7 @@ class FreeplayState extends MusicBeatState
 
 		// LOAD CHARACTERS
 
-		var bg:FlxSprite = new FlxSprite().loadGraphic(Paths.image('menuBGBlue'));
+		bg = new FlxSprite().loadGraphic(Paths.image('menuDesat'));
 		add(bg);
 
 		grpSongs = new FlxTypedGroup<Alphabet>();
@@ -129,6 +134,8 @@ class FreeplayState extends MusicBeatState
 
 		add(scoreText);
 
+		bg.color = songs[curSelected].color;
+		intendedColor = bg.color;
 		changeSelection();
 		changeDiff();
 
