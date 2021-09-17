@@ -20,8 +20,10 @@ class HealthIcon extends FlxSprite
 		loadGraphic(Paths.image('icons/icon-' + char, 'preload'), true, 150, 150);
 
 		animation.add(char, [0, 1], 0, false, isPlayer);
-
-		animation.play(char);
+                if (char != null)
+			animation.play(char);
+		else
+			animation.play('face');
 
 		switch (char)
 		{
