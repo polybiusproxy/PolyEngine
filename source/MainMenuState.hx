@@ -109,7 +109,14 @@ class MainMenuState extends MusicBeatState
 		}
 		else
 		{
-			versionShit.text = PlayState.uglyVersion + (" FNF - " + PlayState.daVersion + " - PolyEngine");
+			if (!PlayState.daVersion.contains(data.trim()) && !OutdatedSubState.leftState && MainMenuState.nightly == "")
+			{
+				versionShit.text = PlayState.uglyVersion + (" Fortnite - " + "DICK MOD" + " - BobuxEngine");
+			}
+			else
+			{
+				versionShit.text = PlayState.uglyVersion + (" FNF - " + PlayState.daVersion + " - PolyEngine");
+			}
 		}
 
 		versionShit.scrollFactor.set();

@@ -35,6 +35,8 @@ This game was made with love to Newgrounds and its community. Extra love to Tom 
 - [TRSF2.0](https://github.com/TRSF-sonicman) - also programmer.
 - [Idiocrasy]() - Artist for Dark assets in mod example. <!--- lol -->
 
+### Other Credit shit
+- [Dog](https://www.youtube.com/watch?v=dQw4w9WgXcQ) - Circus
 
 ### Shoutouts
 - [BrightFyre](https://github.com/brightfyregit) - Tester (i'm stealing ur code >:))))) ).
