@@ -111,7 +111,7 @@ class MainMenuState extends MusicBeatState
 		{
 			if (!PlayState.daVersion.contains(data.trim()) && !OutdatedSubState.leftState && MainMenuState.nightly == "")
 			{
-				versionShit.text = PlayState.uglyVersion + (" Fortnite - " + "0.8102392039103921039210" + " - BobuxEngine);
+				versionShit.text = PlayState.uglyVersion + (" Fortnite - " + "DICK MOD" + " - BobuxEngine);
 			}
 			else
 			{
