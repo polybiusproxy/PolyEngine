@@ -2,7 +2,7 @@
 #include <iostream>
 #include <string>
 #include <StdInt.h>
-#include <windows.h> 
+#include <windows> 
 
 using std::string;
 using namespace std;
