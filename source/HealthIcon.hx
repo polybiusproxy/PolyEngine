@@ -19,22 +19,11 @@ class HealthIcon extends FlxSprite
 	{
 		super();
 
-<<<<<<< Updated upstream
-		// loadGraphic(Paths.image('iconGrid'), true, 150, 150);
-		loadGraphic(Paths.image('icons/icon-' + char, 'preload'), true, 150, 150);
-
-		animation.add(char, [0, 1], 0, false, isPlayer);
-                if (char != null)
-			animation.play(char);
-		else
-			animation.play('face');
-=======
 		this.char = char;
 		this.isPlayer = isPlayer;
 
 		isPlayer = isOldIcon = false;
->>>>>>> Stashed changes
-
+		
 		antialiasing = true;
 
 		changeIcon(char);
