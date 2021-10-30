@@ -3,6 +3,7 @@ package;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.graphics.frames.FlxAtlasFrames;
+import flixel.util.FlxSort;
 
 using StringTools;
 
@@ -388,11 +389,11 @@ class Character extends FlxSprite
 
 			case "tankman":
 				frames = Paths.getSparrowAtlas('characters/tankmanCaptain', 'shared');
-				animation.addByPrefix('idle', 'Tankman Idle Dance', 24, false);
-				animation.addByPrefix('singUP', 'Tankman UP note ', 24, false);
-				animation.addByPrefix('singDOWN', 'Tankman DOWN note ', 24, false);
-				animation.addByPrefix('singLEFT', 'Tankman Note Left ', 24, false);
-				animation.addByPrefix('singRIGHT', 'Tankman Right Note ', 24, false);
+				animation.addByPrefix('idle', 'Tankman Idle Dance instance', 24);
+				animation.addByPrefix('singUP', 'Tankman UP note instance', 24);
+				animation.addByPrefix('singRIGHT', 'Tankman Note Left instance', 24);
+				animation.addByPrefix('singLEFT', 'Tankman Right Note instance', 24);
+				animation.addByPrefix('singDOWN', 'Tankman DOWN note instance', 24);
 
 				animation.addByPrefix('singUP-alt', 'TANKMAN UGH', 24, false);
 				animation.addByPrefix('singDOWN-alt', 'PRETTY GOOD', 24, false);
@@ -434,6 +435,17 @@ class Character extends FlxSprite
 				loadOffsetFile(curCharacter);
 				playAnim("firstDeath");
 				flipX = true;
+			case "pico-speaker":
+				frames = Paths.getSparrowAtlas('characters/picoSpeaker', 'shared');
+
+				animation.addByPrefix('shoot1', 'Pico shoot 1');
+				animation.addByPrefix('shoot2', 'Pico shoot 2');
+				animation.addByPrefix('shoot3', 'Pico shoot 3');
+				animation.addByPrefix('shoot4', 'Pico shoot 4');
+
+				loadOffsetFile(this.curCharacter);
+				playAnim("shoot1");
+				loadMappedAnims();
 		}
 
 		dance();
@@ -551,47 +563,7 @@ class Character extends FlxSprite
 					if (!danced)
 						playAnim('idle', true);
 					danced = !danced;
-				case 'gf':
-					if (!animation.curAnim.name.startsWith('hair'))
-					{
-						danced = !danced;
-
-						if (danced)
-							playAnim('danceRight');
-						else
-							playAnim('danceLeft');
-					}
-				case 'gf-christmas':
-					if (!animation.curAnim.name.startsWith('hair'))
-					{
-						danced = !danced;
-
-						if (danced)
-							playAnim('danceRight');
-						else
-							playAnim('danceLeft');
-					}
-				case 'gf-car':
-					if (!animation.curAnim.name.startsWith('hair'))
-					{
-						danced = !danced;
-
-						if (danced)
-							playAnim('danceRight');
-						else
-							playAnim('danceLeft');
-					}
-				case 'gf-pixel':
-					if (!animation.curAnim.name.startsWith('hair'))
-					{
-						danced = !danced;
-
-						if (danced)
-							playAnim('danceRight');
-						else
-							playAnim('danceLeft');
-					}
-				case 'gf-tankmen':
+				case 'gf' | 'gf-christmas' | 'gf-car' | 'gf-pixel' | 'gf-tankmen':
 					if (!animation.curAnim.name.startsWith('hair'))
 					{
 						danced = !danced;
@@ -611,6 +583,8 @@ class Character extends FlxSprite
 				case "tankman":
 					if (animation.curAnim.name != "singDOWN-alt")
 						playAnim('idle');
+				case 'pico-speaker':
+				// djfhyoiuytogbt
 
 				default:
 					playAnim('idle');
@@ -652,25 +626,25 @@ class Character extends FlxSprite
 
 	public function loadMappedAnims()
 	{
-		var pico = Song.loadFromJson("picoSpeaker", "stress").notes;
+		var pico = Song.loadFromJson("pico-speaker", "stress");
+		var notes = pico.notes;
 
-		for (i in pico)
+		for (section in notes)
 		{
-			for (note in i.sectionNotes)
+			for (note in section.sectionNotes)
 			{
 				animationNotes.push(note);
 			}
 		}
 
+		TankmenBG.animationNotes = animationNotes;
+
 		animationNotes.sort(sortAnims);
 	}
 
-	function sortAnims(a, b)
+	function sortAnims(val1:Array<Dynamic>, val2:Array<Dynamic>):Int
 	{
-		var aThing = a[0];
-		var bThing = b[0];
-
-		return aThing < bThing ? -1 : 1;
+		return FlxSort.byValues(FlxSort.ASCENDING, val1[0], val2[0]);
 	}
 
 	public function addOffset(name:String, x:Float = 0, y:Float = 0)

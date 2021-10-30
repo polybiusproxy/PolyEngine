@@ -2,6 +2,8 @@ package;
 
 import flixel.FlxSprite;
 
+using StringTools;
+
 class HealthIcon extends FlxSprite
 {
 	/**
@@ -11,11 +13,13 @@ class HealthIcon extends FlxSprite
 
 	public var isOldIcon:Bool = false;
 	public var isPlayer:Bool = false;
+	public var char:String = 'bf';
 
 	public function new(char:String = 'bf', isPlayer:Bool = false)
 	{
 		super();
 
+<<<<<<< Updated upstream
 		// loadGraphic(Paths.image('iconGrid'), true, 150, 150);
 		loadGraphic(Paths.image('icons/icon-' + char, 'preload'), true, 150, 150);
 
@@ -24,16 +28,38 @@ class HealthIcon extends FlxSprite
 			animation.play(char);
 		else
 			animation.play('face');
+=======
+		this.char = char;
+		this.isPlayer = isPlayer;
 
-		switch (char)
-		{
-			case 'bf-pixel' | 'senpai' | 'senpai-angry' | 'spirit' | 'gf-pixel':
-				antialiasing = false;
-			default:
-				antialiasing = true; // grrrrr this is what makes the rest not look blocky, mannnnn
-		}
+		isPlayer = isOldIcon = false;
+>>>>>>> Stashed changes
 
+		antialiasing = true;
+
+		changeIcon(char);
 		scrollFactor.set();
+	}
+
+	public function swapOldIcon()
+	{
+		(isOldIcon = !isOldIcon) ? changeIcon("bf-old") : changeIcon(char);
+	}
+
+	public function changeIcon(char:String)
+	{
+		if (char != 'bf-pixel' && char != 'bf-old')
+			char = char.split("-")[0];
+
+		loadGraphic(Paths.image('icons/icon-' + char), true, 150, 150);
+
+		if (char.endsWith('-pixel') || char.startsWith('senpai') || char.startsWith('spirit'))
+			antialiasing = false
+		else
+			antialiasing = true;
+
+		animation.add(char, [0, 1], 0, false, isPlayer);
+		animation.play(char);
 	}
 
 	override function update(elapsed:Float)

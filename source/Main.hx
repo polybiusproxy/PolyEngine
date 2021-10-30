@@ -98,9 +98,5 @@ class Main extends Sprite
 		#if debug
 		flixel.addons.studio.FlxStudio.create();
 		#end
-
-		#if desktop
-		Lib.current.stage.frameRate = 120;
-		#end
 	}
 }

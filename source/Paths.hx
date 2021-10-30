@@ -59,9 +59,12 @@ class Paths
 		return getPath(file, type, library);
 	}
 
-	inline static public function txt(key:String, ?library:String)
+	inline static public function txt(key:String, ?library:String, ?offset:Bool = false)
 	{
-		return getPath('data/$key.txt', TEXT, library);
+		if (!offset)
+			return getPath('data/$key.txt', TEXT, library);
+		else
+			return getPath('$key.txt', TEXT, library);
 	}
 
 	inline public static function offsets(path:String, ?library:String):Array<String>
@@ -70,6 +73,7 @@ class Paths
 
 		// CRINGE ASS!
 		daList = lime.utils.Assets.getText('shared:assets/shared/images/characters/$path.txt').trim().split('\n');
+		trace("loading offset: " + daList);
 
 		for (i in 0...daList.length)
 		{

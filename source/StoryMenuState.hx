@@ -165,11 +165,11 @@ class StoryMenuState extends MusicBeatState
 				case 'parents-christmas':
 					weekCharacterThing.setGraphicSize(Std.int(weekCharacterThing.width * 0.9));
 					weekCharacterThing.updateHitbox();
+				case "tankman":
+					weekCharacterThing.setGraphicSize(Std.int(weekCharacterThing.width * 0.9));
+					weekCharacterThing.updateHitbox();
 				case "senpai":
 					weekCharacterThing.setGraphicSize(Std.int(weekCharacterThing.width * 1.4));
-					weekCharacterThing.updateHitbox();
-				case "tankman":
-					weekCharacterThing.setGraphicSize(Std.int(weekCharacterThing.width));
 					weekCharacterThing.updateHitbox();
 			}
 
@@ -403,15 +403,15 @@ class StoryMenuState extends MusicBeatState
 		grpWeekCharacters.members[2].animation.play(weekCharacters[curWeek][2]);
 		txtTracklist.text = "Tracks\n\n";
 
-		switch (grpWeekCharacters.members[0].animation.curAnim.name)
+		switch (grpWeekCharacters.members[0].animation.name)
 		{
-			case 'parents':
-				grpWeekCharacters.members[0].offset.set(250, 200);
-				grpWeekCharacters.members[0].setGraphicSize(Std.int(grpWeekCharacters.members[0].width * 1.5));
+			case 'parents-christmas':
+				grpWeekCharacters.members[0].offset.set(200, 200);
+				grpWeekCharacters.members[0].setGraphicSize(Std.int(grpWeekCharacters.members[0].width * 0.99));
 
 			case 'senpai':
 				grpWeekCharacters.members[0].offset.set(130, 0);
-				grpWeekCharacters.members[0].setGraphicSize(Std.int(grpWeekCharacters.members[0].width * 1.4));
+				grpWeekCharacters.members[0].setGraphicSize(Std.int(grpWeekCharacters.members[0].width * 0.9));
 
 			case 'mom':
 				grpWeekCharacters.members[0].offset.set(100, 200);
@@ -424,8 +424,30 @@ class StoryMenuState extends MusicBeatState
 			default:
 				grpWeekCharacters.members[0].offset.set(100, 100);
 				grpWeekCharacters.members[0].setGraphicSize(Std.int(grpWeekCharacters.members[0].width * 1));
-				// grpWeekCharacters.members[0].updateHitbox();
+				// weekCharactersArray.members[curWeek].members[0].updateHitbox();
 		}
+
+		/*
+			switch (grpWeekCharacters.members[0].animation.curAnim.name)
+			{
+				case 'parents-christmas':
+					grpWeekCharacters.members[0].offset.set(250, 200);
+					grpWeekCharacters.members[0].setGraphicSize(Std.int(grpWeekCharacters.members[0].width * 1.5));
+
+				case 'mom':
+					grpWeekCharacters.members[0].offset.set(100, 200);
+					grpWeekCharacters.members[0].setGraphicSize(Std.int(grpWeekCharacters.members[0].width * 1));
+
+				case 'dad':
+					grpWeekCharacters.members[0].offset.set(120, 200);
+					grpWeekCharacters.members[0].setGraphicSize(Std.int(grpWeekCharacters.members[0].width * 1));
+
+				default:
+					grpWeekCharacters.members[0].offset.set(100, 100);
+					grpWeekCharacters.members[0].setGraphicSize(Std.int(grpWeekCharacters.members[0].width * 1));
+					// grpWeekCharacters.members[0].updateHitbox();
+			}
+		 */
 
 		var stringThing:Array<String> = weekData[curWeek];
 

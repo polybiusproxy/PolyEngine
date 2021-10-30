@@ -10,19 +10,6 @@
 	<target id='haxe' tool='linker' toolid='exe'>
 		<lib name='${CPP_DIR}/lib/libvlc.lib' if='windows'/>
 		<lib name='${CPP_DIR}/lib/libvlccore.lib' if='windows'/>
+        <lib name="-l${CPP_DIR}/lib/libvlc" unless="windows"/>
 	</target>
-
-	<target id="haxe" tool="linker" if="macos">
-            <flag value="-framework"/>
-            <flag value="OpenGL"/>
-            <flag value="-framework"/>
-            <flag value="CoreVideo"/>
-            <flag value="-framework"/>
-            <flag value="IOKit"/>
-            <flag value="-framework"/>
-            <flag value="Cocoa"/>
-            <flag value="-framework"/>      
-            <flag value="Glut"/>
-        </target>
-	
 </xml>

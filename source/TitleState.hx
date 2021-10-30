@@ -85,7 +85,7 @@ class TitleState extends MusicBeatState
 				assetLibraryPaths: [
 					"exclude" => "exclude", "fonts" => "fonts", "songs" => "songs", "data" => "data", "images" => "images", "music" => "music",
 					"sounds" => "sounds", "shared" => "shared", "tutorial" => "tutorial", "videos" => "videos", "week1" => "week1", "week2" => "week2",
-					"week3" => "week3", "week4" => "week4", "week5" => "week5", "week6" => "week6"
+					"week3" => "week3", "week4" => "week4", "week5" => "week5", "week6" => "week6", "week7" => "week7"
 				]
 			}
 		});
@@ -137,8 +137,6 @@ class TitleState extends MusicBeatState
 		{
 			FlxG.save.data.basedVocals = false;
 		}
-
-		FlxG.game.focusLostFramerate = 60;
 
 		PlayerSettings.init();
 

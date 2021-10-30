@@ -81,6 +81,8 @@ class ChartingState extends MusicBeatState
 	var leftIcon:HealthIcon;
 	var rightIcon:HealthIcon;
 
+	var isAltNoteCheck:FlxUICheckBox;
+
 	override function create()
 	{
 		curSection = lastSection;
@@ -323,6 +325,7 @@ class ChartingState extends MusicBeatState
 	}
 
 	var stepperSusLength:FlxUINumericStepper;
+	var stepperAltNote:FlxUINumericStepper;
 
 	function addNoteUI():Void
 	{
@@ -334,7 +337,13 @@ class ChartingState extends MusicBeatState
 		stepperSusLength.name = 'note_susLength';
 
 		var applyLength:FlxButton = new FlxButton(100, 10, 'Apply');
-
+		isAltNoteCheck = new FlxUICheckBox(10, 100, null, null, "Alt Anim Note", 100);
+		isAltNoteCheck.name = "isAltNote";
+		stepperAltNote = new FlxUINumericStepper(10, 200, 1, 0, 0, 999, 0);
+		stepperAltNote.value = 0;
+		stepperAltNote.name = 'alt_anim_note';
+		tab_group_note.add(isAltNoteCheck);
+		tab_group_note.add(stepperAltNote);
 		tab_group_note.add(stepperSusLength);
 		tab_group_note.add(applyLength);
 
@@ -405,6 +414,12 @@ class ChartingState extends MusicBeatState
 					FlxG.log.add('changed bpm shit');
 				case "Alt Animation":
 					_song.notes[curSection].altAnim = check.checked;
+				case 'Alt Anim Note':
+					if (curSelectedNote != null)
+					{
+						curSelectedNote[3] = check.checked ? 1 : 0;
+					}
+					updateNoteUI();
 			}
 		}
 		else if (id == FlxUINumericStepper.CHANGE_EVENT && (sender is FlxUINumericStepper))
@@ -436,6 +451,13 @@ class ChartingState extends MusicBeatState
 			{
 				_song.notes[curSection].bpm = Std.int(nums.value);
 				updateGrid();
+			}
+			else if (wname == 'alt_anim_note')
+			{
+				if (curSelectedNote != null)
+					curSelectedNote[3] = nums.value;
+
+				updateNoteUI();
 			}
 		}
 
@@ -791,20 +813,24 @@ class ChartingState extends MusicBeatState
 	{
 		if (check_mustHitSection.checked)
 		{
-			leftIcon.animation.play('bf');
-			rightIcon.animation.play('dad');
+			leftIcon.animation.play(PlayState.SONG.player1);
+			rightIcon.animation.play(PlayState.SONG.player2);
 		}
 		else
 		{
-			leftIcon.animation.play('dad');
-			rightIcon.animation.play('bf');
+			rightIcon.animation.play(PlayState.SONG.player2);
+			leftIcon.animation.play(PlayState.SONG.player1);
 		}
 	}
 
 	function updateNoteUI():Void
 	{
 		if (curSelectedNote != null)
+		{
 			stepperSusLength.value = curSelectedNote[2];
+			isAltNoteCheck.checked = cast curSelectedNote[3];
+			stepperAltNote.value = curSelectedNote[3] != null ? curSelectedNote[3] : 0;
+		}
 	}
 
 	function updateGrid():Void

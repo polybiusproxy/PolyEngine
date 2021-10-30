@@ -4,7 +4,6 @@ import flixel.FlxG;
 import flixel.FlxState;
 import openfl.events.Event;
 import openfl.media.Video;
-import openfl.net.NetConnection;
 import openfl.net.NetStream;
 import systools.Dialogs;
 import vlc.VlcBitmap;
