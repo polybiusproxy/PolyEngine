@@ -1,7 +1,6 @@
 package;
 
 // TODO: add overlay shader for week 4
-import flixel.addons.display.FlxShaderMaskCamera;
 import flixel.system.FlxAssets.FlxShader;
 
 typedef ShaderEffect =

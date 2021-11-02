@@ -16,6 +16,7 @@ class Character extends FlxSprite
 	public var curCharacter:String = 'bf';
 
 	public var holdTimer:Float = 0;
+	public var offsetNames:Array<String> = [];
 
 	public function new(x:Float, y:Float, ?character:String = "bf", ?isPlayer:Bool = false)
 	{
@@ -649,6 +650,8 @@ class Character extends FlxSprite
 
 	public function addOffset(name:String, x:Float = 0, y:Float = 0)
 	{
+		offsetNames.push(name);
+
 		if (isPlayer && !curCharacter.startsWith('bf'))
 		{
 			if (curCharacter.startsWith('pico') && !name.startsWith('singDOWN'))

@@ -704,7 +704,7 @@ class PlayState extends MusicBeatState
 
 		if (curStage == 'tank')
 			gfVersion = 'gf-tankmen';
-		else if (SONG.song.toLowerCase() == 'stress')
+		else if (SONG.song.toLowerCase() == 'stress' && curStage == 'tank')
 			gfVersion = 'pico-speaker';
 
 		switch (gfVersion)
@@ -2935,6 +2935,7 @@ class PlayState extends MusicBeatState
 		for (asset in trackedAssets)
 		{
 			remove(asset);
+			asset = null;
 		}
 	}
 

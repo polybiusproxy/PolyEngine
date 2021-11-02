@@ -8,7 +8,7 @@ import openfl.filters.ShaderFilter; // 2. Import ShaderFilter.
 
 class ShaderState extends MusicBeatState
 {
-	var creation:CreationEffect; // 3. Create a variable for the effect like you normally would do.
+	var creation:CreationEffect; // 3. Create a variable for the effect like you would normally do.
 
 	var back = controls.BACK;
 
@@ -29,5 +29,5 @@ class ShaderState extends MusicBeatState
 			FlxG.switchState(new OptionsMenu());
 	}
 
-	// 7. Compile and.... You should see your shader!
+	// 7. Compile and you should see your shader!
 }
