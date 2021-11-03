@@ -4,9 +4,11 @@ import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.math.FlxMath;
+import flixel.system.FlxSound;
 import flixel.text.FlxText;
 import flixel.util.FlxColor;
 import flixel.util.FlxTimer;
+import openfl.utils.Assets;
 
 using StringTools;
 
@@ -33,7 +35,11 @@ class FreeplayState extends MusicBeatState
 	private var curPlaying:Bool = false;
 
 	private var iconArray:Array<HealthIcon> = [];
+
 	var trackedAssets:Array<Dynamic> = [];
+	var trackedSounds:Array<Dynamic> = [];
+
+	var leInst:FlxSound = new FlxSound();
 
 	override function create()
 	{
@@ -149,7 +155,6 @@ class FreeplayState extends MusicBeatState
 	public function addSong(songName:String, weekNum:Int, songCharacter:String)
 	{
 		songs.push(new SongMetadata(songName, weekNum, songCharacter));
-		FlxG.sound.cache(Paths.inst(songName));
 	}
 
 	public function addWeek(songs:Array<String>, weekNum:Int, ?songCharacters:Array<String>)
@@ -204,6 +209,7 @@ class FreeplayState extends MusicBeatState
 
 		if (controls.BACK)
 		{
+			unloadAssets();
 			FlxG.switchState(new MainMenuState());
 		}
 
@@ -267,7 +273,13 @@ class FreeplayState extends MusicBeatState
 		#end
 
 		#if PRELOAD_ALL // desktop
-		FlxG.sound.playMusic(Paths.inst(songs[curSelected].songName), 0);
+		var inst:String = Paths.inst(songs[curSelected].songName);
+
+		// Assets.getSound(songs[curSelected].songName);
+		FlxG.sound.playMusic(inst, 0);
+
+		if (trackedSounds.contains(songs[curSelected].songName) == false)
+			trackedSounds.push(songs[curSelected].songName);
 		#end
 
 		var bullShit:Int = 0;
@@ -306,6 +318,12 @@ class FreeplayState extends MusicBeatState
 		for (asset in trackedAssets)
 		{
 			remove(asset);
+		}
+
+		for (sound in trackedSounds)
+		{
+			trace('Deleting ' + sound);
+			Assets.cache.clear(sound);
 		}
 	}
 }

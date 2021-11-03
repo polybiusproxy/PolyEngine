@@ -588,7 +588,11 @@ class PlayState extends MusicBeatState
 			case 'ugh' | 'guns' | 'stress':
 				{
 					defaultCamZoom = 0.9;
-					curStage = 'tank';
+
+					if (SONG.song.toLowerCase() == 'stress')
+						curStage = 'pico-tank';
+					else
+						curStage = 'tank';
 
 					var bg:BGSprite = new BGSprite('tankSky', -400, -400, 0, 0);
 					bg.active = true;
@@ -697,15 +701,32 @@ class PlayState extends MusicBeatState
 				gfVersion = 'gf-pixel';
 			case 'schoolEvil':
 				gfVersion = 'gf-pixel';
+			case 'tank':
+				gfVersion = 'gf-tankmen';
+			case 'pico-tank':
+				gfVersion = 'pico-speaker';
 		}
 
 		if (curStage == 'limo')
 			gfVersion = 'gf-car';
 
-		if (curStage == 'tank')
-			gfVersion = 'gf-tankmen';
-		else if (SONG.song.toLowerCase() == 'stress' && curStage == 'tank')
-			gfVersion = 'pico-speaker';
+		#if desktop
+		var artist:String = 'KawaiSprite';
+
+		if (curStage != 'schoolEvil')
+		{
+			Application.current.window.title = "Friday Night Funkin' - PolyEngine - PLAYING: " + artist + ' - ' + SONG.song.toUpperCase() + ' ['
+				+ storyDifficultyText.toUpperCase() + ']';
+		}
+
+		if (songEnded)
+		{
+			Application.current.window.title = "Friday Night Funkin' - PolyEngine";
+		}
+		#end
+
+		gf = new Character(400, 130, gfVersion);
+		gf.scrollFactor.set(0.95, 0.95);
 
 		switch (gfVersion)
 		{
@@ -730,24 +751,6 @@ class PlayState extends MusicBeatState
 					}
 				}
 		}
-
-		#if desktop
-		var artist:String = 'KawaiSprite';
-
-		if (curStage != 'schoolEvil')
-		{
-			Application.current.window.title = "Friday Night Funkin' - PolyEngine - PLAYING: " + artist + ' - ' + SONG.song.toUpperCase() + ' ['
-				+ storyDifficultyText.toUpperCase() + ']';
-		}
-
-		if (songEnded)
-		{
-			Application.current.window.title = "Friday Night Funkin' - PolyEngine";
-		}
-		#end
-
-		gf = new Character(400, 130, gfVersion);
-		gf.scrollFactor.set(0.95, 0.95);
 
 		/*
 			if (gfVersion == 'pico-speaker')
@@ -862,6 +865,14 @@ class PlayState extends MusicBeatState
 				gf.x += 180;
 				gf.y += 300;
 			case 'tank':
+				gf.y -= 55;
+				gf.x -= 200;
+
+				boyfriend.x += 40;
+
+				dad.y += 60;
+				dad.x -= 80;
+			case 'pico-tank':
 				gf.y -= 55;
 				gf.x -= 200;
 
@@ -1291,7 +1302,7 @@ class PlayState extends MusicBeatState
 			for (songNotes in section.sectionNotes)
 			{
 				// var daStrumTime:Float = songNotes[0] + FlxG.save.data.noteoffset;
-				var daStrumTime:Float = songNotes[0];
+				var daStrumTime:Float = songNotes[0] + 40;
 				var daNoteData:Int = Std.int(songNotes[1] % 4);
 
 				if (daStrumTime < 0)
@@ -2916,6 +2927,8 @@ class PlayState extends MusicBeatState
 				}
 			case 'tank':
 				tankWatchtower.dance();
+			case 'pico-tank':
+				tankWatchtower.dance();
 		}
 
 		if (isHalloween && FlxG.random.bool(10) && curBeat > lightningStrikeBeat + lightningOffset)
@@ -2935,7 +2948,7 @@ class PlayState extends MusicBeatState
 		for (asset in trackedAssets)
 		{
 			remove(asset);
-			asset = null;
+			asset.kill();
 		}
 	}
 
