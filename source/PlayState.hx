@@ -11,6 +11,7 @@ import flixel.FlxCamera;
 import flixel.FlxG;
 import flixel.FlxObject;
 import flixel.FlxSprite;
+import flixel.FlxState;
 import flixel.FlxSubState;
 import flixel.addons.effects.FlxTrail;
 import flixel.addons.effects.chainable.FlxEffectSprite;
@@ -31,6 +32,8 @@ import flixel.util.FlxTimer;
 import haxe.Exception;
 import lime.app.Application;
 import openfl.Lib;
+import openfl.utils.Assets;
+import sys.io.Process;
 
 using StringTools;
 
@@ -158,6 +161,8 @@ class PlayState extends MusicBeatState
 
 	override public function create()
 	{
+		Paths.unloadAssets();
+
 		if (FlxG.sound.music != null)
 			FlxG.sound.music.stop();
 
@@ -1302,7 +1307,7 @@ class PlayState extends MusicBeatState
 			for (songNotes in section.sectionNotes)
 			{
 				// var daStrumTime:Float = songNotes[0] + FlxG.save.data.noteoffset;
-				var daStrumTime:Float = songNotes[0] + 40;
+				var daStrumTime:Float = songNotes[0];
 				var daNoteData:Int = Std.int(songNotes[1] % 4);
 
 				if (daStrumTime < 0)
@@ -1336,7 +1341,10 @@ class PlayState extends MusicBeatState
 				{
 					oldNote = unspawnNotes[Std.int(unspawnNotes.length - 1)];
 
-					var sustainNote:Note = new Note(daStrumTime + (Conductor.stepCrochet * susNote) + Conductor.stepCrochet, daNoteData, oldNote, true);
+					var sustainNote:Note = new Note(daStrumTime
+						+ (Conductor.stepCrochet * susNote)
+						+ (Conductor.stepCrochet / FlxMath.roundDecimal(SONG.speed, 2)), daNoteData, oldNote,
+						true);
 					sustainNote.scrollFactor.set();
 					unspawnNotes.push(sustainNote);
 
@@ -1859,8 +1867,6 @@ class PlayState extends MusicBeatState
 			vocals.stop();
 			FlxG.sound.music.stop();
 
-			unloadAssets();
-
 			openSubState(new GameOverSubstate(boyfriend.getScreenPosition().x, boyfriend.getScreenPosition().y));
 			deaths++;
 
@@ -2149,7 +2155,6 @@ class PlayState extends MusicBeatState
 
 				transIn = FlxTransitionableState.defaultTransIn;
 				transOut = FlxTransitionableState.defaultTransOut;
-				unloadAssets();
 
 				FlxG.switchState(new StoryMenuState());
 
@@ -2197,7 +2202,6 @@ class PlayState extends MusicBeatState
 
 				PlayState.SONG = Song.loadFromJson(PlayState.storyPlaylist[0].toLowerCase() + difficulty, PlayState.storyPlaylist[0]);
 				FlxG.sound.music.stop();
-				unloadAssets();
 
 				LoadingState.loadAndSwitchState(new PlayState());
 			}
@@ -2205,7 +2209,6 @@ class PlayState extends MusicBeatState
 		else
 		{
 			trace('WENT BACK TO FREEPLAY??');
-			unloadAssets();
 
 			#if debug
 			new FlxTimer().start(1, function(tmr:FlxTimer)
@@ -2246,13 +2249,13 @@ class PlayState extends MusicBeatState
 		var daRating:String = "sick";
 
 		// global arrow offset i think
-		if (noteDiff > Conductor.safeZoneOffset * 0.9)
+		if (noteDiff > Conductor.safeZoneOffset * 0.85)
 		{
 			daRating = 'shit';
 			accuracy -= 0.1;
 			score = 50;
 		}
-		else if (noteDiff > Conductor.safeZoneOffset * 0.75)
+		else if (noteDiff > Conductor.safeZoneOffset * 0.6)
 		{
 			daRating = 'bad';
 			accuracy += 0.1;
@@ -2638,14 +2641,6 @@ class PlayState extends MusicBeatState
 		}
 	}
 
-	function noteMissWrongPress(direction:Int = 1):Void
-	{
-		if (!startingSong)
-		{
-			// funny ghost taps
-		}
-	}
-
 	function badNoteCheck()
 	{
 		// nada
@@ -2934,21 +2929,6 @@ class PlayState extends MusicBeatState
 		if (isHalloween && FlxG.random.bool(10) && curBeat > lightningStrikeBeat + lightningOffset)
 		{
 			lightningStrikeShit();
-		}
-	}
-
-	override function add(Object:FlxBasic):FlxBasic
-	{
-		trackedAssets.insert(trackedAssets.length, Object);
-		return super.add(Object);
-	}
-
-	function unloadAssets():Void
-	{
-		for (asset in trackedAssets)
-		{
-			remove(asset);
-			asset.kill();
 		}
 	}
 

@@ -43,6 +43,9 @@ class FreeplayState extends MusicBeatState
 
 	override function create()
 	{
+		if (FlxG.sound.music.playing)
+			FlxG.sound.music.stop();
+
 		var initSonglist = CoolUtil.coolTextFile(Paths.txt('freeplaySonglist'));
 
 		for (i in 0...initSonglist.length)
@@ -273,13 +276,12 @@ class FreeplayState extends MusicBeatState
 		#end
 
 		#if PRELOAD_ALL // desktop
+		leInst.stop();
 		var inst:String = Paths.inst(songs[curSelected].songName);
 
 		// Assets.getSound(songs[curSelected].songName);
-		FlxG.sound.playMusic(inst, 0);
-
-		if (trackedSounds.contains(songs[curSelected].songName) == false)
-			trackedSounds.push(songs[curSelected].songName);
+		leInst.loadEmbedded(inst, true);
+		leInst.play();
 		#end
 
 		var bullShit:Int = 0;
@@ -307,24 +309,15 @@ class FreeplayState extends MusicBeatState
 		}
 	}
 
-	override function add(Object:flixel.FlxBasic):flixel.FlxBasic
-	{
-		trackedAssets.insert(trackedAssets.length, Object);
-		return super.add(Object);
-	}
-
 	function unloadAssets():Void
 	{
-		for (asset in trackedAssets)
+		if (leInst != null)
 		{
-			remove(asset);
+			leInst.stop();
+			leInst.destroy();
 		}
 
-		for (sound in trackedSounds)
-		{
-			trace('Deleting ' + sound);
-			Assets.cache.clear(sound);
-		}
+		leInst = null;
 	}
 }
 

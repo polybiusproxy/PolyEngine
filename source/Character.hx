@@ -516,7 +516,9 @@ class Character extends FlxSprite
 					playAnim("shoot" + shootAnim, true);
 
 					animationNotes.shift();
-					trace('played shoot anim' + animationNotes[0][1]);
+
+					if (animationNotes != null)
+						trace('played shoot anim' + animationNotes[0][1]);
 				}
 
 				if (animation.curAnim != null && animation.curAnim.finished)

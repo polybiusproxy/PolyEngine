@@ -18,7 +18,7 @@ class OptionsMenu extends MusicBeatState
 	var optionItems:Array<String> = ['Keys', 'Scroll', 'Exit to menu'];
 	#end
 
-	var keysItems:Array<String> = ['WASD', 'DFJK'];
+	var keysItems:Array<String> = ['WASD', 'DFJK', 'Custom'];
 	var scrollItems:Array<String> = ['Downscroll', 'Upscroll'];
 	var debugItems:Array<String> = ['Diffbased Vocals', 'Disable Diffbased Vocals', 'Shaders', 'Video'];
 
@@ -148,6 +148,8 @@ class OptionsMenu extends MusicBeatState
 					controls.setKeyboardScheme(Controls.KeyboardScheme.Solo);
 					menuItems = optionItems;
 					regenMenu();
+				case "Custom":
+					FlxG.switchState(new KeybindState());
 				case "Downscroll":
 					FlxG.save.data.downscroll = true;
 					menuItems = optionItems;

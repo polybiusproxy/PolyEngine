@@ -1,11 +1,14 @@
 package;
 
 import flixel.FlxG;
+import flixel.graphics.FlxGraphic;
 import flixel.graphics.frames.FlxAtlasFrames;
 import flixel.system.FlxAssets.FlxGraphicAsset;
 import flixel.system.FlxAssets.FlxSoundAsset;
+import openfl.display.BitmapData;
 import openfl.utils.AssetType;
 import openfl.utils.Assets as OpenFlAssets;
+import sys.FileSystem;
 
 using StringTools;
 
@@ -14,6 +17,8 @@ class Paths
 	inline public static var SOUND_EXT = #if web "mp3" #else "ogg" #end;
 
 	static var currentLevel:String;
+
+	public static var imagesLoaded:Map<String, Bool> = new Map();
 
 	static public function setCurrentLevel(name:String)
 	{
@@ -126,8 +131,13 @@ class Paths
 		return rawSound;
 	}
 
-	inline static public function image(key:String, ?library:String):FlxGraphicAsset
+	inline static public function image(key:String, ?library:String):Dynamic
 	{
+		var cacheImage:FlxGraphic = addGraphic(key);
+
+		if (cacheImage != null)
+			return cacheImage;
+
 		return getPath('images/$key.png', IMAGE, library);
 	}
 
@@ -144,5 +154,43 @@ class Paths
 	inline static public function getPackerAtlas(key:String, ?library:String)
 	{
 		return FlxAtlasFrames.fromSpriteSheetPacker(image(key, library), file('images/$key.txt', library));
+	}
+
+	inline static public function addGraphic(key:String):FlxGraphic
+	{
+		if (FileSystem.exists(file(key)))
+		{
+			if (!imagesLoaded.exists(key))
+			{
+				var bitmap:BitmapData = BitmapData.fromFile(file(key));
+
+				var graphic:FlxGraphic = FlxGraphic.fromBitmapData(bitmap, false, key);
+				graphic.persist = true;
+
+				FlxG.bitmap.addGraphic(graphic);
+				imagesLoaded.set(key, true);
+			}
+
+			return FlxG.bitmap.get(key);
+		}
+
+		return null;
+	}
+
+	public static function unloadAssets()
+	{
+		for (key in imagesLoaded.keys())
+		{
+			var graphic:FlxGraphic = FlxG.bitmap.get(key);
+
+			if (graphic != null)
+			{
+				graphic.bitmap.dispose();
+				graphic.destroy();
+				FlxG.bitmap.removeByKey(key);
+			}
+		}
+
+		imagesLoaded.clear();
 	}
 }
