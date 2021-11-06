@@ -13,7 +13,7 @@ class KeybindState extends MusicBeatState
 {
 	var text:FlxText;
 
-	var keys:Array<String> = ['LEFT', 'UP', 'DOWN', 'RIGHT'];
+	var keys:Array<String> = ['LEFT', 'DOWN', 'UP', 'RIGHT'];
 	var rebindedKeys:Array<String> = [''];
 
 	var currentKey:String = '';
@@ -88,8 +88,10 @@ class KeybindState extends MusicBeatState
 			}
 		}
 		else
+		{
 			text.text = 'Keys had been rebinded sucessfully!';
-		FlxG.switchState(new MainMenuState());
+			FlxG.switchState(new MainMenuState());
+		}
 
 		text.text = "Welcome!\nPlease, press the key to rebind the current key: " + keys[0] + " - " + currentKey;
 	}
