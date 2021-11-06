@@ -37,24 +37,9 @@ class KeybindState extends MusicBeatState
 		blackBG.scrollFactor.set();
 		add(blackBG);
 
-		text = new FlxText(0, 0, 0, "Welcome!\nPlease, press the key to rebind the current key: " + keys[0] + " - " + currentKey, 20);
+		text = new FlxText(0, 0, 0, "Welcome!\nPlease, press the key to rebind the current key: " + keys[0], 20);
 		text.screenCenter();
 		add(text);
-
-		for (key in keys)
-		{
-			switch (key)
-			{
-				case 'LEFT':
-					currentKey = Controls.Control.LEFT.getName();
-				case 'DOWN':
-					currentKey = Controls.Control.DOWN.getName();
-				case 'UP':
-					currentKey = Controls.Control.UP.getName();
-				case 'RIGHT':
-					currentKey = Controls.Control.RIGHT.getName();
-			}
-		}
 	}
 
 	override function update(elapsed:Float)
@@ -66,7 +51,7 @@ class KeybindState extends MusicBeatState
 			if (FlxG.keys.justPressed.ANY)
 			{
 				var key = FlxG.keys.getIsDown()[0].ID;
-				var control:Control = Control.UP;
+				var control:Control = null;
 
 				switch (keys[0])
 				{
@@ -89,10 +74,9 @@ class KeybindState extends MusicBeatState
 		}
 		else
 		{
-			text.text = 'Keys had been rebinded sucessfully!';
 			FlxG.switchState(new MainMenuState());
 		}
 
-		text.text = "Welcome!\nPlease, press the key to rebind the current key: " + keys[0] + " - " + currentKey;
+		text.text = (keys[0] == null ? 'Bye!\nKeys had been rebinded sucessfully!' : "Welcome!\nPlease, press the key to rebind the current key: " + keys[0]);
 	}
 }
