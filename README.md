@@ -12,8 +12,8 @@
 
  - **Downscroll and input**
 	 - An improved input system, similar to osu!, with less delays, downscroll, and more!
- - **DFJK**
-	 - An option that lets you switch between WASD and DFJK. (keybinding soon).
+ - **Keybinding (EXPERIMENTAL)**
+	 - Now you can switch between WASD and DFJK, or custom keys!
  - **Polymod support**
      - it explains all
  - **Video support**
