@@ -33,7 +33,7 @@ jobs:
           haxelib install newgrounds
           haxelib install flixel-addons
           haxelib git systools https://github.com/polybiusproxy/systools.git
-          haxelib install polymod
+          haxelib git polymod https://github.com/McJonnycat/old-polymod.git
           haxelib git discord_rpc https://github.com/Aidan63/linc_discord-rpc
           haxelib list
       - name: Build time! (macOS)
