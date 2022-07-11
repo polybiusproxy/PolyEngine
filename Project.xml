@@ -127,6 +127,7 @@
 	<haxelib name="discord_rpc" if="desktop" />
 	<haxelib name="flixel-studio" if="debug" />
 	<haxelib name="systools" if="desktop" />
+	<haxelib name="hxCodec"/>
 
 	<ndll name="systools" haxelib="systools" if="desktop" />
 
