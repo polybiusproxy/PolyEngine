@@ -1137,6 +1137,31 @@ class PlayState extends MusicBeatState
 
 	var startTimer:FlxTimer;
 
+	function playCutscene(name:String, atEndOfSong:Bool = false)
+	{
+		inCutscene = true;
+		FlxG.sound.music.stop();
+		
+		var video:VideoHandler = new VideoHandler();
+		video.finishCallback = function()
+		{
+			if (atEndOfSong)
+			{
+				if (storyPlaylist.length <= 0)
+					FlxG.switchState(new StoryMenuState());
+				else
+				{
+					SONG = Song.loadFromJson(storyPlaylist[0].toLowerCase());
+					FlxG.switchState(new PlayState());
+				}
+			}
+			else
+				startCountdown();
+		}
+		video.playVideo(Paths.video(name));
+	}
+		
+
 	function startCountdown():Void
 	{
 		inCutscene = false;
