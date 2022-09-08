@@ -4,7 +4,7 @@
 	
 	<!-- _________________________ Application Settings _________________________ -->
 
-	<app title="Friday Night Funkin' - PolyEngine" file="Funkin" packageName="com.polybiusproxy.polyengine" package="com.polybiusproxy.polyengine" main="Main" version="2.1.4" company="PolybiusProxy" />
+	<app title="Friday Night Funkin': Poly Engine" file="PolyEngine" packageName="com.polybiusproxy.polyengine" package="com.polybiusproxy.polyengine" main="Main" version="2.1.4" company="PolybiusProxy" />
 
 	<!--Switch Export with Unique ApplicationID and Icon-->
 	<set name="APP_ID" value="0x0100f6c013bbc000" />
