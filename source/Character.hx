@@ -262,7 +262,7 @@ class Character extends FlxSprite
 			case 'bf-car':
 				var tex = Paths.getSparrowAtlas('characters/bfCar', 'shared');
 				frames = tex;
-				animation.addByPrefix('idle', 'BF idle dance', 24, false);
+				animation.addByPrefix('idle', 'BF idle dance', 24, true);
 				animation.addByPrefix('worried', 'BF idle worried', 24, false);
 				animation.addByPrefix('singUP', 'BF NOTE UP0', 24, false);
 				animation.addByPrefix('singLEFT', 'BF NOTE LEFT0', 24, false);
