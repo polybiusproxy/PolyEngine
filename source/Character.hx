@@ -156,7 +156,7 @@ class Character extends FlxSprite
 				tex = Paths.getSparrowAtlas('characters/momCar', 'shared');
 				frames = tex;
 
-				animation.addByPrefix('idle', "Mom Idle", 24, false);
+				animation.addByPrefix('idle', "Mom Idle", 24, true);
 				animation.addByPrefix('singUP', "Mom Up Pose", 24, false);
 				animation.addByPrefix('singDOWN', "MOM DOWN POSE", 24, false);
 				animation.addByPrefix('singLEFT', 'Mom Left Pose', 24, false);
