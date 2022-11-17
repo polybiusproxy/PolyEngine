@@ -7,6 +7,10 @@ import flixel.addons.ui.FlxUIState;
 import flixel.math.FlxRect;
 import flixel.util.FlxTimer;
 
+#if GAMEJOLT_ALLOWED
+import gamejolt.GJClient;
+#end
+
 class MusicBeatState extends FlxUIState
 {
 	private var lastBeat:Float = 0;
@@ -21,6 +25,7 @@ class MusicBeatState extends FlxUIState
 
 	override function create()
 	{
+		destroySubStates = false; // This to avoid crashes on substates re-opening (GamerPablito)
 		if (transIn != null)
 			trace('reg ' + transIn.region);
 
@@ -35,8 +40,11 @@ class MusicBeatState extends FlxUIState
 		updateCurStep();
 		updateBeat();
 
-		if (oldStep != curStep && curStep > 0)
-			stepHit();
+		if (oldStep != curStep && curStep > 0) stepHit();
+
+		#if GAMEJOLT_ALLOWED
+		GJClient.pingSession();
+		#end
 
 		super.update(elapsed);
 	}

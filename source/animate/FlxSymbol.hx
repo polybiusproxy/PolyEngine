@@ -82,7 +82,7 @@ class FlxSymbol extends FlxSprite
 
 						spr.origin.set();
 
-						spr.antialiasing = true;
+						spr.antialiasing = FlxG.save.data.antialiasing;
 						spr.draw();
 
 						if (FlxG.keys.justPressed.ONE)

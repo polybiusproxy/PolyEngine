@@ -35,6 +35,10 @@ import polymod.Polymod.PolymodError;
 import sys.FileSystem;
 #end
 
+#if GAMEJOLT_ALLOWED
+import gamejolt.GJClient;
+#end
+
 class TitleState extends MusicBeatState
 {
 	static var initialized:Bool = false;
@@ -138,6 +142,11 @@ class TitleState extends MusicBeatState
 			FlxG.save.data.basedVocals = false;
 		}
 
+		if (FlxG.save.data.antialiasing == null)
+		{
+			FlxG.save.data.antialiasing = true;
+		}
+
 		PlayerSettings.init();
 
 		curWacky = FlxG.random.getObject(getIntroTextShit());
@@ -183,6 +192,7 @@ class TitleState extends MusicBeatState
 		Application.current.onExit.add(function(exitCode)
 		{
 			DiscordClient.shutdown();
+			#if GAMEJOLT_ALLOWED GJClient.logout(); #end
 		});
 		#end
 	}
@@ -223,7 +233,7 @@ class TitleState extends MusicBeatState
 
 		logoBl = new FlxSprite(-150, -100);
 		logoBl.frames = Paths.getSparrowAtlas('logoBumpin');
-		logoBl.antialiasing = true;
+		logoBl.antialiasing = FlxG.save.data.antialiasing;
 		logoBl.animation.addByPrefix('bump', 'logo bumpin', 24);
 		logoBl.animation.play('bump');
 		logoBl.visible = false;
@@ -233,7 +243,7 @@ class TitleState extends MusicBeatState
 		gfDance.frames = Paths.getSparrowAtlas('gfDanceTitle');
 		gfDance.animation.addByIndices('danceLeft', 'gfDance', [30, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14], "", 24, false);
 		gfDance.animation.addByIndices('danceRight', 'gfDance', [15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29], "", 24, false);
-		gfDance.antialiasing = true;
+		gfDance.antialiasing = FlxG.save.data.antialiasing;
 		gfDance.visible = false;
 		gfDance.shader = swagShader.shader;
 		add(gfDance);
@@ -243,13 +253,13 @@ class TitleState extends MusicBeatState
 		titleText.frames = Paths.getSparrowAtlas('titleEnter');
 		titleText.animation.addByPrefix('idle', "Press Enter to Begin", 24);
 		titleText.animation.addByPrefix('press', "ENTER PRESSED", 24);
-		titleText.antialiasing = true;
+		titleText.antialiasing = FlxG.save.data.antialiasing;
 		titleText.animation.play('idle');
 		titleText.updateHitbox();
 		titleText.visible = false;
 		add(titleText);
 
-		FlxTween.tween(logoBl, {y: logoBl.y + 50}, 0.6, {ease: FlxEase.quadInOut, type: PINGPONG});
+		FlxTween.tween(logoBl, {y: logoBl.y + 30}, 0.6, {ease: FlxEase.quadInOut, type: PINGPONG});
 
 		credGroup = new FlxGroup();
 		add(credGroup);
@@ -265,7 +275,7 @@ class TitleState extends MusicBeatState
 		ngSpr.setGraphicSize(Std.int(ngSpr.width * 0.8));
 		ngSpr.updateHitbox();
 		ngSpr.screenCenter(X);
-		ngSpr.antialiasing = true;
+		ngSpr.antialiasing = FlxG.save.data.antialiasing;
 
 		FlxG.sound.playMusic(Paths.music('freakyMenu'), 0);
 		FlxG.sound.music.fadeIn(4, 0, 0.7);

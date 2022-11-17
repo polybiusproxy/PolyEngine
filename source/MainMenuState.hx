@@ -18,6 +18,13 @@ using StringTools;
 import Discord.DiscordClient;
 #end
 
+#if GAMEJOLT_ALLOWED
+import gamejolt.GJClient;
+import gamejolt.extras.Popup;
+import gamejolt.formats.Trophie;
+import gamejolt.formats.User;
+#end
+
 class MainMenuState extends MusicBeatState
 {
 	var curSelected:Int = 0;
@@ -62,7 +69,7 @@ class MainMenuState extends MusicBeatState
 		bg.setGraphicSize(Std.int(bg.width * 1.1));
 		bg.updateHitbox();
 		bg.screenCenter();
-		bg.antialiasing = true;
+		bg.antialiasing = FlxG.save.data.antialiasing;
 		add(bg);
 
 		camFollow = new FlxObject(0, 0, 1, 1);
@@ -75,7 +82,7 @@ class MainMenuState extends MusicBeatState
 		magenta.updateHitbox();
 		magenta.screenCenter();
 		magenta.visible = false;
-		magenta.antialiasing = true;
+		magenta.antialiasing = FlxG.save.data.antialiasing;
 		magenta.color = 0xFFfd719b;
 		add(magenta);
 		// magenta.scrollFactor.set();
@@ -96,7 +103,7 @@ class MainMenuState extends MusicBeatState
 			menuItem.screenCenter(X);
 			menuItems.add(menuItem);
 			menuItem.scrollFactor.set();
-			menuItem.antialiasing = true;
+			menuItem.antialiasing = FlxG.save.data.antialiasing;
 		}
 
 		FlxG.camera.follow(camFollow, null, 0.06);
@@ -115,6 +122,18 @@ class MainMenuState extends MusicBeatState
 		versionShit.scrollFactor.set();
 		versionShit.setFormat("VCR OSD Mono", 16, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		add(versionShit);
+
+		#if GAMEJOLT_ALLOWED
+		var leDate = Date.now();
+
+		GJClient.initialize(function (userData:User) {add(new Popup(userData.developer_name, "You were logged in successfully!"));});
+
+		if (leDate.getDay() == 5 && leDate.getHours() >= 18)
+		{
+			GJClient.trophieAdd(172542,
+			function (troph:Trophie) {add(new Popup(troph.title, troph.description, 4));});
+		}
+		#end
 
 		changeItem();
 

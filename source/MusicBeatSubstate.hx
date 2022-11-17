@@ -4,6 +4,10 @@ import Conductor.BPMChangeEvent;
 import flixel.FlxG;
 import flixel.FlxSubState;
 
+#if GAMEJOLT_ALLOWED
+import gamejolt.GJClient;
+#end
+
 class MusicBeatSubstate extends FlxSubState
 {
 	public function new()
@@ -29,8 +33,11 @@ class MusicBeatSubstate extends FlxSubState
 		updateCurStep();
 		curBeat = Math.floor(curStep / 4);
 
-		if (oldStep != curStep && curStep > 0)
-			stepHit();
+		if (oldStep != curStep && curStep > 0) stepHit();
+
+		#if GAMEJOLT_ALLOWED
+		GJClient.pingSession();
+		#end
 
 		super.update(elapsed);
 	}

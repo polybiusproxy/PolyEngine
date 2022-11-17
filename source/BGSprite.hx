@@ -1,5 +1,6 @@
 package;
 
+import flixel.FlxG;
 import flixel.FlxSprite;
 
 class BGSprite extends FlxSprite
@@ -32,7 +33,7 @@ class BGSprite extends FlxSprite
 		}
 
 		scrollFactor.set(scrollX, scrollY);
-		antialiasing = true;
+		antialiasing = FlxG.save.data.antialiasing;
 	}
 
 	public function dance()
