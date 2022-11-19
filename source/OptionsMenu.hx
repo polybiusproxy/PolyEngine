@@ -117,7 +117,7 @@ class OptionsMenu extends MusicBeatState
 		}
 		else if (back)
 		{
-			FlxG.switchState(new MainMenuState());
+			MusicBeatState.switchState(new MainMenuState());
 		}
 
 		if (controls.LEFT_P)
@@ -173,7 +173,7 @@ class OptionsMenu extends MusicBeatState
 					menuItems = optionItems;
 					regenMenu();
 				case "Custom":
-					FlxG.switchState(new KeybindState());
+					MusicBeatState.switchState(new KeybindState());
 				case "Downscroll":
 					FlxG.save.data.downscroll = true;
 					menuItems = optionItems;
@@ -184,7 +184,7 @@ class OptionsMenu extends MusicBeatState
 					regenMenu();
 				#if GAMEJOLT_ALLOWED
 				case "GameJolt":
-					FlxG.switchState(new GJOptionsState());
+					MusicBeatState.switchState(new GJOptionsState());
 				#end
 				case "Diffbased Vocals":
 					FlxG.save.data.basedVocals = true;
@@ -195,7 +195,7 @@ class OptionsMenu extends MusicBeatState
 					menuItems = optionItems;
 					regenMenu();
 				case "Shaders":
-					FlxG.switchState(new ShaderState());
+					MusicBeatState.switchState(new ShaderState());
 				case "Video":
 					var video:VideoHandler = new VideoHandler();
 					video.playMP4(Paths.video('bigChungus'), new MainMenuState(), false, false);
@@ -210,7 +210,7 @@ class OptionsMenu extends MusicBeatState
 						regenMenu();
 				 */
 				case "Exit to menu":
-					FlxG.switchState(new MainMenuState());
+					MusicBeatState.switchState(new MainMenuState());
 			}
 		}
 

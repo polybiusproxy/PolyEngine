@@ -1,7 +1,6 @@
 package gamejolt;
 
 import flixel.FlxG;
-import flixel.util.FlxTimer;
 import gamejolt.formats.*;
 import haxe.Http;
 import haxe.Json;
@@ -487,34 +486,26 @@ class GJClient
     /**
      * If there's a session active, this function keeps the session active, so it needs to be placed in somewhere it can be executed repeatedly.
      * 
-     * @param interval The time in seconds of the ping intervals (Default: 15)
      * @param onPing Put a function with actions here, they'll be processed every time a ping is made successfully.
      * @param onFail Put a function with actions here, they'll be processed if an error has ocurred during the process.  
      */
-    public static function pingSession(interval:Int = 15, ?onPing:() -> Void, ?onFail:() -> Void)
+    public static function pingSession(?onPing:() -> Void, ?onFail:() -> Void)
     {
-        if (logged && pingCompleted)
+        if (logged)
         {
-            pingCompleted = false;
-
-            new FlxTimer().start(interval, function (tmr:FlxTimer)
+            var urlData = urlResult(urlConstruct('sessions', 'ping'),
+            function ()
             {
-                var urlData = urlResult(urlConstruct('sessions', 'ping'),
-                function ()
-                {
-                    printMsg('Session pinged!');
-                    if (onPing != null) onPing();
-                },
-                function ()
-                {
-                    printMsg('Ping failed! You\'ve been disconnected!');
-                    if (onFail != null) onFail();
-                    logged = false;
-                });
-                if (urlData != null) urlData;
-            
-                pingCompleted = true;
+                printMsg('Session pinged!');
+                if (onPing != null) onPing();
+            },
+            function ()
+            {
+                printMsg('Ping failed! You\'ve been disconnected!');
+                if (onFail != null) onFail();
+                logged = false;
             });
+            if (urlData != null) urlData;
         }
     }
 
@@ -539,8 +530,6 @@ class GJClient
     }
 
     // INTERNAL FUNCTIONS (DON'T ALTER IF YOU DON'T KNOW WHAT YOU'RE DOING!!)
-
-    static var pingCompleted:Bool = true;
 
     static var noDataWarned:Bool = false;
 

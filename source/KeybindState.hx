@@ -74,7 +74,7 @@ class KeybindState extends MusicBeatState
 		}
 		else
 		{
-			FlxG.switchState(new MainMenuState());
+			MusicBeatState.switchState(new MainMenuState());
 		}
 
 		text.text = (keys[0] == null ? 'Bye!\nKeys had been rebinded sucessfully!' : "Welcome!\nPlease, press the key to rebind the current key: " + keys[0]);
