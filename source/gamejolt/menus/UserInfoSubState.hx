@@ -16,15 +16,18 @@ class UserInfoSubState extends MusicBeatSubstate
     var missInfo:FlxText;
     var curUser:Null<User>;
 
+    public static var daUserID:Null<Int> = null;
+
     public function new()
     {
         super();
         openCallback = createMenu;
+        closeCallback = function () {daUserID = null;};
     }
 
     function createMenu()
     {
-        curUser = GJClient.getUserData();
+        curUser = GJClient.getUserData(daUserID);
 
         bg = new FlxSprite().loadGraphic(Paths.image('menuDesat'));
         bg.antialiasing = FlxG.save.data.antialiasing;
@@ -67,7 +70,11 @@ class UserInfoSubState extends MusicBeatSubstate
             userPhoto.scrollFactor.set();
             userPhoto.alpha = 0;
             userPhoto.y = extraBG.y + sep2;
-            userPhoto.x = extraBG.x + extraBG.width - userPhoto.width - sep2;
+            userPhoto.x = extraBG.x + extraBG.width - userPhoto.width - (sep2 * 3);
+
+            var trophAchieved = GJClient.getTrophiesList(active);
+            var trophTotal = GJClient.getTrophiesList();
+            var trophGained = trophTotal != null ? '${trophAchieved == null ? 0 : trophAchieved.length}/${trophTotal.length}' : 'N/A';
 
             var userName = new FlxText(extraBG.x + sep2, extraBG.y + sep2, 0, 'Username: ${curUser.developer_name}');
             userName.setFormat(daFont, daSize, FlxColor.WHITE, LEFT, OUTLINE, FlxColor.BLACK);
@@ -87,6 +94,14 @@ class UserInfoSubState extends MusicBeatSubstate
             add(userType);
             add(userID);
             add(userWeb);
+
+            if (daUserID == null)
+            {
+                var userTrophs = new FlxText(userWeb.x, userWeb.y + userWeb.height + sep, 0, 'Trophies gained: $trophGained');
+                userTrophs.setFormat(daFont, daSize, FlxColor.WHITE, LEFT, OUTLINE, FlxColor.BLACK);
+                add(userTrophs);
+            }
+            
             add(userDesc);
             add(userPhoto);
 

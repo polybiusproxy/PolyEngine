@@ -1,30 +1,32 @@
 package gamejolt.menus;
 
 import flixel.FlxG;
-import flixel.FlxObject;
 import flixel.FlxSprite;
+import flixel.FlxObject;
 import flixel.text.FlxText;
 import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
 import flixel.util.FlxColor;
 import gamejolt.GJClient;
-import gamejolt.extras.TrophieBox;
-import gamejolt.formats.Trophie;
+import gamejolt.formats.User;
+import gamejolt.menus.UserInfoSubState;
 
-class TrophiesSubState extends MusicBeatSubstate
+class FriendsSubState extends MusicBeatSubstate
 {
     var bg:FlxSprite;
     var title:Alphabet;
     var leftArrow:Alphabet;
 	var rightArrow:Alphabet;
     var missInfo:FlxText;
+
     var camPos:FlxObject;
     var curScreen:Int;
     var screenPos:Int;
     var yPos:Int;
-    var trophList:Null<Array<Trophie>>;
-    var trophGroup:Array<TrophieBox>;
 
+    var friendList:Null<Array<User>>;
+    var friendLine:Array<FlxText>;
+    
     public function new()
     {
         super();
@@ -33,8 +35,8 @@ class TrophiesSubState extends MusicBeatSubstate
 
     function createMenu()
     {
-        trophList = GJClient.getTrophiesList();
-
+        friendList = GJClient.getFriendsList();
+        
         bg = new FlxSprite().loadGraphic(Paths.image('menuDesat'));
         bg.antialiasing = FlxG.save.data.antialiasing;
         bg.scrollFactor.set();
@@ -46,7 +48,7 @@ class TrophiesSubState extends MusicBeatSubstate
 		camPos.screenCenter();
 		add(camPos);
 
-        title = new Alphabet(0, 50, 'Trophies', true);
+        title = new Alphabet(0, 50, 'Friends', true);
 		title.screenCenter(X);
         title.antialiasing = FlxG.save.data.antialiasing;
 		title.scrollFactor.set();
@@ -70,33 +72,32 @@ class TrophiesSubState extends MusicBeatSubstate
         curScreen = 0;
         screenPos = -1;
         yPos = -1;
-        trophGroup = [];
-        
-        if (trophList != null)
+        friendLine = [];
+
+        if (friendList != null)
         {
-            for (i in 0...trophList.length)
+            for (i in 0...friendList.length)
             {
-                var curTroph:Trophie = cast trophList[i];
+                var curFriend:User = cast friendList[i];
 
-                if (i % 6 == 0) screenPos++;
-                
-                // if (i % 2 == 0) {yPos++; yPos = yPos % 3;}
+                if (i % 5 == 0) screenPos++;
+
+                // if (i % 2 == 0) {yPos++; yPos = yPos % 5;}
                 yPos++;
-                yPos = yPos % 3;
+                yPos = yPos % 10;
 
-                var leDate:String = (curTroph.achieved != false ? 'Achieved ${Std.string(curTroph.achieved)}' : "Not achieved yet");
-
-                var trophCard = new TrophieBox(curTroph.title, curTroph.description, leDate);
-                trophCard.x = (FlxG.width / 2) - (trophCard.width / 2) + (FlxG.width * screenPos);
-                trophCard.y = (FlxG.height * 0.2) + ((trophCard.height + 20) * yPos);
-                trophCard.alpha = 0;
-                trophGroup.push(trophCard);
-                add(trophGroup[i]);
+                var newFriend = new FlxText(0, 0, 0, '${i + 1}. ${curFriend.developer_name} (@${curFriend.username})');
+                newFriend.setFormat("VCR OSD Mono", 32, FlxColor.WHITE, CENTER, OUTLINE, FlxColor.BLACK);
+                newFriend.x = (FlxG.width / 2) - (newFriend.width / 2) + (FlxG.width * screenPos);
+                newFriend.y = (FlxG.height * 0.25) + ((newFriend.height + 20) * yPos);
+                newFriend.alpha = 0;
+                friendLine.push(newFriend);
+                add(friendLine[i]);
             }
         }
         else
         {
-            missInfo = new FlxText(0, 0, 0, "Sorry, the game doesn't have\nany trophie registered yet\n\nPlease go add some and retry later!");
+            missInfo = new FlxText(0, 0, 0, "You don't have any friends\nto track info from yet!\nPlease, go add some and retry later");
             missInfo.setFormat(Paths.font('pixel.otf'), 35, FlxColor.WHITE, CENTER, OUTLINE, FlxColor.BLACK);
             missInfo.screenCenter();
             missInfo.antialiasing = FlxG.save.data.antialiasing;
@@ -107,11 +108,11 @@ class TrophiesSubState extends MusicBeatSubstate
             FlxTween.tween(missInfo, {alpha: 0.25}, 0.5, {type: PINGPONG});
         }
 
-        FlxTween.tween(bg, {alpha: 1}, 0.7, {onComplete: function (twn:FlxTween) {if (trophList == null) missInfo.visible = true;}});
+        FlxTween.tween(bg, {alpha: 1}, 0.7, {onComplete: function (twn:FlxTween) {if (friendList == null) missInfo.visible = true;}});
         FlxTween.tween(title, {alpha: 1}, 0.7);
         FlxTween.tween(leftArrow, {alpha: 1}, 0.7);
         FlxTween.tween(rightArrow, {alpha: 1}, 0.7);
-        for (j in trophGroup) FlxTween.tween(j, {alpha: 1}, 0.7);
+        for (j in friendLine) FlxTween.tween(j, {alpha: 1}, 0.7);
 
         FlxG.camera.follow(camPos, null, 1);
     }
@@ -135,6 +136,24 @@ class TrophiesSubState extends MusicBeatSubstate
 		leftArrow.visible = !isMinCount;
 		rightArrow.visible = !isMaxCount;
 
+        if (friendList != null)
+        {
+            for (i in 0...friendLine.length)
+            {
+                if (FlxG.mouse.overlaps(friendLine[i]))
+                {
+                    friendLine[i].color = FlxColor.YELLOW;
+
+                    if (FlxG.mouse.justPressed)
+                    {
+                        UserInfoSubState.daUserID = friendList[i].id;
+                        openSubState(new UserInfoSubState());
+                    }
+                }
+                else friendLine[i].color = FlxColor.WHITE;
+            }
+        }
+
         if (screenPos > 0)
         {
             if (FlxG.keys.justPressed.LEFT && !isMinCount) {curScreen--; camTween();}
@@ -149,12 +168,12 @@ class TrophiesSubState extends MusicBeatSubstate
             FlxTween.tween(title, {alpha: 0}, 0.7);
             FlxTween.tween(leftArrow, {alpha: 0}, 0.7);
             FlxTween.tween(rightArrow, {alpha: 0}, 0.7);
-            if (trophList == null)
+            if (friendList == null)
             {
                 FlxTween.cancelTweensOf(missInfo);
                 FlxTween.tween(missInfo, {alpha: 0}, 0.7);
             }
-            for (j in trophGroup) FlxTween.tween(j, {alpha: 0}, 0.7);
+            for (j in friendLine) FlxTween.tween(j, {alpha: 0}, 0.7);
         }
     }
 }

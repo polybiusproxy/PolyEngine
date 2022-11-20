@@ -174,9 +174,9 @@ class TitleState extends MusicBeatState
 		}
 
 		#if FREEPLAY
-		FlxG.switchState(new FreeplayState());
+		MusicBeatState.switchState(new FreeplayState());
 		#elseif CHARTING
-		FlxG.switchState(new ChartingState());
+		MusicBeatState.switchState(new ChartingState());
 		#else
 		new FlxTimer().start(1, function(tmr:FlxTimer)
 		{
@@ -363,18 +363,18 @@ class TitleState extends MusicBeatState
 					if (!PlayState.daVersion.contains(data.trim()) && !OutdatedSubState.leftState && MainMenuState.nightly == "")
 					{
 						trace('this dumbass cant update lmfao hahahahh ' + data.trim() + ' != ' + PlayState.daVersion);
-						FlxG.switchState(new OutdatedSubState());
+						MusicBeatState.switchState(new OutdatedSubState());
 					}
 					else
 					{
-						FlxG.switchState(new MainMenuState());
+						MusicBeatState.switchState(new MainMenuState());
 					}
 				}
 
 				http.onError = function(error)
 				{
 					trace('error: $error');
-					FlxG.switchState(new MainMenuState()); // fail but we go anyway
+					MusicBeatState.switchState(new MainMenuState()); // fail but we go anyway
 				}
 
 				http.request();

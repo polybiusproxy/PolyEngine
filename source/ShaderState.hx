@@ -26,7 +26,7 @@ class ShaderState extends MusicBeatState
 		creation.update(elapsed); // 6. Write this line and replace "creation" with the shader you want.
 
 		if (back)
-			FlxG.switchState(new OptionsMenu());
+			MusicBeatState.switchState(new OptionsMenu());
 	}
 
 	// 7. Compile and you should see your shader!

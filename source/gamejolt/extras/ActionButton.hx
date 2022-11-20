@@ -37,7 +37,7 @@ class ActionButton extends FlxUIGroup
             if (FlxG.mouse.justPressed)
             {
                 actions();
-                if (redirectTo != null) FlxG.switchState(redirectTo);
+                if (redirectTo != null) MusicBeatState.switchState(redirectTo);
             }
         }
         else members[0].color = FlxColor.CYAN;

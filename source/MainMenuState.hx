@@ -108,31 +108,21 @@ class MainMenuState extends MusicBeatState
 
 		FlxG.camera.follow(camFollow, null, 0.06);
 
-		versionShit = new FlxText(5, FlxG.height - 18, 0, "", 12);
+		#if GAMEJOLT_ALLOWED
+		versionShit = new FlxText(5, FlxG.height - 44, 0, 'GameJolt Support v1.4');
+		versionShit.scrollFactor.set();
+		versionShit.setFormat("VCR OSD Mono", 16, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+		add(versionShit);
+		#end
 
-		if (PlayState.isBetaVer)
-		{
-			versionShit.text = PlayState.uglyVersion + (" FNF - " + PlayState.daVersion + " - PolyEngine | [BETA VERSION]");
-		}
-		else
-		{
-			versionShit.text = PlayState.uglyVersion + (" FNF - " + PlayState.daVersion + " - PolyEngine");
-		}
-
+		versionShit = new FlxText(5, FlxG.height - 24, 0, "");
+		versionShit.text = '${PlayState.uglyVersion} FNF - ${PlayState.daVersion} - PolyEngine${PlayState.isBetaVer ? ' | [BETA VERSION]' : ''}';
 		versionShit.scrollFactor.set();
 		versionShit.setFormat("VCR OSD Mono", 16, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		add(versionShit);
 
 		#if GAMEJOLT_ALLOWED
-		var leDate = Date.now();
-
 		GJClient.initialize(function (userData:User) {add(new Popup(userData.developer_name, "You were logged in successfully!"));});
-
-		if (leDate.getDay() == 5 && leDate.getHours() >= 18)
-		{
-			GJClient.trophieAdd(172542,
-			function (troph:Trophie) {add(new Popup(troph.title, troph.description, 4));});
-		}
 		#end
 
 		changeItem();
@@ -165,7 +155,7 @@ class MainMenuState extends MusicBeatState
 
 			if (controls.BACK)
 			{
-				FlxG.switchState(new TitleState());
+				MusicBeatState.switchState(new TitleState());
 			}
 
 			if (controls.ACCEPT)
@@ -199,17 +189,17 @@ class MainMenuState extends MusicBeatState
 								switch (daChoice)
 								{
 									case 'story mode':
-										FlxG.switchState(new StoryMenuState());
+										MusicBeatState.switchState(new StoryMenuState());
 										trace("Story Menu Selected");
 									case 'freeplay':
-										FlxG.switchState(new FreeplayState());
+										MusicBeatState.switchState(new FreeplayState());
 
 										trace("Freeplay Menu Selected");
 
 									case 'options':
 										FlxTransitionableState.skipNextTransIn = true;
 										FlxTransitionableState.skipNextTransOut = true;
-										FlxG.switchState(new OptionsMenu());
+										MusicBeatState.switchState(new OptionsMenu());
 								}
 							});
 						}

@@ -68,7 +68,7 @@ class LogoutSubState extends MusicBeatSubstate
                     FlxTween.tween(bg, {alpha: 0}, 0.3);
                     FlxTween.tween(info, {alpha: 0}, 0.3, {onComplete: function (twn:FlxTween)
                     {
-                        FlxG.switchState(new MainMenuState());
+                        MusicBeatState.switchState(new MainMenuState());
                     }});
                 }
             );

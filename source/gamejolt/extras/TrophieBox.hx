@@ -17,12 +17,12 @@ class TrophieBox extends FlxUIGroup
     var daBG:FlxSprite;
 
     // Size Parameters
-    var boxWidth:Int = Std.int(FlxG.width * 0.425);
-    var boxHeight:Int = Std.int(FlxG.height * 0.25);
+    var boxWidth:Int = Std.int(FlxG.width * 0.6);
+    var boxHeight:Int = Std.int(FlxG.height * 0.275);
 
     // Fonts
     var titleFont:String = Paths.font("pixel.otf");
-    var descFont:String = Paths.font("pixel.otf");
+    var descFont:String = "VCR OSD Mono";
     var dateFont:String = "VCR OSD Mono";
 
     //Sizes
@@ -30,7 +30,7 @@ class TrophieBox extends FlxUIGroup
     var descSize:Int = 24;
     var dateSize:Int = 16;
 
-    public function new(x:Float, y:Float, title:String, desc:String, date:String, ?image:String, ?bg:String)
+    public function new(title:String, desc:String, date:String, x:Float = 0, y:Float = 0, ?image:String, ?bg:String)
     {
         super(x, y);
 
@@ -50,7 +50,7 @@ class TrophieBox extends FlxUIGroup
             daImage = new FlxSprite().loadGraphic(Paths.image(image));
         else daImage = new FlxSprite().loadGraphic(Paths.image('unknownMod'));
 
-        var imgScale:Int = Std.int(daBG.height * (2/3));
+        var imgScale:Int = Std.int(daBG.height * (3/5));
 
         daImage.setGraphicSize(imgScale, imgScale);
         daImage.updateHitbox();
@@ -76,8 +76,7 @@ class TrophieBox extends FlxUIGroup
         descBox.setFormat(descFont, descSize, FlxColor.WHITE, LEFT, OUTLINE, FlxColor.BLACK);
         descBox.textField.multiline = false;
         descBox.borderColor = FlxColor.BLACK;
-        var middle = dateBox.y - (titleBox.y + titleBox.height);
-        descBox.y = dateBox.y - middle;
+        descBox.y = titleBox.y + ((dateBox.y + dateBox.height - titleBox.y) / 2);
 
         add(daBG);
         add(daImage);
