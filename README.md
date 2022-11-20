@@ -39,5 +39,6 @@ This game was made with love to Newgrounds and its community. Extra love to Tom 
 - [BrightFyre](https://github.com/brightfyregit) - Tester (i'm stealing ur code >:))))) ).
 - [RapperGF](https://github.com/RapperGF) - Helping with input fix.
 - [datee]() - Developing HaxeVLC (all the contents in the 'vlc' folder belongs to datee).
+- [Frozen]() - Making nice additions to the engine
 - [u/Henry34111](https://www.reddit.com/user/Henry34111/) - Making the loading art.
 - [The VideoLAN team]() - Making the VLC media player.
