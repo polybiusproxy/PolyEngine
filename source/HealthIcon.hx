@@ -1,5 +1,6 @@
 package;
 
+import flixel.FlxG;
 import flixel.FlxSprite;
 
 using StringTools;
@@ -24,7 +25,7 @@ class HealthIcon extends FlxSprite
 
 		isPlayer = isOldIcon = false;
 		
-		antialiasing = true;
+		antialiasing = FlxG.save.data.antialiasing;
 
 		changeIcon(char);
 		scrollFactor.set();
@@ -45,7 +46,7 @@ class HealthIcon extends FlxSprite
 		if (char.endsWith('-pixel') || char.startsWith('senpai') || char.startsWith('spirit'))
 			antialiasing = false
 		else
-			antialiasing = true;
+			antialiasing = FlxG.save.data.antialiasing;
 
 		animation.add(char, [0, 1], 0, false, isPlayer);
 		animation.play(char);

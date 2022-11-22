@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<project xmlns="http://lime.software/project/1.0.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://lime.software/project/1.0.2 http://lime.software/xsd/project-1.0.2.xsd">
+<project>
 	
 	<!-- _________________________ Application Settings _________________________ -->
 
@@ -47,6 +46,8 @@
 	
 	<define name="PRELOAD_ALL" unless="web" />
 	<define name="NO_PRELOAD_ALL" unless="PRELOAD_ALL"/>
+
+	<define name="GAMEJOLT_ALLOWED" if="desktop" />
 	
 	<section if="PRELOAD_ALL">
 		<library name="songs"    preload="true" />

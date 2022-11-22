@@ -6,20 +6,29 @@ import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.text.FlxText;
 import flixel.util.FlxColor;
 
+#if GAMEJOLT_ALLOWED
+import gamejolt.GJClient;
+import gamejolt.menus.GJOptionsState;
+#end
+
 class OptionsMenu extends MusicBeatState
 {
 	var grpMenuShit:FlxTypedGroup<Alphabet>;
 
 	var menuItems:Array<String> = [];
 
-	#if debug
-	var optionItems:Array<String> = ['Keys', 'Scroll', 'DEBUG', 'Exit to menu'];
-	#else
-	var optionItems:Array<String> = ['Keys', 'Scroll', 'Exit to menu'];
-	#end
+	var optionItems:Array<String> =
+	[
+		'Keys',
+		'Scroll',
+		#if GAMEJOLT_ALLOWED 'GameJolt', #end
+		'Quality',
+		'Exit to menu'
+	];
 
 	var keysItems:Array<String> = ['WASD', 'DFJK', 'Custom'];
 	var scrollItems:Array<String> = ['Downscroll', 'Upscroll'];
+	var qualityItems:Array<String> = ['Antialiasing On', 'Antialiasing Off'];
 	var debugItems:Array<String> = ['Diffbased Vocals', 'Disable Diffbased Vocals', 'Shaders', 'Video'];
 
 	// var noteItems:Array<String> = ['Enable note splash', 'Disable note splash'];
@@ -29,6 +38,10 @@ class OptionsMenu extends MusicBeatState
 	override function create()
 	{
 		super.create();
+
+		#if debug
+		optionItems.insert(2, "DEBUG");
+		#end
 
 		menuItems = optionItems;
 
@@ -77,7 +90,7 @@ class OptionsMenu extends MusicBeatState
 			songText.screenCenter(X);
 			grpMenuShit.add(songText);
 			songText.scrollFactor.set();
-			songText.antialiasing = true;
+			songText.antialiasing = FlxG.save.data.antialiasing;
 		}
 
 		curSelected = 0;
@@ -104,7 +117,7 @@ class OptionsMenu extends MusicBeatState
 		}
 		else if (back)
 		{
-			FlxG.switchState(new MainMenuState());
+			MusicBeatState.switchState(new MainMenuState());
 		}
 
 		if (controls.LEFT_P)
@@ -133,11 +146,22 @@ class OptionsMenu extends MusicBeatState
 				case "DEBUG":
 					menuItems = debugItems;
 					regenMenu();
+				case "Quality":
+					menuItems = qualityItems;
+					regenMenu();
 				/*
 					case "Note":
 						menuItems = noteItems;
 						regenMenu();
 				 */
+				case "Antialiasing On":
+					FlxG.save.data.antialiasing = true;
+					menuItems = optionItems;
+					regenMenu();
+				case "Antialiasing Off":
+					FlxG.save.data.antialiasing = false;
+					menuItems = optionItems;
+					regenMenu();
 				case "WASD":
 					FlxG.save.data.dfjk = false;
 					controls.setKeyboardScheme(Controls.KeyboardScheme.Solo);
@@ -149,7 +173,7 @@ class OptionsMenu extends MusicBeatState
 					menuItems = optionItems;
 					regenMenu();
 				case "Custom":
-					FlxG.switchState(new KeybindState());
+					MusicBeatState.switchState(new KeybindState());
 				case "Downscroll":
 					FlxG.save.data.downscroll = true;
 					menuItems = optionItems;
@@ -158,6 +182,10 @@ class OptionsMenu extends MusicBeatState
 					FlxG.save.data.downscroll = false;
 					menuItems = optionItems;
 					regenMenu();
+				#if GAMEJOLT_ALLOWED
+				case "GameJolt":
+					MusicBeatState.switchState(new GJOptionsState());
+				#end
 				case "Diffbased Vocals":
 					FlxG.save.data.basedVocals = true;
 					menuItems = optionItems;
@@ -167,7 +195,7 @@ class OptionsMenu extends MusicBeatState
 					menuItems = optionItems;
 					regenMenu();
 				case "Shaders":
-					FlxG.switchState(new ShaderState());
+					MusicBeatState.switchState(new ShaderState());
 				case "Video":
 					var video:VideoHandler = new VideoHandler();
 					video.playMP4(Paths.video('bigChungus'), new MainMenuState(), false, false);
@@ -182,7 +210,7 @@ class OptionsMenu extends MusicBeatState
 						regenMenu();
 				 */
 				case "Exit to menu":
-					FlxG.switchState(new MainMenuState());
+					MusicBeatState.switchState(new MainMenuState());
 			}
 		}
 

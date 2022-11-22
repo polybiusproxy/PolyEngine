@@ -29,7 +29,7 @@ class KeybindState extends MusicBeatState
 		bg.setGraphicSize(Std.int(bg.width * 1.1));
 		bg.updateHitbox();
 		bg.screenCenter();
-		bg.antialiasing = true;
+		bg.antialiasing = FlxG.save.data.antialiasing;
 		add(bg);
 
 		var blackBG:FlxSprite = new FlxSprite().makeGraphic(FlxG.width, FlxG.height, FlxColor.BLACK);
@@ -74,7 +74,7 @@ class KeybindState extends MusicBeatState
 		}
 		else
 		{
-			FlxG.switchState(new MainMenuState());
+			MusicBeatState.switchState(new MainMenuState());
 		}
 
 		text.text = (keys[0] == null ? 'Bye!\nKeys had been rebinded sucessfully!' : "Welcome!\nPlease, press the key to rebind the current key: " + keys[0]);

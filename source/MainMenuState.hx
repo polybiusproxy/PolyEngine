@@ -18,6 +18,13 @@ using StringTools;
 import Discord.DiscordClient;
 #end
 
+#if GAMEJOLT_ALLOWED
+import gamejolt.GJClient;
+import gamejolt.extras.Popup;
+import gamejolt.formats.Trophie;
+import gamejolt.formats.User;
+#end
+
 class MainMenuState extends MusicBeatState
 {
 	var curSelected:Int = 0;
@@ -62,7 +69,7 @@ class MainMenuState extends MusicBeatState
 		bg.setGraphicSize(Std.int(bg.width * 1.1));
 		bg.updateHitbox();
 		bg.screenCenter();
-		bg.antialiasing = true;
+		bg.antialiasing = FlxG.save.data.antialiasing;
 		add(bg);
 
 		camFollow = new FlxObject(0, 0, 1, 1);
@@ -75,7 +82,7 @@ class MainMenuState extends MusicBeatState
 		magenta.updateHitbox();
 		magenta.screenCenter();
 		magenta.visible = false;
-		magenta.antialiasing = true;
+		magenta.antialiasing = FlxG.save.data.antialiasing;
 		magenta.color = 0xFFfd719b;
 		add(magenta);
 		// magenta.scrollFactor.set();
@@ -96,25 +103,27 @@ class MainMenuState extends MusicBeatState
 			menuItem.screenCenter(X);
 			menuItems.add(menuItem);
 			menuItem.scrollFactor.set();
-			menuItem.antialiasing = true;
+			menuItem.antialiasing = FlxG.save.data.antialiasing;
 		}
 
 		FlxG.camera.follow(camFollow, null, 0.06);
 
-		versionShit = new FlxText(5, FlxG.height - 18, 0, "", 12);
-
-		if (PlayState.isBetaVer)
-		{
-			versionShit.text = PlayState.uglyVersion + (" FNF - " + PlayState.daVersion + " - PolyEngine | [BETA VERSION]");
-		}
-		else
-		{
-			versionShit.text = PlayState.uglyVersion + (" FNF - " + PlayState.daVersion + " - PolyEngine");
-		}
-
+		#if GAMEJOLT_ALLOWED
+		versionShit = new FlxText(5, FlxG.height - 44, 0, 'GameJolt Support v1.4');
 		versionShit.scrollFactor.set();
 		versionShit.setFormat("VCR OSD Mono", 16, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		add(versionShit);
+		#end
+
+		versionShit = new FlxText(5, FlxG.height - 24, 0, "");
+		versionShit.text = '${PlayState.uglyVersion} FNF - ${PlayState.daVersion} - PolyEngine${PlayState.isBetaVer ? ' | [BETA VERSION]' : ''}';
+		versionShit.scrollFactor.set();
+		versionShit.setFormat("VCR OSD Mono", 16, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+		add(versionShit);
+
+		#if GAMEJOLT_ALLOWED
+		GJClient.initialize(function (userData:User) {add(new Popup(userData.developer_name, "You were logged in successfully!"));});
+		#end
 
 		changeItem();
 
@@ -146,7 +155,7 @@ class MainMenuState extends MusicBeatState
 
 			if (controls.BACK)
 			{
-				FlxG.switchState(new TitleState());
+				MusicBeatState.switchState(new TitleState());
 			}
 
 			if (controls.ACCEPT)
@@ -180,17 +189,17 @@ class MainMenuState extends MusicBeatState
 								switch (daChoice)
 								{
 									case 'story mode':
-										FlxG.switchState(new StoryMenuState());
+										MusicBeatState.switchState(new StoryMenuState());
 										trace("Story Menu Selected");
 									case 'freeplay':
-										FlxG.switchState(new FreeplayState());
+										MusicBeatState.switchState(new FreeplayState());
 
 										trace("Freeplay Menu Selected");
 
 									case 'options':
 										FlxTransitionableState.skipNextTransIn = true;
 										FlxTransitionableState.skipNextTransOut = true;
-										FlxG.switchState(new OptionsMenu());
+										MusicBeatState.switchState(new OptionsMenu());
 								}
 							});
 						}

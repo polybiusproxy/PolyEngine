@@ -181,7 +181,7 @@ class PauseSubState extends MusicBeatSubstate
 					menuItems = pauseOG;
 					regenMenu();
 				case "Exit to menu":
-					FlxG.switchState(new MainMenuState());
+					MusicBeatState.switchState(new MainMenuState());
 					Application.current.window.title = "Friday Night Funkin' - PolyEngine";
 					PlayState.songEnded = true;
 					PlayState.deaths = 0;

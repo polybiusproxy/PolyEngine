@@ -279,7 +279,7 @@ class AnimationDebug extends MusicBeatState
 		{
 			FlxG.mouse.visible = false;
 			FlxG.sound.play(Paths.sound('cancelMenu'));
-			FlxG.switchState(new PlayState());
+			MusicBeatState.switchState(new PlayState());
 		}
 
 		if (FlxG.keys.justPressed.E)

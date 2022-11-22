@@ -51,7 +51,7 @@ class WarningState extends MusicBeatState
 				transIn = FlxTransitionableState.defaultTransIn;
 				transOut = FlxTransitionableState.defaultTransOut;
 
-				FlxG.switchState(new TitleState());
+				MusicBeatState.switchState(new TitleState());
 			});
 		}
 

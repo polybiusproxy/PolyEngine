@@ -2,10 +2,15 @@ package;
 
 import Conductor.BPMChangeEvent;
 import flixel.FlxG;
+import flixel.FlxState;
 import flixel.addons.transition.FlxTransitionableState;
 import flixel.addons.ui.FlxUIState;
 import flixel.math.FlxRect;
 import flixel.util.FlxTimer;
+
+#if GAMEJOLT_ALLOWED
+import gamejolt.GJClient;
+#end
 
 class MusicBeatState extends FlxUIState
 {
@@ -16,14 +21,22 @@ class MusicBeatState extends FlxUIState
 	private var curBeat:Int = 0;
 	private var controls(get, never):Controls;
 
+	#if GAMEJOLT_ALLOWED
+	private static var pingTrigger:FlxTimer;
+	#end
+
 	inline function get_controls():Controls
 		return PlayerSettings.player1.controls;
 
 	override function create()
 	{
-		if (transIn != null)
-			trace('reg ' + transIn.region);
+		destroySubStates = false; // This to avoid crashes on substates re-opening (GamerPablito)
 
+		#if GAMEJOLT_ALLOWED
+		pingTrigger = new FlxTimer().start(3, function (tmr:FlxTimer) {GJClient.pingSession();}, 0);
+		#end
+
+		if (transIn != null) trace('reg ' + transIn.region);
 		super.create();
 	}
 
@@ -35,10 +48,23 @@ class MusicBeatState extends FlxUIState
 		updateCurStep();
 		updateBeat();
 
-		if (oldStep != curStep && curStep > 0)
-			stepHit();
+		if (oldStep != curStep && curStep > 0) stepHit();
+
+		#if GAMEJOLT_ALLOWED
+		GJClient.pingSession();
+		#end
 
 		super.update(elapsed);
+	}
+
+	public static function switchState(nextState:FlxState)
+	{
+		#if GAMEJOLT_ALLOWED
+		pingTrigger.cancel();
+		pingTrigger.destroy();
+		#end
+		
+		FlxG.switchState(nextState);
 	}
 
 	private function updateBeat():Void
