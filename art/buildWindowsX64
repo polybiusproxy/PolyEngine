@@ -1,0 +1,10 @@
+@Echo Off
+@Color 0a
+@CD ..
+@Echo Building Poly Engine, please wait...
+@haxelib run lime build windows -release
+@Echo -
+@Echo Done!
+@Pause
+@PWD
+@explorer.exe export\release\windows\bin
