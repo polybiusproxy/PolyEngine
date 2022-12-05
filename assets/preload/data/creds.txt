@@ -1,18 +1,12 @@
-ninjamuffin99 - Programming
-PhantomArcade - Art, Animation
-Kawaisprite - Music
-evilsk8r - Art Design
+PolyEngine
+PolybiusProxy - Lead programmer.
+TRSF2.0 - also programmer.
+Idiocrasy - Artist for Dark assets in mod example.
 
-BassetFilms - "Monster" Musician, Additional Character Design 
-Moawling - Week 7 Pixel Artist
-JohnnyUtah - Logo redesign, Tankman voice and creator, pixel art assistant
-
-Spazkid - Additional Character Design, Additional Animation
-
-IvanAlmighty - Misc. UI Design
-
-MtH - Additional Programming, Additional Charting
-Geokureli - Additional Programming
-
-
-M&M - Extra Programming
+Shoutouts
+BrightFyre - Tester.
+RapperGF - Helping with input fix.
+datee - Developing HaxeVLC (all the contents in the 'vlc' folder belongs to datee).
+Frozen - Making nice additions to the engine.
+u/Henry34111 - Making the loading art.
+The VideoLAN team - Making the VLC media player.
