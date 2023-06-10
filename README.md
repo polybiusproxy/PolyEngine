@@ -4,9 +4,9 @@
 # Friday Night Funkin' - PolyEngine
 > Uh oh! Your tryin to kiss ur hot girlfriend, but her MEAN and EVIL dad is trying to KILL you! He's an ex-rockstar, the only way to get to his heart? The power of music... 
 
-**PolyEngine** is a custom FNF engine made for modding & playing. It includes downscroll.
+**PolyEngine** is a custom FNF engine made for modding & playing. It includes nice additions like week 7, mp4 support and cache cleaning.
 
-**REMEMBER**: This is a **mod**. This is not the vanilla game and should be treated as a **modification**. This is not and probably will never be official, so don't get confused.
+**REMEMBER**: This is a **engine**. This is not the vanilla game and should be treated as a **modification**. This is not and probably will never be official, so don't get confused.
 
 # Features
 
@@ -15,7 +15,7 @@
  - **Keybinding (EXPERIMENTAL)**
 	 - Now you can switch between WASD and DFJK, or custom keys!
  - **Polymod support**
-     - it explains all
+     - ^ read it.
  - **Video support**
 	 - An experimental media support of MP4 files. (ONLY WINDOWS AND HTML5)
  - **Note offset** (in beta)
