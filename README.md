@@ -4,7 +4,7 @@
 # Friday Night Funkin' - PolyEngine
 > Uh oh! Your tryin to kiss ur hot girlfriend, but her MEAN and EVIL dad is trying to KILL you! He's an ex-rockstar, the only way to get to his heart? The power of music... 
 
-# **NO LONGER IN DEVELOPMENT""
+# **NO LONGER IN DEVELOPMENT**
 
 **PolyEngine** is a custom FNF engine made for modding & playing. It includes nice additions like week 7, mp4 support and cache cleaning.
 
