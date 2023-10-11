@@ -34,6 +34,7 @@ This game was made with love to Newgrounds and its community. Extra love to Tom 
 - [PolybiusProxy](https://twitter.com/polybiusproxy) - Lead programmer.
 - [TRSF2.0](https://github.com/TRSF-sonicman) - also programmer.
 - [Idiocrasy]() - Artist for Dark assets in mod example. <!--- lol -->
+- [Frozen](https://github.com/FrozenOfficialGITHUB) - Bug fixing.
 
 ### Shoutouts
 - [BrightFyre](https://github.com/brightfyregit) - Tester (i'm stealing ur code >:))))) ).
